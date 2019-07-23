@@ -86,6 +86,56 @@ class ThirdPartyController extends Controller
        
     }
 
+    public function register(Request $request)
+    {
+        try {
+         $data = $request->validate([
+            'title' => 'required',
+            'id_token' => 'required',
+            'type' => 'required',
+            'view_order' => 'required',
+            'status' => 'required',
+            'position' => 'required',
+            'contact_person' => 'required',
+            'contact_phone' => 'required',
+            'contact_email' => 'required',
+            'config' => 'required'
+         ]);
+ 
+            } catch (\Illuminate\Validation\ValidationException $e){
+                return $e->errors();
+        
+     }
+
+
+        $query = DB::select('SELECT * from third_parties where title=? AND id_token=?', [$data['title'],$data['id_token']]);
+       if(!$query){
+            $thirdparty = new Third_party();
+
+            $thirdparty->title = $data['title'];
+            $thirdparty->id_token = $data['id_token'];
+            $thirdparty->description = $request['description'];
+            $thirdparty->logo = $request['logo'];
+            $thirdparty->type = $data['type'];
+            $thirdparty->view_order = $data['view_order'];
+            $thirdparty->status = $data['status'];
+            $thirdparty->position = $data['position'];
+            $thirdparty->website = $request['website'];
+            $thirdparty->contact_person = $data['contact_person'];
+            $thirdparty->contact_phone = $data['contact_phone'];
+            $thirdparty->contact_email = $data['contact_email'];
+            $thirdparty->public = $request['public'];
+            $thirdparty->config = json_encode(["config" => $data['config']]);
+            $thirdparty->save();
+            return "your data have been added succecfully" ;
+        }
+     else{
+
+            return "Sorry,something went wrong please fill all the information" ;
+        }
+       
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public function viewThirdParty($id)
     {
@@ -637,3 +687,22 @@ public function sortThirdPartiesAsJson($json, $column, $method){
 
 
 }
+
+/* 
+this is a template for the config column in the thirdparty table
+
+
+{
+        "config": {
+            "connection-standard": "OAuth/LIT/Rest",
+            "HTTP request type": "GET/POST/PUT",
+            "url": "url required for the connection",
+            "header": {
+                "a group of header segmants required for the connection"
+            },
+            "body": {
+
+                "a group of body segmants required for the connection"
+            }
+        }
+    }*/
