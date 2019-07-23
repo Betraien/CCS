@@ -20,9 +20,6 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         //
-        'http://localhost/laravel/Blog/public/ThirdParty/*'
-        // 'http://localhost/laravel/Blog/public/ThirdParty/connect_third_party',
-        // 'http://localhost/laravel/Blog/public/ThirdParty/create',
-        // 'http://localhost/laravel/Blog/public/ThirdParty/update'
+        'http://localhost/GitHub/CCS/*'
      ];
 }
