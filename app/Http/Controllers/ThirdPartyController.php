@@ -163,34 +163,39 @@ class ThirdPartyController extends Controller
 
         try{
 
-            $data = $request->validate([
-                'type' => 'required',
-                'user_id' => 'required',
-                'client_id' => 'required',
-                'platform_id' => 'required'
-                 ]);
+            $data = $request->validate(['type' => 'required']);
         
-            } catch (\Illuminate\Validation\ValidationException $e){
-            return $e->errors();
-        }
 
         $option = strtolower($data['type']);
         $query = null;
 
         try {
+
             if ($option == 'client') {
+                //validating client_id and platform_id before querying the database
+                $data = $request->validate([ 'client_id' => 'required', 'platform_id' => 'required']);
                 $query = Client_third_party::select()->where([['client_id', '=', $data['client_id']],['platform_id', '=', $data['platform_id']], ['deleted', '=', '0']])->get();
+
             } else if ($option == 'user') {
+                //validating user_id and platform_id before querying the database
+                $data = $request->validate([ 'user_id' => 'required', 'platform_id' => 'required']);
                 $query = User_third_party::select()->where([['user_id', '=', $data['user_id']], ['platform_id', '=', $data['platform_id']], ['deleted', '=', '0']])->get();
+
             } else if ($option == 'platform') {
+                //validating user_id and platform_id before querying the database
+                $data = $request->validate(['platform_id' => 'required']);
                 $query = User_third_party::select()->where([['platform_id', '=', $data['platform_id']], ['deleted', '=', '0']])->get();
+
             } else if ($option == 'order') {
 
                 if($request['orderType'] == null){
-                $query = Third_party::select()->where('deleted', '=', '0')->orderBy('view_order', 'asc')->get();
+
+                    $query = Third_party::select()->where('deleted', '=', '0')->orderBy('view_order', 'asc')->get();
 
                 }else{ 
-                $query = Third_party::select()->where('deleted', '=', '0')->orderBy('view_order', $request['orderType'])->get();
+
+                    $query = Third_party::select()->where('deleted', '=', '0')->orderBy('view_order', $request['orderType'])->get();
+
                 }
             } else {
                 return "Please select listing type";
@@ -199,6 +204,10 @@ class ThirdPartyController extends Controller
             return $e->getMessage();
         }
 
+
+    } catch (\Illuminate\Validation\ValidationException $e){
+        return $e->errors();
+}
         if (count($query) > 0) {
 
 
