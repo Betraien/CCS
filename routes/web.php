@@ -33,6 +33,7 @@ Route::resource('ClientType', 'ClientTypeController');
 //Route::resource('Product', 'ProductController');
 //Route::resource('ThirdParty', 'ThirdPartyController');
 Route::resource('ThirdPartyRating', 'ThirdPartyRatingController');
+
 Route::resource('UserThirdParty', 'UserThirdPartyController');
  
 
@@ -53,6 +54,7 @@ Route::post('ThirdParty/delete','ThirdPartyController@delete');
 //Route::get('ThirdParty/delete/{id}','ThirdPartyController@delete');
 Route::get('ThirdParty/search/{key}','ThirdPartyController@search');
 Route::get('ThirdPartyRating/rate/{user_id}/{third_party_id}/{rating}/{comment}','ThirdPartyRatingController@rate');
+Route::get('/ThirdPartyRating/showRatings/{TPid}','ThirdPartyRatingController@showRatings');
 
 Route::get('ThirdParty/edit/{x}', 'ThirdPartyController@edit');
 Route::post('ThirdParty/reorder/{x}', 'ThirdPartyController@reorder');
