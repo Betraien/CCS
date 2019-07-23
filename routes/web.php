@@ -33,7 +33,6 @@ Route::resource('ClientType', 'ClientTypeController');
 //Route::resource('Product', 'ProductController');
 //Route::resource('ThirdParty', 'ThirdPartyController');
 Route::resource('ThirdPartyRating', 'ThirdPartyRatingController');
-
 Route::resource('UserThirdParty', 'UserThirdPartyController');
  
 
@@ -42,6 +41,10 @@ Route::get('ThirdParty/index', 'ThirdPartyController@index');
 //Route::post('ThirdParty/list_third_party', 'ThirdPartyController@list_third_party');
 //Route::post('ThirdParty/list_third_party', ['as' => 'ThirdParty.list_third_party', 'uses' =>'ThirdPartyController@list_third_party']);
 Route::get('ThirdParty/list_third_party/{x}/{y}', ['as' => 'ThirdParty.list_third_party', 'uses' =>'ThirdPartyController@list_third_party']);
+
+Route::post('ThirdParty/list_third_party', ['as' => 'ThirdParty.list_third_party', 'uses' =>'ThirdPartyController@list_third_party']);
+
+
 Route::post('ThirdParty/connect_third_party', ['as' => 'ThirdParty.connect_third_party', 'uses' =>'ThirdPartyController@connect_third_party']);
 
 
@@ -54,9 +57,8 @@ Route::post('ThirdParty/delete','ThirdPartyController@delete');
 //Route::get('ThirdParty/delete/{id}','ThirdPartyController@delete');
 Route::get('ThirdParty/search/{key}','ThirdPartyController@search');
 Route::get('ThirdPartyRating/rate/{user_id}/{third_party_id}/{rating}/{comment}','ThirdPartyRatingController@rate');
-Route::get('/ThirdPartyRating/showRatings/{TPid}','ThirdPartyRatingController@showRatings');
 
-Route::get('ThirdParty/edit/{x}', 'ThirdPartyController@edit');
+Route::get('ThirdParty/viewThirdParty/{x}', 'ThirdPartyController@viewThirdParty');
 Route::post('ThirdParty/reorder/{x}', 'ThirdPartyController@reorder');
 Route::put('ThirdParty/update/{x}', 'ThirdPartyController@update');
 

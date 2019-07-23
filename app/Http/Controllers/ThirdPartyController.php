@@ -87,7 +87,7 @@ class ThirdPartyController extends Controller
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public function edit(Request $request, $id)
+    public function viewThirdParty($id)
     {
         $thirdparty = DB::select('SELECT * from third_parties where id=?', [$id]);
         return $thirdparty;
@@ -157,21 +157,41 @@ class ThirdPartyController extends Controller
      */
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public function list_third_party(Request $request, $type, $id)
+    public function list_third_party(Request $request)
     {
-        $option = strtolower($type);
-        $query = null;
+
+
+        try{
+
+            $data = $request->validate([
+                'type' => 'required',
+                'user_id' => 'required',
+                'client_id' => 'required',
+                'platform_id' => 'required'
+                 ]);
         
+            } catch (\Illuminate\Validation\ValidationException $e){
+            return $e->errors();
+        }
+
+        $option = strtolower($data['type']);
+        $query = null;
 
         try {
             if ($option == 'client') {
-                $query = Client_third_party::select()->where([['client_id', '=', $id], ['deleted', '=', '0']])->get();
+                $query = Client_third_party::select()->where([['client_id', '=', $data['client_id']],['platform_id', '=', $data['platform_id']], ['deleted', '=', '0']])->get();
             } else if ($option == 'user') {
-                $query = User_third_party::select()->where([['user_id', '=', $id], ['deleted', '=', '0']])->get();
+                $query = User_third_party::select()->where([['user_id', '=', $data['user_id']], ['platform_id', '=', $data['platform_id']], ['deleted', '=', '0']])->get();
             } else if ($option == 'platform') {
-                $query = User_third_party::select()->where([['platform_id', '=', $id], ['deleted', '=', '0']])->get();
+                $query = User_third_party::select()->where([['platform_id', '=', $data['platform_id']], ['deleted', '=', '0']])->get();
             } else if ($option == 'order') {
-                $query = Third_party::select()->where('deleted', '=', '0')->orderBy('view_order', $id)->get();
+
+                if($request['orderType'] == null){
+                $query = Third_party::select()->where('deleted', '=', '0')->orderBy('view_order', 'asc')->get();
+
+                }else{ 
+                $query = Third_party::select()->where('deleted', '=', '0')->orderBy('view_order', $request['orderType'])->get();
+                }
             } else {
                 return "Please select listing type";
             }
@@ -208,12 +228,12 @@ class ThirdPartyController extends Controller
                     ];
                     $result[$i] =  $object;
                 } else {
-                    //return $row;
+                     //return $row->Third_party->third_party_status_id;
                     if (empty($row->Third_party) == true) {
                         $i--;
                         continue;
                     }
-                    if ($row->Third_party->deleted == 1 || $row->Third_party->status != 'Active') {
+                    if ($row->Third_party->deleted == 1 || $row->Third_party->third_party_status_id != 1) {
                         $i--;
                         continue;
                     }

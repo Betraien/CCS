@@ -83,30 +83,6 @@ class ThirdPartyRatingController extends Controller
     {
         //
     }
-    
-    public function showRatings($TPid){
-
-        $TPs=DB::select("SELECT* FROM third_party_ratings WHERE third_party_id='$TPid'");
-
-       
-
-          if (count($TPs) > 0) {
-
-                $i = 1;
-                $json = null;
-                foreach ($TPs as $row) {
-                    $json[$i] = $row;
-                    $i++;
-                }
-
-                return $json;
-            } else {
-                echo "no data found";
-            }
-        
-
-
-    }
 
     public function rate($user_id, $third_party_id, $rating, $comment)
     {   
