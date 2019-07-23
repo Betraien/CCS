@@ -34,7 +34,7 @@ Route::resource('ClientType', 'ClientTypeController');
 //Route::resource('ThirdParty', 'ThirdPartyController');
 Route::resource('ThirdPartyRating', 'ThirdPartyRatingController');
 Route::resource('UserThirdParty', 'UserThirdPartyController');
- 
+
 
 Route::get('ThirdParty/index', 'ThirdPartyController@index');
 
@@ -57,18 +57,17 @@ Route::post('ThirdParty/delete','ThirdPartyController@delete');
 //Route::get('ThirdParty/delete/{id}','ThirdPartyController@delete');
 Route::get('ThirdParty/search/{key}','ThirdPartyController@search');
 Route::get('ThirdPartyRating/rate/{user_id}/{third_party_id}/{rating}/{comment}','ThirdPartyRatingController@rate');
+Route::get('/Third_party_rating/showRatings/{TPid}','ThirdPartyRatingController@showRatings');
 
 Route::get('ThirdParty/viewThirdParty/{x}', 'ThirdPartyController@viewThirdParty');
 Route::post('ThirdParty/reorder/{x}', 'ThirdPartyController@reorder');
 Route::put('ThirdParty/update/{x}', 'ThirdPartyController@update');
 
-Route::post('ThirdParty/show_subscribed_third_parties', 'ThirdPartyController@show_subscribed_third_parties');
-Route::post('ThirdParty/show_unsubscribed_third_parties', 'ThirdPartyController@show_unsubscribed_third_parties');
+Route::post('ThirdParty/show_user_subscriptions', 'ThirdPartyController@show_subscribed_third_parties');
+Route::post('ThirdParty/show_user_avilable_subscriptions', 'ThirdPartyController@show_unsubscribed_third_parties');
 
 Route::get('ThirdParty/token', 'ThirdPartyController@token');
 
 Route::post('ThirdParty/ClientThirdParty/create', ['as' => 'ClientThirdParty.create', 'uses' => 'ClientThirdPartyController@create']);
 Route::post('ThirdParty/ClientThirdParty/delete', ['as' => 'ClientThirdParty.delete', 'uses' => 'ClientThirdPartyController@delete']);
 //Route::get('ThirdParty/dropboxToeken/{x}', ['as' => 'ThirdParty.dropboxToeken', 'uses' =>'ThirdPartyController@dropboxToeken']);
-
-  
