@@ -161,6 +161,7 @@ class ThirdPartyController extends Controller
     {
         $option = strtolower($type);
         $query = null;
+        
 
         try {
             if ($option == 'client') {
