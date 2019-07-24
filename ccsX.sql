@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 24, 2019 at 08:41 AM
+-- Generation Time: Jul 24, 2019 at 10:25 AM
 -- Server version: 10.3.16-MariaDB
 -- PHP Version: 7.1.30
 
@@ -132,6 +132,7 @@ INSERT INTO `third_parties` (`id`, `title`, `id_token`, `description`, `logo`, `
 CREATE TABLE `third_party_ratings` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
+  `platform_id` int(11) NOT NULL,
   `third_party_id` int(11) NOT NULL,
   `rating` float NOT NULL,
   `comment` varchar(250) NOT NULL,
@@ -144,9 +145,9 @@ CREATE TABLE `third_party_ratings` (
 -- Dumping data for table `third_party_ratings`
 --
 
-INSERT INTO `third_party_ratings` (`id`, `user_id`, `third_party_id`, `rating`, `comment`, `created_at`, `updated_at`, `deleted`) VALUES
-(1, 3, 2, 5, 'Hello this is a comment', '2019-07-18 08:18:32', '2019-07-20 10:38:26', 0),
-(14, 1, 5, 2.85, 'classeraXv9', '2019-07-21 13:22:52', '2019-07-21 13:22:52', 0);
+INSERT INTO `third_party_ratings` (`id`, `user_id`, `platform_id`, `third_party_id`, `rating`, `comment`, `created_at`, `updated_at`, `deleted`) VALUES
+(1, 3, 1, 2, 5, 'Hello this is a comment', '2019-07-18 08:18:32', '2019-07-20 10:38:26', 0),
+(14, 1, 2, 5, 2.85, 'classeraXv9', '2019-07-21 13:22:52', '2019-07-21 13:22:52', 0);
 
 -- --------------------------------------------------------
 
@@ -217,6 +218,7 @@ INSERT INTO `usercps` (`id`, `client_id`, `platform_id`) VALUES
 
 CREATE TABLE `users` (
   `id` int(11) UNSIGNED NOT NULL,
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `username` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -299,7 +301,8 @@ ALTER TABLE `third_parties`
 ALTER TABLE `third_party_ratings`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `user_id_2` (`user_id`,`third_party_id`),
-  ADD KEY `user_id` (`user_id`,`third_party_id`);
+  ADD KEY `user_id` (`user_id`,`third_party_id`),
+  ADD KEY `platform_id` (`platform_id`);
 
 --
 -- Indexes for table `third_party_statuses`
