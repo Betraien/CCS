@@ -38,9 +38,12 @@ Route::resource('UserThirdParty', 'UserThirdPartyController');
 
 Route::get('ThirdParty/index', 'ThirdPartyController@index');
 
-//Route::post('ThirdParty/list_third_party', 'ThirdPartyController@list_third_party');
-//Route::post('ThirdParty/list_third_party', ['as' => 'ThirdParty.list_third_party', 'uses' =>'ThirdPartyController@list_third_party']);
-Route::get('ThirdParty/list_third_party/{x}/{y}', ['as' => 'ThirdParty.list_third_party', 'uses' =>'ThirdPartyController@list_third_party']);
+  Route::get('ThirdParty/listThirdPartyBy/{type}/{type_id}/{platform_id}', ['as' => 'ThirdParty.list_third_party', 'uses' =>'ThirdPartyController@listThirdPartyBy']);
+  Route::get('ThirdParty/listThirdPartyBy/{type}/{platform_id_OR_orderType}', ['as' => 'ThirdParty.list_third_party', 'uses' =>'ThirdPartyController@listThirdPartyBy']);
+  Route::get('ThirdParty/listThirdPartyBy/{type}', ['as' => 'ThirdParty.list_third_party', 'uses' =>'ThirdPartyController@listThirdPartyBy']);
+
+
+
 
 Route::post('ThirdParty/list_third_party', ['as' => 'ThirdParty.list_third_party', 'uses' =>'ThirdPartyController@list_third_party']);
 
