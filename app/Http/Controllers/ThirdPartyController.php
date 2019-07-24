@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Third_party;
 use App\Client_third_party;
 use App\User_third_party;
+use App\Platform_third_party;
 use DB;
 
 use Illuminate\Http\Request;
@@ -285,24 +286,22 @@ class ThirdPartyController extends Controller
                     $query = Client_third_party::select()->where([['client_id', '=', $type_id], ['platform_id', '=', $platform_id], ['deleted', '=', '0']])->get();
                 } else if ($option == 'user') {
                     $query = User_third_party::select()->where([['user_id', '=', $type_id], ['platform_id', '=', $platform_id], ['deleted', '=', '0']])->get();
-                } else if ($option == 'platform'){
+                } else if ($option == 'platform') {
                     return "listing third party by platform needs only one parameter to be passed";
-                }
-                else {
+                } else {
                     return "Please check your inputs";
                 }
-
             } else {
 
                 $platform_id = $type_id;
 
-                if ($option == 'platform'){
+                if ($option == 'platform') {
 
-                    $query = Client_third_party::select('platform_id', 'third_party_id')
-                        ->where([['platform_id', '=', $platform_id], ['deleted', '=', '0']])
-                        ->groupBy(['platform_id', 'third_party_id'])
-                        ->get();
-
+                    // $query = Client_third_party::select('platform_id', 'third_party_id')
+                    //     ->where([['platform_id', '=', $platform_id], ['deleted', '=', '0']])
+                    //     ->groupBy(['platform_id', 'third_party_id'])
+                    //     ->get();
+                    $query = Platform_third_party::select()->where([['platform_id', '=', $platform_id], ['deleted', '=', '0']])->get();
                 } else if ($option == 'order') {
 
                     $orderType = strtolower($platform_id);
