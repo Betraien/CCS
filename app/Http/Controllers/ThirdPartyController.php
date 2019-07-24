@@ -10,8 +10,8 @@ use DB;
 
 use Illuminate\Http\Request;
 
-//use Ixudra\Curl\Facades\Session;
-
+ //use Ixudra\Curl\Facades\Session;
+ 
 use Ixudra\Curl\Facades\Curl;
 use Illuminate\Support\Facades\Session;
 
@@ -26,7 +26,7 @@ class ThirdPartyController extends Controller
     public function index()
     {
 
-        return view('Third_party.index');
+         return view('Third_party.index');
         //return view('Third_party.Store');
     }
 
@@ -40,25 +40,27 @@ class ThirdPartyController extends Controller
     public function create(Request $request)
     {
         try {
-            $data = $request->validate([
-                'title' => 'required',
-                'id_token' => 'required',
-                'type' => 'required',
-                'view_order' => 'required',
-                'status' => 'required',
-                'position' => 'required',
-                'contact_person' => 'required',
-                'contact_phone' => 'required',
-                'contact_email' => 'required',
-                'config' => 'required'
-            ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return $e->errors();
-        }
+         $data = $request->validate([
+            'title' => 'required',
+            'id_token' => 'required',
+            'type' => 'required',
+            'view_order' => 'required',
+            'status' => 'required',
+            'position' => 'required',
+            'contact_person' => 'required',
+            'contact_phone' => 'required',
+            'contact_email' => 'required',
+            'config' => 'required'
+         ]);
+ 
+            } catch (\Illuminate\Validation\ValidationException $e){
+                return $e->errors();
+        
+     }
 
 
-        $query = DB::select('SELECT * from third_parties where title=? AND id_token=?', [$data['title'], $data['id_token']]);
-        if (!$query) {
+        $query = DB::select('SELECT * from third_parties where title=? AND id_token=?', [$data['title'],$data['id_token']]);
+       if(!$query){
             $thirdparty = new Third_party();
 
             $thirdparty->title = $data['title'];
@@ -76,11 +78,13 @@ class ThirdPartyController extends Controller
             $thirdparty->public = $request['public'];
             $thirdparty->config = json_encode(["config" => $data['config']]);
             $thirdparty->save();
-            return "third party has been added";
-        } else {
-
-            return "Sorry, we couldn't add the third party..";
+            return "third party has been added" ;
         }
+     else{
+
+            return "Sorry, we couldn't add the third party.." ;
+        }
+       
     }
 
     public function register(Request $request)
@@ -138,6 +142,7 @@ class ThirdPartyController extends Controller
     {
         $thirdparty = DB::select('SELECT * from third_parties where id=?', [$id]);
         return $thirdparty;
+        
     }
 
     /**
@@ -150,22 +155,23 @@ class ThirdPartyController extends Controller
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     public function update(Request $request, $id)
     {
-        try {
-            $data = $request->validate([
-                'title' => 'required',
-                'id_token' => 'required',
-                'type' => 'required',
-                'view_order' => 'required',
-                'status' => 'required',
-                'position' => 'required',
-                'contact_person' => 'required',
-                'contact_phone' => 'required',
-                'contact_email' => 'required',
-                'config' => 'required'
-            ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return $e->errors();
-        }
+        try{
+        $data = $request->validate([
+            'title' => 'required',
+            'id_token' => 'required',
+            'type' => 'required',
+            'view_order' => 'required',
+            'status' => 'required',
+            'position' => 'required',
+            'contact_person' => 'required',
+            'contact_phone' => 'required',
+            'contact_email' => 'required',
+            'config' => 'required'
+        ]);
+    } catch (\Illuminate\Validation\ValidationException $e){
+        return $e->errors();
+
+}
         $title = $data['title'];
         $id_token = $data['id_token'];
         $description = $request['description'];
@@ -182,15 +188,16 @@ class ThirdPartyController extends Controller
         $config = json_encode(["config" => $data['config']]);
 
         DB::Update(
-
-            'UPDATE third_parties SET title=? , id_token=? , description=? , logo=? , type=? ,view_order=? , status=? ,position=? , website=? , contact_person=? , contact_phone=? , contact_email=? , config=? , public=?
+            
+        'UPDATE third_parties SET title=? , id_token=? , description=? , logo=? , type=? ,view_order=? , status=? ,position=? , website=? , contact_person=? , contact_phone=? , contact_email=? , config=? , public=?
         
-        WHERE id =?',
-
-            [$title, $id_token, $description, $logo, $type, $view_order, $status, $position,  $website, $contact_person, $contact_phone, $contact_email, $config, $public, $id]
-
+        WHERE id =?', 
+    
+        [$title, $id_token, $description, $logo, $type, $view_order, $status, $position,  $website, $contact_person, $contact_phone, $contact_email , $config, $public, $id]
+    
         );
         return "Third party has been updated";
+
     }
 
     /**
@@ -200,186 +207,58 @@ class ThirdPartyController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public function list_third_party(Request $request)
     {
 
 
-        try {
+        try{
 
             $data = $request->validate(['type' => 'required']);
-
-
-            $option = strtolower($data['type']);
-            $query = null;
-
-            try {
-
-                if ($option == 'client') {
-                    //validating client_id and platform_id before querying the database
-                    $data = $request->validate(['client_id' => 'required', 'platform_id' => 'required']);
-                    $query = Client_third_party::select()->where([['client_id', '=', $data['client_id']], ['platform_id', '=', $data['platform_id']], ['deleted', '=', '0']])->get();
-                } else if ($option == 'user') {
-                    //validating user_id and platform_id before querying the database
-                    $data = $request->validate(['user_id' => 'required', 'platform_id' => 'required']);
-                    $query = User_third_party::select()->where([['user_id', '=', $data['user_id']], ['platform_id', '=', $data['platform_id']], ['deleted', '=', '0']])->get();
-                } else if ($option == 'platform') {
-                    //validating user_id and platform_id before querying the database
-                    $data = $request->validate(['platform_id' => 'required']);
-                    $query = Client_third_party::select()->where([['platform_id', '=', $data['platform_id']], ['deleted', '=', '0']])->get();
-                } else if ($option == 'order') {
-
-                    if ($request['orderType'] == null) {
-
-                        $query = Third_party::select()->where('deleted', '=', '0')->orderBy('view_order', 'asc')->get();
-                    } else {
-
-                        $query = Third_party::select()->where('deleted', '=', '0')->orderBy('view_order', $request['orderType'])->get();
-                    }
-                } else {
-                    return "Please select listing type";
-                }
-            } catch (\Illuminate\Database\QueryException $e) {
-                return $e->getMessage();
-            }
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return $e->errors();
-        }
-        if (count($query) > 0) {
-
-
-            $result = null;
-            $i = 0;
-            foreach ($query as $row) {
-                $i++;
-                if ($option == 'order') {
-
-                    if ($row->deleted == 1 || $row->third_party_status_id != 1) {
-                        //check what does ACTIVE THIRD PARTIES MEANS WITH ASHMAAWIIIIIIII
-                        //STATUS TABLE NEED TO BE CREATED IN THE DATABASE
-
-                        $i--;
-                        continue;
-                    }
-
-                    $object = [
-                        'logo' => $row->logo,
-                        'title' => $row->title,
-                        'description' => $row->description,
-                        'website' => $row->website,
-                        'id_token' => $row->id_token,
-                        'created_at' => $row->created_at,
-                        'updated_at' => $row->updated_at
-
-                    ];
-                    $result[$i] =  $object;
-                } else {
-                    //return $row->Third_party->third_party_status_id;
-                    if (empty($row->Third_party) == true) {
-                        $i--;
-                        continue;
-                    }
-                    if ($row->Third_party->deleted == 1 || $row->Third_party->third_party_status_id != 1) {
-                        $i--;
-                        continue;
-                    }
-
-
-                    $object = [
-                        'logo' => $row->Third_party->logo,
-                        'title' => $row->Third_party->title,
-                        'description' => $row->Third_party->description,
-                        'website' => $row->Third_party->website,
-                        'id_token' => $row->Third_party->id_token,
-                        'created_at' => $row->Third_party->created_at,
-                        'updated_at' => $row->Third_party->updated_at
-                    ];
-                    $result[$i] = $object;
-                }
-            }
-
-            if ($result != null) {
-                return ['success' => true, 'data' => $result];
-            } else {
-                return ['success' => false, 'data' => [], 'message' => "NO RESULTS"];
-            }
-        } else {
-            return ['success' => false, 'data' => [], 'message' => "NO RESULTS"];
-        }
-    }
-    //////////////////////////////////////////////listThirdPartyBy///////////////////////////////////////////////////////
-    public function listThirdPartyBy($type, $type_id, $platform_id = null)
-    {
-
-        /*
-            The method takes three or two paramteres depends on the type and there are two possiblities:
-                
-                1 - if the type was either client or user it will take three parameters, $type, $type_id and $platform_id where $type is the listing type (user or client) , $type_id is the id of either client or user
-                    and the platform_id which is the platform id 
-
-                2 - if the type was either platform or order it will take two parameters, $type and $type_id where $type is the listing type (platform or order).
-                   
-                        Note that $type_id in this case will have two possiblites depends on the type: 
-                              - if the type was platform then $type_id will be processed as it is the platform_id.
-                              - if the type was order then $type_id will be processed as it is the orderType which is either (asc, desc).
         
-        */
+
+        $option = strtolower($data['type']);
+        $query = null;
 
         try {
 
-            $option = strtolower($type);
-            $query = null;
+            if ($option == 'client') {
+                //validating client_id and platform_id before querying the database
+                $data = $request->validate([ 'client_id' => 'required', 'platform_id' => 'required']);
+                $query = Client_third_party::select()->where([['client_id', '=', $data['client_id']],['platform_id', '=', $data['platform_id']], ['deleted', '=', '0']])->get();
 
-            if ($platform_id != null) {
+            } else if ($option == 'user') {
+                //validating user_id and platform_id before querying the database
+                $data = $request->validate([ 'user_id' => 'required', 'platform_id' => 'required']);
+                $query = User_third_party::select()->where([['user_id', '=', $data['user_id']], ['platform_id', '=', $data['platform_id']], ['deleted', '=', '0']])->get();
 
-                if ($option == 'client') {
-                    $query = Client_third_party::select()->where([['client_id', '=', $type_id], ['platform_id', '=', $platform_id], ['deleted', '=', '0']])->get();
-                } else if ($option == 'user') {
-                    $query = User_third_party::select()->where([['user_id', '=', $type_id], ['platform_id', '=', $platform_id], ['deleted', '=', '0']])->get();
-                } else if ($option == 'platform') {
-                    return "listing third party by platform needs only one parameter to be passed";
-                } else {
-                    return "Please check your inputs";
+            } else if ($option == 'platform') {
+                //validating user_id and platform_id before querying the database
+                $data = $request->validate(['platform_id' => 'required']);
+                $query = User_third_party::select()->where([['platform_id', '=', $data['platform_id']], ['deleted', '=', '0']])->get();
+
+            } else if ($option == 'order') {
+
+                if($request['orderType'] == null){
+
+                    $query = Third_party::select()->where('deleted', '=', '0')->orderBy('view_order', 'asc')->get();
+
+                }else{ 
+
+                    $query = Third_party::select()->where('deleted', '=', '0')->orderBy('view_order', $request['orderType'])->get();
+
                 }
             } else {
-
-                $platform_id = $type_id;
-
-                if ($option == 'platform') {
-
-                    // $query = Client_third_party::select('platform_id', 'third_party_id')
-                    //     ->where([['platform_id', '=', $platform_id], ['deleted', '=', '0']])
-                    //     ->groupBy(['platform_id', 'third_party_id'])
-                    //     ->get();
-                    $query = Platform_third_party::select()->where([['platform_id', '=', $platform_id], ['deleted', '=', '0']])->get();
-                } else if ($option == 'order') {
-
-                    $orderType = strtolower($platform_id);
-
-                    if ($orderType == null) {
-                        $query = Third_party::select()->where('deleted', '=', '0')->orderBy('view_order', 'asc')->get();
-                    } else {
-
-                        if ($orderType === 'asc' || $orderType === 'desc') {
-                            $query = Third_party::select()->where('deleted', '=', '0')->orderBy('view_order', $orderType)->get();
-                        } else {
-                            return "please select a valid order type";
-                        }
-                    }
-                } else {
-                    if (($option == 'client' || $option == 'user') && $type_id != null) {
-                        return " please type the platform id";
-                    } else if ($option == 'client' || $option == 'user') {
-                        return "Please type the " . $option . " id";
-                    } else {
-                        return "listing type is missing";
-                    }
-                }
+                return "Please select listing type";
             }
         } catch (\Illuminate\Database\QueryException $e) {
             return $e->getMessage();
         }
 
+
+    } catch (\Illuminate\Validation\ValidationException $e){
+        return $e->errors();
+}
         if (count($query) > 0) {
 
 
@@ -389,7 +268,7 @@ class ThirdPartyController extends Controller
                 $i++;
                 if ($option == 'order') {
 
-                    if ($row->deleted == 1 || $row->third_party_status_id != 1) {
+                    if ($row->deleted == 1 || $row->status != 'Active') {
                         //check what does ACTIVE THIRD PARTIES MEANS WITH ASHMAAWIIIIIIII
                         //STATUS TABLE NEED TO BE CREATED IN THE DATABASE
 
@@ -409,7 +288,7 @@ class ThirdPartyController extends Controller
                     ];
                     $result[$i] =  $object;
                 } else {
-                    //return $row->Third_party->third_party_status_id;
+                     //return $row->Third_party->third_party_status_id;
                     if (empty($row->Third_party) == true) {
                         $i--;
                         continue;
@@ -431,6 +310,7 @@ class ThirdPartyController extends Controller
                     ];
                     $result[$i] = $object;
                 }
+            
             }
 
             if ($result != null) {
@@ -443,56 +323,59 @@ class ThirdPartyController extends Controller
         }
     }
 
-
     //////////////////////////////////////////////connect///////////////////////////////////////////////////////
-
+    
     public function connect_third_party(Request $request)
     {
         Session([
-
+                
             'user_id' => $request['user_id'],
             'client_id' => $request['client_id'],
             'platform_id' => $request['platform_id'],
-            'third_party_id' => $request['third_party_id']
-
-        ]);
+            'third_party_id' => $request['third_party_id'] 
+           
+       ]);
         //if($request->query('code') == null){
 
         $connect = Third_party::select('config')->where([['id', '=', $request['third_party_id']], ['deleted', '=', '0']])->get();
 
-        $checkSubscribtion =  User_third_party::select('user_id', 'client_id', 'platform_id', 'third_party_id')->where([
-            ['user_id', '=', $request['user_id']],
-            ['client_id', '=', $request['client_id']],
-            ['platform_id', '=', $request['platform_id']],
-            ['third_party_id', '=', $request['third_party_id']],
-            ['deleted', '=', '0']
+        $checkSubscribtion =  User_third_party::select('user_id','client_id','platform_id', 'third_party_id')->where([
+             ['user_id', '=', $request['user_id']],
+             ['client_id', '=', $request['client_id']],
+             ['platform_id', '=', $request['platform_id']],
+             ['third_party_id', '=', $request['third_party_id']],
+             ['deleted', '=', '0']
 
-        ])->get();
+         ])->get();
+         
+         //return empty($checkSubscribtion);
+    if(count($checkSubscribtion) == 0){
 
-        //return empty($checkSubscribtion);
-        if (count($checkSubscribtion) == 0) {
+        if(count($connect) == 0){
+            return "the third party is undefined";
+        }
 
-            if (count($connect) == 0) {
-                return "the third party is undefined";
-            }
+        //Connect third party to the CCS
+        $config = json_decode($connect[0]['config'], true);
 
-            //Connect third party to the CCS
-            $config = json_decode($connect[0]['config'], true);
+        $auth = $config['config']['Auth'];
+        $auth = strtolower($auth);
 
-            $auth = $config['config']['Auth'];
-            $auth = strtolower($auth);
-
-
-            if ($auth == 'restapi') {
+ 
+            if($auth == 'restapi'){
                 return $this->connectREST($config);
-            } else if ($auth == 'oauth') {
+
+            } else if($auth == 'oauth'){
                 return $this->connectOAuth($config);
-            } else {
+
+            } else{
                 return "there is no auth type in the config";
             }
-        } else {
+        }
+        else{
 
-            return "you are already subscribed to this third party";
+        return "you are already subscribed to this third party";
+
         }
         //return $config['header']['Authorization'];
     }
@@ -500,133 +383,146 @@ class ThirdPartyController extends Controller
 
 
 
-    public function token(Request $request)
-    {
+    public function token(Request $request){
 
         // dd($request);
-        $token = $request['code'];
-
-        return $this->saveConnection($token);  // This is a way how to access a query string in laravel, you should put no parameters in the route
+         $token = $request['code'];
+        
+         return $this->saveConnection($token);  // This is a way how to access a query string in laravel, you should put no parameters in the route
 
     }
 
 
-    public function connectREST($config)
-    {
+public function connectREST($config){
 
-        $type = $config['config']['type'];
-        $url = $config['config']['url'];
-        $headers = $config['config']['header'];
-        $body = $config['config']['body'];
+    $type = $config['config']['type'];
+    $url = $config['config']['url'];
+    $headers = $config['config']['header'];
+    $body = $config['config']['body'];
 
-        $arrayOfHeaders = array();
+    $arrayOfHeaders = array();
 
-        //      if(count($headers)!= 0){
+    //      if(count($headers)!= 0){
         foreach ($headers as $key => $value) { // This loop changes json header to an array to pass it with the curl request
             array_push($arrayOfHeaders, $key . " : " . $value);
         }
-        //    }
+    //    }
 
         //return strcasecmp($type,'post');
-        if (strcasecmp($type, 'post') == 0) { // ignoraing the case of the request type;
+        if(strcasecmp($type,'post') == 0){ // ignoraing the case of the request type;
             $response = Curl::to($url)->withHeaders($arrayOfHeaders)->withData($body)->asJson(true)->post();
             //return $response;
             $request['token'] = $response['id'];
-        } else if (strcasecmp($type, 'get') == 0) {
+             
+        }else if(strcasecmp($type,'get') == 0){
             //$response = Curl::to($url)->withHeaders($arrayOfHeaders)->withData($body)->asJson(true)->get();
             //return $response;
-
-            return redirect($url);
-        } else {
+ 
+          return redirect($url);
+        
+        }else{
             return "Error request type";
         }
 
         return  $this->saveConnection($request['token']);
-    }
 
+}
 
+ 
 
-    public function connectOAuth($config)
-    {
+public function connectOAuth($config){
 
-        $type = $config['config']['type'];
-        $url = $config['config']['url'];
-        $headers = $config['config']['header'];
-        $body = $config['config']['body'];
+    $type = $config['config']['type'];
+    $url = $config['config']['url'];
+    $headers = $config['config']['header'];
+    $body = $config['config']['body'];
 
-        $arrayOfHeaders = array();
+    $arrayOfHeaders = array();
 
-        //      if(count($headers)!= 0){
+    //      if(count($headers)!= 0){
         foreach ($headers as $key => $value) { // This loop changes json header to an array to pass it with the curl request
             array_push($arrayOfHeaders, $key . " : " . $value);
         }
-        //    }
+    //    }
 
         //return strcasecmp($type,'post');
-        if (strcasecmp($type, 'post') == 0) { // ignoraing the case of the request type;
+        if(strcasecmp($type,'post') == 0){ // ignoraing the case of the request type;
             $response = Curl::to($url)->withHeaders($arrayOfHeaders)->withData($body)->asJson(true)->post();
             //return $response;
-
-        } else if (strcasecmp($type, 'get') == 0) {
+             
+        }else if(strcasecmp($type,'get') == 0){
             //$response = Curl::to($url)->withHeaders($arrayOfHeaders)->withData($body)->asJson(true)->get();
-
-
+            
+           
             //return $response;
 
 
-            //          if type == OAuth2 redirect otherwise send curl get request;
+  //          if type == OAuth2 redirect otherwise send curl get request;
+                
+          return redirect($url);
 
-            return redirect($url);
-        } else {
+        
+        }else{
             return "Error request type";
         }
 
         //$this->saveConnection($request['token']);
 
-    }
+}
 
 
-    public function saveConnection($token)
-    {
+public function saveConnection($token){
 
-        try {
+    try {
 
-            // $client_third_parties_id = Client_third_party::select('id')->where('client_id', '=', $request['client_id'])->get();
-            //check if the client was connected to the third party
+        // $client_third_parties_id = Client_third_party::select('id')->where('client_id', '=', $request['client_id'])->get();
+         //check if the client was connected to the third party
+          
+         $query = User_third_party::insert([ //inserting array of values 'column' => value
+             'user_id' => Session::get('user_id'),
+             'client_id' => Session::get('client_id'),
+             'platform_id' => Session::get('platform_id'),
+             'third_party_id' => Session::get('third_party_id'),
+             'token' => $token,
+             'status' => 'Active',
+             'expire_date' => \Carbon\Carbon::now(),
+             'created_at' => \Carbon\Carbon::now(),  //since you are using QueryBuilder (insert method) you have to create the timestamp manyally, because Fields created_at,update_at and deleted_at are "part" of Eloquent and you cannot use them in QueryBuilder
+             'updated_at' => \Carbon\Carbon::now(),
+             'deleted' => '0'
+         ]);
+        
+         Session::flush();
+         return "The user has been successfully connected to the third party";
+       
+     } catch (\Illuminate\Database\QueryException $e) {
+         return $e->getMessage();
+     }
 
-            $query = User_third_party::insert([ //inserting array of values 'column' => value
-                'user_id' => Session::get('user_id'),
-                'client_id' => Session::get('client_id'),
-                'platform_id' => Session::get('platform_id'),
-                'third_party_id' => Session::get('third_party_id'),
-                'token' => $token,
-                'status' => 'Active',
-                'expire_date' => \Carbon\Carbon::now(),
-                'created_at' => \Carbon\Carbon::now(),  //since you are using QueryBuilder (insert method) you have to create the timestamp manyally, because Fields created_at,update_at and deleted_at are "part" of Eloquent and you cannot use them in QueryBuilder
-                'updated_at' => \Carbon\Carbon::now(),
-                'deleted' => '0'
-            ]);
-
-            Session::flush();
-            return "The user has been successfully connected to the third party";
-        } catch (\Illuminate\Database\QueryException $e) {
-            return $e->getMessage();
-        }
-    }
+}
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function delete(Request $request)
-    {
+    {      
         //POST method   /ThirdParty/delete
-        //takes a third party id as a parameter
-        //delets a third party softly from the database 
-        $id = $request['id'];
-        $TPS = DB::Update("UPDATE third_parties SET deleted =1 WHERE id =" . $id);
+    //takes a third party id as a parameter
+         //delets a third party softly from the database 
+         if($request['id']==null){
+             return'please type in a third party id';
+         }else{
+               $id= $request['id'];
+        try{
+            $TPS = DB::Update("UPDATE third_parties SET deleted =1 WHERE id =". $id);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return $e->getMessage();
+        }
+         }
+      return "the third party has been deleted";
+    
     }
 
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      
     public function search($key)
     {
         //GET method      /ThirdParty/search/{key}
@@ -635,17 +531,17 @@ class ThirdPartyController extends Controller
         try {
 
             $query = DB::select("SELECT * FROM third_parties WHERE title LIKE '%$key%' or description LIKE '%$key%' or type LIKE '%$key%' or status = '%$key%' ");
-
+              /* $test = Third_party::select()->where([
+                    ['id', '=', $key]
+                    
+                    
+                    ])->getQuery()->get()->all();   
+*/
+                  //  return dd($test);
             if (count($query) > 0) {
 
-                $i = 1;
-                $json = null;
-                foreach ($query as $row) {
-                    $json[$i] = $row;
-                    $i++;
-                }
 
-                return $json;
+                return $this->beatify($query);
             } else {
                 echo "no data found";
             }
@@ -653,39 +549,41 @@ class ThirdPartyController extends Controller
             return $e->getMessage();
         }
     }
-
+ 
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public function reorder(Request $request, $id)
     {
         $new_order = $request['view_order'];
-        try {
-            DB::Update("UPDATE third_parties SET view_order=? WHERE id =?", [$new_order, $id]);
-        } catch (\Illuminate\Database\QueryException $e) {
-            return $e->getMessage();
-        }
+        try{
+        DB::Update("UPDATE third_parties SET view_order=? WHERE id =?", [$new_order, $id]);
+
+    } catch (\Illuminate\Database\QueryException $e) {
+        return $e->getMessage();
     }
+}
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public function show_subscribed_third_parties(Request $request)
-    {
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+public function show_subscribed_third_parties(Request $request)
+{
 
-        $query = null;
+    $query = null;
 
-        try {
+    try {
 
-            $query = User_third_party::select()->where([['user_id', '=',  $request['user_id']], ['deleted', '=', '0']])->get();
-        } catch (\Illuminate\Database\QueryException $e) {
-            return $e->getMessage();
-        }
-        if (count($query) > 0) {
+       $query = User_third_party::select()->where([['user_id', '=',  $request['user_id']], ['deleted', '=', '0']])->get();
+        
+    } catch (\Illuminate\Database\QueryException $e) {
+        return $e->getMessage();
+    }
+      if (count($query) > 0) {
 
-            $result = null;
-            $sResult = array();
-            $i = 0;
-            foreach ($query as $row) {
-                $i++;
+        $result = null;
+        $sResult = array();
+        $i = 0;
+        foreach ($query as $row) {
+            $i++;
                 //return $row;
                 if (empty($row->Third_party) == true) {
                     $i--;
@@ -698,91 +596,123 @@ class ThirdPartyController extends Controller
                 }
 
                 $result[$i] = $row->Third_party;
-
-                array_push($sResult, $result[$i]); // used for sorting
-
-
-                //$i++;
-            }
-
-            if ($result != null) {
+               
+                 array_push($sResult, $result[$i]); // used for sorting
 
 
+            //$i++;
+        }
 
-                return $this->beatify($this->sortThirdPartiesAsJson($sResult, 'view_order', 'asc')); // used to sort by view_order
-                return ['success' => true, 'data' => $result];
-            } else {
-                return ['success' => false, 'data' => [], 'message' => "NO RESULTS"];
-            }
+        if ($result != null) {
+              
+
+            
+           return $this->beatify($this->sortThirdPartiesAsJson($sResult,'view_order', 'asc')); // used to sort by view_order
+            return ['success' => true, 'data' => $result];
         } else {
             return ['success' => false, 'data' => [], 'message' => "NO RESULTS"];
         }
+
+        
+    } else {
+        return ['success' => false, 'data' => [], 'message' => "NO RESULTS"];
     }
 
-
-
-
-    public function show_unsubscribed_third_parties(Request $request)
-    {
-        try {
-
-            $data = $request->validate([
-                'user_id' => 'required',
-                'client_id' => 'required'
-            ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return $e->errors();
-        }
-
-
-        try {
-
-            // to show the user the third parties that he can subscribe
-            $unsubscribed_public = DB::select("SELECT * from third_parties where deleted = 0 AND status='Active' AND public = 1 AND id not in (SELECT third_party_id from user_third_parties where user_id=?)", [$data['user_id']]);
-            $unsubscribed_private = DB::select("SELECT * from third_parties where deleted = 0  AND public = 0 AND id in (select third_party_id from client_third_parties where client_id=?)", [$data['client_id']]);
-        } catch (\Illuminate\Database\QueryException $e) {
-            return $e->getMessage();
-        }
-        $merged = array();
-        $i = 0;
-        foreach ($unsubscribed_public as $key => $value) {
-            array_push($merged, $value);
-        }
-        foreach ($unsubscribed_private as $key => $value) {
-            array_push($merged, $value);
-        }
-
-        return $this->beatify($this->sortThirdPartiesAsJson($merged, 'view_order', 'asc'));     // This will sort the unsubscribed third parties and beatify them in the beatify function
-
-
-    }
-
-
-    public function beatify($arrayOfJsons)
-    {
-        //The method recieves array of Json objects and beatify them by numbering these objects starting from index :1
-        $i = 1;
-        $json = null;
-        foreach ($arrayOfJsons as $row) {
-            $json[$i] = $row;
-            $i++;
-        }
-        return $json;
-    }
-
-    public function sortThirdPartiesAsJson($json, $column, $method)
-    {
-        //The method sort third_parties by a column eaither asc or desc
-
-        $json = json_decode(json_encode($json), true); // removing stdClass error
-        $assoc_array = $json;
-        $ids = array();
-        foreach ($assoc_array as $tp) {
-            array_push($ids, $tp['id']);
-        }
-        //return $ids;
-
-        $result = DB::table('third_parties')->whereIn('id', $ids)->orderBy($column, $method)->get();
-        return $result;
-    }
+    
 }
+
+
+
+
+public function show_unsubscribed_third_parties(Request $request)
+{
+    try{
+
+    $data = $request->validate([
+        'user_id' => 'required',
+        'client_id' => 'required'
+         ]);
+
+    } catch (\Illuminate\Validation\ValidationException $e){
+    return $e->errors();
+
+}
+
+
+   try {
+
+    // to show the user the third parties that he can subscribe
+   $unsubscribed_public = DB::select("SELECT * from third_parties where deleted = 0 AND status='Active' AND public = 1 AND id not in (SELECT third_party_id from user_third_parties where user_id=?)",[$data['user_id']]);
+   $unsubscribed_private = DB::select("SELECT * from third_parties where deleted = 0  AND public = 0 AND id in (select third_party_id from client_third_parties where client_id=?)", [$data['client_id']]);
+   
+
+
+   } catch (\Illuminate\Database\QueryException $e) {
+       return $e->getMessage();
+   }
+   $merged = array();
+   $i = 0;
+   foreach ($unsubscribed_public as $key => $value) {
+     array_push($merged, $value);
+
+   }
+   foreach ($unsubscribed_private as $key => $value) {
+     array_push($merged, $value);
+
+   }
+
+   return $this->beatify($this->sortThirdPartiesAsJson($merged, 'view_order', 'asc'));     // This will sort the unsubscribed third parties and beatify them in the beatify function
+
+
+}
+
+
+public function beatify($arrayOfJsons){
+//The method recieves array of Json objects and beatify them by numbering these objects starting from index :1
+$i = 1;
+$json = null;
+ foreach ($arrayOfJsons as $row) {
+   $json[$i] = $row;
+   $i++;
+  }
+    return $json;
+
+}
+
+public function sortThirdPartiesAsJson($json, $column, $method){
+    //The method sort third_parties by a column eaither asc or desc
+
+  $json = json_decode(json_encode($json), true); // removing stdClass error
+  $assoc_array = $json;
+  $ids = array();
+  foreach($assoc_array as $tp){
+      array_push($ids, $tp['id']);
+  }
+  //return $ids;
+
+  $result = DB::table('third_parties')->whereIn('id', $ids)->orderBy($column,$method)->get();
+  return $result;
+}
+
+
+
+}
+
+/* 
+this is a template for the config column in the thirdparty table
+
+
+{
+        "config": {
+            "connection-standard": "OAuth/LIT/Rest",
+            "HTTP request type": "GET/POST/PUT",
+            "url": "url required for the connection",
+            "header": {
+                "a group of header segmants required for the connection"
+            },
+            "body": {
+
+                "a group of body segmants required for the connection"
+            }
+        }
+    }*/
