@@ -93,7 +93,7 @@ class ThirdPartyController extends Controller
          $data = $request->validate([
             'title' => 'required',
             'id_token' => 'required',
-            'type' => 'required',
+            'third_party_type_id' => 'required',
             'contact_person' => 'required',
             'contact_phone' => 'required',
             'contact_email' => 'required',
@@ -114,12 +114,12 @@ class ThirdPartyController extends Controller
             $thirdparty->id_token = $data['id_token'];
             $thirdparty->description = $request['description'];
             $thirdparty->logo = $request['logo'];
-            $thirdparty->type = $data['type'];
+            $thirdparty->third_party_type_id = $data['third_party_type_id'];
             $thirdparty->website = $request['website'];
             $thirdparty->contact_person = $data['contact_person'];
             $thirdparty->contact_phone = $data['contact_phone'];
             $thirdparty->contact_email = $data['contact_email'];
-            $thirdparty->public = $request['public'];
+            
             $thirdparty->config = json_encode(["config" => $data['config']]);
             $thirdparty->save();
             return "your data have been added succecfully" ;

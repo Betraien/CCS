@@ -55,7 +55,7 @@ Route::post('ThirdParty/add_to_client', ['as' => 'ThirdParty.add_to_client', 'us
 Route::post('ThirdParty/delete_client_third_party', ['as' => 'ThirdParty.delete_client_third_party', 'uses' => 'ThirdPartyController@delete_client_third_party']);
 
 Route::post('ThirdParty/create', ['as' => 'ThirdParty.create', 'uses' => 'ThirdPartyController@create']);
-
+Route::post('ThirdParty/register','ThirdPartyController@register');
 Route::post('ThirdParty/delete','ThirdPartyController@delete');
 //Route::get('ThirdParty/delete/{id}','ThirdPartyController@delete');
 Route::get('ThirdParty/search/{key}','ThirdPartyController@search');
