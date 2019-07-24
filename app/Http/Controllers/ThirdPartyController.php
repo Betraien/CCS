@@ -94,9 +94,6 @@ class ThirdPartyController extends Controller
             'title' => 'required',
             'id_token' => 'required',
             'type' => 'required',
-            'view_order' => 'required',
-            'status' => 'required',
-            'position' => 'required',
             'contact_person' => 'required',
             'contact_phone' => 'required',
             'contact_email' => 'required',
@@ -118,9 +115,6 @@ class ThirdPartyController extends Controller
             $thirdparty->description = $request['description'];
             $thirdparty->logo = $request['logo'];
             $thirdparty->type = $data['type'];
-            $thirdparty->view_order = $data['view_order'];
-            $thirdparty->status = $data['status'];
-            $thirdparty->position = $data['position'];
             $thirdparty->website = $request['website'];
             $thirdparty->contact_person = $data['contact_person'];
             $thirdparty->contact_phone = $data['contact_phone'];
@@ -500,7 +494,7 @@ public function saveConnection($token){
 
 }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
 
     public function delete(Request $request)
     {      
