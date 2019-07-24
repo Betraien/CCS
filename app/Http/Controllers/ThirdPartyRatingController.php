@@ -109,7 +109,7 @@ class ThirdPartyRatingController extends Controller
     }
     
 
-    public function rate($user_id, $third_party_id, $rating, $comment)
+    public function rate($user_id,$plat_id, $third_party_id, $rating, $comment)
     {   
        //GET method    /Third_party_rating/rate/{user_id}/{third_party_id}/{rating}/{comment}
        //takes the rater id,the third party that is being rated the rating as float,and the comment
@@ -120,6 +120,7 @@ class ThirdPartyRatingController extends Controller
        $query = $ThirdPartyRating->insert([
 
             'user_id' => $user_id,
+            'platform_id'=>$plat_id,
             'third_party_id' => $third_party_id,
             'rating' => $rating,
             'comment' => $comment
