@@ -18,22 +18,21 @@
                               <input id="user_id" type="text" class="form-control" name="user_id">
                           </div>
                       </div>
-
-                      <div class="form-group row">
-                        <label for="client_id" class="col-md-4 col-form-label text-md-right">client id:</label>
-
-                        <div class="col-md-6">
-                            <input id="client_id" type="text" class="form-control" name="client_id">
-                        </div>
-                    </div>
-
-
-                    
+ 
                   <div class="form-group row">
                     <label for="platform_id" class="col-md-4 col-form-label text-md-right">platform_id:</label>
 
                     <div class="col-md-6">
                         <input id="platform_id" type="text" class="form-control" name="platform_id">
+                    </div>
+                </div>
+
+
+                <div class="form-group row">
+                    <label for="client_id" class="col-md-4 col-form-label text-md-right">client id:</label>
+
+                    <div class="col-md-6">
+                        <input id="client_id" type="text" class="form-control" name="client_id">
                     </div>
                 </div>
 

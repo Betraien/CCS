@@ -137,8 +137,8 @@ class ThirdPartyController extends Controller
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public function viewThirdParty($id)
     {
-
-       $thirdparty =  Third_party::select()->where([['id', '=', $id], ['deleted', '=', '0']])->get();
+ 
+        $thirdparty =  Third_party::select()->where([['id', '=', $id], ['deleted', '=', '0']])->get();
         
         return $thirdparty;
         
@@ -389,9 +389,7 @@ class ThirdPartyController extends Controller
         // dd($request);
         $token = $request['code'];  // This is a way how to access a query string in laravel, you should put no parameters in the route
         
-        $data = json_decode($request['state'],true);
-        $data = json_encode(['data' => $data, 'token' => $token]);
-
+        $data = json_encode(['data' => $request['state'], 'token' => $token]);
         return $this->saveConnection($data); 
 
     }
@@ -459,8 +457,10 @@ public function connectREST($config){
             //$response = Curl::to($url)->withHeaders($arrayOfHeaders)->withData($body)->asJson(true)->get();
             //return $response;
   //          if type == OAuth2 redirect otherwise send curl get request;
-                
-            return redirect($url . '&state='. $data);
+            
+
+              return redirect($url . '&state='. encrypt($data)); //encrypting the data so it won't be shown to the user as a text plain
+
         } else {
             return "Error request type";
         }
@@ -473,7 +473,8 @@ public function connectREST($config){
     public function saveConnection($response)
     {
         $response = json_decode($response, true);
-
+        $response['data'] = json_decode(decrypt($response['data']), true); // decrypting data
+        
         try {
             // $client_third_parties_id = Client_third_party::select('id')->where('client_id', '=', $request['client_id'])->get();
             //check if the client was connected to the third party
