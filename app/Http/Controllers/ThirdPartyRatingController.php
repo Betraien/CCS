@@ -86,7 +86,7 @@ class ThirdPartyRatingController extends Controller
 
      public function showRatings($TPid){
 
-        $TPs=DB::select("SELECT* FROM third_party_ratings WHERE third_party_id='$TPid'");
+       try{ $TPs=DB::select("SELECT* FROM third_party_ratings WHERE third_party_id='$TPid'");
 
        
 
@@ -104,9 +104,10 @@ class ThirdPartyRatingController extends Controller
                 echo "no data found";
             }
         
+        } catch (\Illuminate\Validation\ValidationException $e){
+            return $e->errors();
 
-
-    }
+    }}
     
 
     public function rate($user_id,$platform_id, $third_party_id, $rating, $comment)
@@ -117,18 +118,20 @@ class ThirdPartyRatingController extends Controller
          
        $ThirdPartyRating =  new Third_party_rating();
        
-       $query = $ThirdPartyRating->insert([
+      try{ $query = $ThirdPartyRating->insert([
 
             'user_id' => $user_id,
             'platform_id'=>$platform_id,
-            'third_party_id' => $third_party_id,
+            'third_party_id'=>$third_party_id,
             'rating' => $rating,
             'comment' => $comment
         
           ]);
+        } catch (\Illuminate\Validation\ValidationException $e){
+            return $e->errors();
+        }
 
-
-         $TPs = DB::select("SELECT* FROM third_party_ratings WHERE third_party_id = '$third_party_id'");
+        try{ $TPs = DB::select("SELECT* FROM third_party_ratings WHERE third_party_id = '$third_party_id'");
          $count=0;
          $total=0;
          $rate=0;
@@ -142,10 +145,22 @@ class ThirdPartyRatingController extends Controller
          if($count != 0){
          $rate = $total / $count;
      }
+    } catch (\Illuminate\Validation\ValidationException $e){
+        return $e->errors();
+    }
      
      
 
-        $TPS = DB::Update("UPDATE third_parties SET average_rating = '$rate' WHERE id =" . $third_party_id);
-           
+       try{ $TPS = DB::Update("UPDATE third_parties SET average_rating = '$rate' WHERE id =" . $third_party_id);
+       } catch (\Illuminate\Validation\ValidationException $e){
+        return $e->errors();
+    }
+    return "Rate has been added to the third party profile";
    }
+
+
+
+
+
+
 }
