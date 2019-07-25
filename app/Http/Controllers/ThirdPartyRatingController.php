@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Third_party;
 use App\Third_party_rating;
 use Illuminate\Http\Request;
 use DB;
-
+use Illuminate\Support\Facades\Session;
+use \Illuminate\Database\QueryException;
 class ThirdPartyRatingController extends Controller
 {
     /**
@@ -104,7 +105,7 @@ class ThirdPartyRatingController extends Controller
                 echo "no data found";
             }
         
-        } catch (\Illuminate\Validation\ValidationException $e){
+        } catch (\Illuminate\Database\QueryException $e){
             return $e->errors();
 
     }}
@@ -118,7 +119,8 @@ class ThirdPartyRatingController extends Controller
          
        $ThirdPartyRating =  new Third_party_rating();
        
-      try{ $query = $ThirdPartyRating->insert([
+      try{ 
+          $query = $ThirdPartyRating->insert([
 
             'user_id' => $user_id,
             'platform_id'=>$platform_id,
@@ -127,11 +129,15 @@ class ThirdPartyRatingController extends Controller
             'comment' => $comment
         
           ]);
-        } catch (\Illuminate\Validation\ValidationException $e){
-            return $e->errors();
+        } catch (\Illuminate\Database\QueryException $e){
+           
+            return 'you have already rated this third party';
         }
 
-        try{ $TPs = DB::select("SELECT* FROM third_party_ratings WHERE third_party_id = '$third_party_id'");
+        try{ 
+        // $TPs = DB::select("SELECT* FROM third_party_ratings WHERE third_party_id = '$third_party_id'");
+         $TPs=Third_party_rating::select()->where([["third_party_id","=",$third_party_id]])->getQuery()->get()->all();
+         
          $count=0;
          $total=0;
          $rate=0;
@@ -145,15 +151,19 @@ class ThirdPartyRatingController extends Controller
          if($count != 0){
          $rate = $total / $count;
      }
-    } catch (\Illuminate\Validation\ValidationException $e){
-        return $e->errors();
+    } catch (\Illuminate\Database\QueryException $e){
+        return 'third party dosent exist';
     }
      
      
 
-       try{ $TPS = DB::Update("UPDATE third_parties SET average_rating = '$rate' WHERE id =" . $third_party_id);
-       } catch (\Illuminate\Validation\ValidationException $e){
-        return $e->errors();
+       try{
+       // $TPS = DB::Update("UPDATE third_parties SET average_rating = '$rate' WHERE id =" . $third_party_id);
+        $TP = Third_party::find($third_party_id);
+        $TP->average_rating = $rate;
+        $TP->save();
+       } catch (\Illuminate\Database\QueryException $e){
+        return 'third party dosent exist';
     }
     return "Rate has been added to the third party profile";
    }
