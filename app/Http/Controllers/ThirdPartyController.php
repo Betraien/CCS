@@ -514,9 +514,10 @@ public function connectREST($config){
         try {
 
             //$query = DB::select("SELECT * FROM third_parties WHERE title LIKE '%$key%' or description LIKE '%$key%'");
-
+                
             $query =Third_party::where('title', 'like', '%' . $key . '%')
-            ->orWhere('description', 'like', '%' . $key . '%')->getQuery()->get()->all();
+            ->orWhere('description', 'like', '%' . $key . '%')->get();
+               
               /* $test = Third_party::select()->where([
                     ['id', '=', $key]
                     

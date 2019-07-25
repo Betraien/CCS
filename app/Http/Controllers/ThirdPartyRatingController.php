@@ -136,7 +136,7 @@ class ThirdPartyRatingController extends Controller
 
         try{ 
         // $TPs = DB::select("SELECT* FROM third_party_ratings WHERE third_party_id = '$third_party_id'");
-         $TPs=Third_party_rating::select()->where([["third_party_id","=",$third_party_id]])->getQuery()->get()->all();
+         $TPs=Third_party_rating::select()->where([["third_party_id","=",$third_party_id]])->get();
          
          $count=0;
          $total=0;
