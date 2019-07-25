@@ -59,8 +59,8 @@ class ThirdPartyController extends Controller
      }
 
 
-        $query = DB::select('SELECT * from third_parties where title=? AND id_token=?', [$data['title'],$data['id_token']]);
-       if(!$query){
+       // $query = DB::select('SELECT * from third_parties where title=? AND id_token=?', [$data['title'],$data['id_token']]);
+       try{
             $thirdparty = new Third_party();
 
             $thirdparty->title = $data['title'];
@@ -80,10 +80,10 @@ class ThirdPartyController extends Controller
             $thirdparty->save();
             return "third party has been added" ;
         }
-     else{
+     catch(\Illuminate\Database\QueryException $e){
+        return $e->errors();
 
-            return "Sorry, we couldn't add the third party.." ;
-        }
+}
        
     }
 
@@ -108,8 +108,9 @@ class ThirdPartyController extends Controller
      }
 
 
-        $query = DB::select('SELECT * from third_parties where title=? AND id_token=?', [$data['title'],$data['id_token']]);
-       if(!$query){
+        //$query = DB::select('SELECT * from third_parties where title=? AND id_token=?', [$data['title'],$data['id_token']]);
+     
+       try{
             $thirdparty = new Third_party();
 
             $thirdparty->title = $data['title'];
@@ -126,17 +127,19 @@ class ThirdPartyController extends Controller
             $thirdparty->save();
             return "your data have been added succecfully" ;
         }
-     else{
+     catch(\Illuminate\Database\QueryException $e){
+        return $e->errors();
 
-            return "Sorry,something went wrong please fill all the information" ;
-        }
+}
        
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public function viewThirdParty($id)
     {
-        $thirdparty = DB::select('SELECT * from third_parties where id=?', [$id]);
+
+       $thirdparty =  Third_party::select()->where([['id', '=', $data['id']], ['deleted', '=', '0']])->get();
+        
         return $thirdparty;
         
     }
@@ -508,6 +511,11 @@ public function connectREST($config){
                $id= $request['id'];
         try{
             $TPS = DB::Update("UPDATE third_parties SET deleted =1 WHERE id =". $id);
+            $TPS = Third_party::select()->where(["id","=",$id])->getQuery()->get()->all();
+
+$TPS->deleted = 1;
+
+$TPS->save();
         } catch (\Illuminate\Database\QueryException $e) {
             return $e->getMessage();
         }
@@ -525,7 +533,10 @@ public function connectREST($config){
         //searches for every record that has similar words of the key in thier title,description,type,status,website,contact info and returns a json object of the record
         try {
 
-            $query = DB::select("SELECT * FROM third_parties WHERE title LIKE '%$key%' or description LIKE '%$key%'");
+            //$query = DB::select("SELECT * FROM third_parties WHERE title LIKE '%$key%' or description LIKE '%$key%'");
+
+            $query =Third_party::where('title', 'like', '%' . $key . '%')
+            ->orWhere('description', 'like', '%' . $key . '%')->getQuery()->get()->all();
               /* $test = Third_party::select()->where([
                     ['id', '=', $key]
                     
@@ -552,7 +563,12 @@ public function connectREST($config){
     {
         $new_order = $request['view_order'];
         try{
-        DB::Update("UPDATE third_parties SET view_order=? WHERE id =?", [$new_order, $id]);
+      //  DB::Update("UPDATE third_parties SET view_order=? WHERE id =?", [$new_order, $id]);
+
+        $TP = Third_party::find($id);
+        $TP->view_order = $new_order;
+        $TP->save();
+        
 
     } catch (\Illuminate\Database\QueryException $e) {
         return $e->getMessage();

@@ -60,7 +60,7 @@ Route::post('ThirdParty/delete','ThirdPartyController@delete');
 //Route::get('ThirdParty/delete/{id}','ThirdPartyController@delete');
 Route::get('ThirdParty/search/{key}','ThirdPartyController@search');
 Route::get('ThirdPartyRating/rate/{user_id}/{plat_id}/{third_party_id}/{rating}/{comment}','ThirdPartyRatingController@rate');
-Route::get('/Third_party_rating/showRatings/{TPid}','ThirdPartyRatingController@showRatings');
+Route::get('ThirdPartyRating/showRatings/{TPid}','ThirdPartyRatingController@showRatings');
 
 Route::get('ThirdParty/viewThirdParty/{x}', 'ThirdPartyController@viewThirdParty');
 Route::post('ThirdParty/reorder/{x}', 'ThirdPartyController@reorder');
