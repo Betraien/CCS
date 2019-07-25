@@ -394,10 +394,10 @@ public function connectREST($config){
             $request['token'] = $response['id'];
              
         }else if(strcasecmp($type,'get') == 0){
-            //$response = Curl::to($url)->withHeaders($arrayOfHeaders)->withData($body)->asJson(true)->get();
-            //return $response;
+            $response = Curl::to($url)->withHeaders($arrayOfHeaders)->withData($body)->asJson(true)->get();
+          //  return $response;
  
-          return redirect($url);
+         // return redirect($url);
         
         }else{
             return "Error request type";
