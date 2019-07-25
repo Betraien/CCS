@@ -154,48 +154,25 @@ class ThirdPartyController extends Controller
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     public function update(Request $request, $id)
     {
-        try{
-        $data = $request->validate([
-            'title' => 'required',
-            'id_token' => 'required',
-            'type' => 'required',
-            'view_order' => 'required',
-            'status' => 'required',
-            'position' => 'required',
-            'contact_person' => 'required',
-            'contact_phone' => 'required',
-            'contact_email' => 'required',
-            'config' => 'required'
-        ]);
-    } catch (\Illuminate\Validation\ValidationException $e){
-        return $e->errors();
 
-}
-        $title = $data['title'];
-        $id_token = $data['id_token'];
-        $description = $request['description'];
-        $logo = $request['logo'];
-        $type = $data['type'];
-        $view_order = $data['view_order'];
-        $status = $data['status'];
-        $position = $data['position'];
-        $website = $request['website'];
-        $contact_person = $data['contact_person'];
-        $contact_phone = $data['contact_phone'];
-        $contact_email = $data['contact_email'];
-        $public = $request['public'];
-        $config = json_encode(["config" => $data['config']]);
+    try{
 
-        DB::Update(
-            
-        'UPDATE third_parties SET title=? , id_token=? , description=? , logo=? , type=? ,view_order=? , status=? ,position=? , website=? , contact_person=? , contact_phone=? , contact_email=? , config=? , public=?
-        
-        WHERE id =?', 
+         $assoc_array = $this->jsonToArray($request->getContent());
+
+         unset($assoc_array['id']); //This line is ignoring the id in case the user has put it within the request body
+
+         $query = Third_party::select()->where('id', '=', $id)->update($assoc_array);
+ 
+
+        } catch (\Illuminate\Database\QueryException $e) {
+            return $e->getMessage();
+        } 
     
-        [$title, $id_token, $description, $logo, $type, $view_order, $status, $position,  $website, $contact_person, $contact_phone, $contact_email , $config, $public, $id]
-    
-        );
-        return "Third party has been updated";
+          if($query == 1){
+                return "Third party has been updated!";
+            }else{
+                return "The selected third party was not found!";
+            }
 
     }
 
@@ -510,18 +487,21 @@ public function connectREST($config){
          }else{
                $id= $request['id'];
         try{
-            $TPS = DB::Update("UPDATE third_parties SET deleted =1 WHERE id =". $id);
-            $TPS = Third_party::select()->where(["id","=",$id])->getQuery()->get()->all();
-
-$TPS->deleted = 1;
-
-$TPS->save();
+     //       $TPS = DB::Update("UPDATE third_parties SET deleted =1 WHERE id =". $id);
+            $query = Third_party::select()->where(['id','=',$id])->update(['deleted' => 1]);
+ 
         } catch (\Illuminate\Database\QueryException $e) {
             return $e->getMessage();
         }
-         }
-      return "the third party has been deleted";
-    
+
+        if($query == 1){
+            return "Third party has been deleted!";
+        }else{
+            return "Error in deleting the third party";
+        }
+
+   }
+     
     }
 
 
@@ -705,6 +685,23 @@ public function sortThirdPartiesAsJson($json, $column, $method){
   return $result;
 }
 
+public function jsonToArray($json){
+    
+    $json = json_decode($json, true);
+        
+    $json_keys = [];
+    $json_values = [];
+    $assoc_array = [];
+
+    foreach($json as $key => $value){
+       array_push($json_keys, $key);
+       array_push($json_values, $value);
+   }
+
+    $assoc_array = array_combine($json_keys, $json_values);
+
+    return $assoc_array;
+}
 
 
 }
