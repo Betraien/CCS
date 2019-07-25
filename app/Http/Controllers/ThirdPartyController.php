@@ -13,8 +13,7 @@ use Illuminate\Http\Request;
  //use Ixudra\Curl\Facades\Session;
  
 use Ixudra\Curl\Facades\Curl;
-use Illuminate\Support\Facades\Session;
-
+use function GuzzleHttp\json_encode;
 
 class ThirdPartyController extends Controller
 {
@@ -327,27 +326,32 @@ class ThirdPartyController extends Controller
     
     public function connect_third_party(Request $request)
     {
-        Session([
-                
-            'user_id' => $request['user_id'],
-            'client_id' => $request['client_id'],
-            'platform_id' => $request['platform_id'],
-            'third_party_id' => $request['third_party_id'] 
-           
-       ]);
+        // Session([
+
+        //     'user_id' => $request['user_id'],
+        //     'client_id' => $request['client_id'],
+        //     'platform_id' => $request['platform_id'],
+        //     'third_party_id' => $request['third_party_id']
+
+        // ]);
+        $data = json_encode([
+        'user_id' => $request['user_id'],
+        'client_id' => $request['client_id'],
+        'platform_id' => $request['platform_id'],
+        'third_party_id' => $request['third_party_id']
+        ]);
         //if($request->query('code') == null){
 
         $connect = Third_party::select('config')->where([['id', '=', $request['third_party_id']], ['deleted', '=', '0']])->get();
 
-        $checkSubscribtion =  User_third_party::select('user_id','client_id','platform_id', 'third_party_id')->where([
-             ['user_id', '=', $request['user_id']],
-             ['client_id', '=', $request['client_id']],
-             ['platform_id', '=', $request['platform_id']],
-             ['third_party_id', '=', $request['third_party_id']],
-             ['deleted', '=', '0']
+        $checkSubscribtion =  User_third_party::select('user_id', 'client_id', 'platform_id', 'third_party_id')->where([
+            ['user_id', '=', $request['user_id']],
+            ['client_id', '=', $request['client_id']],
+            ['platform_id', '=', $request['platform_id']],
+            ['third_party_id', '=', $request['third_party_id']],
+            ['deleted', '=', '0']])->get();
 
-         ])->get();
-         
+          
          //return empty($checkSubscribtion);
     if(count($checkSubscribtion) == 0){
 
@@ -361,14 +365,11 @@ class ThirdPartyController extends Controller
         $auth = $config['config']['Auth'];
         $auth = strtolower($auth);
 
- 
-            if($auth == 'restapi'){
+            if ($auth == 'rest') {
                 return $this->connectREST($config);
-
-            } else if($auth == 'oauth'){
-                return $this->connectOAuth($config);
-
-            } else{
+            } else if ($auth == 'oauth') {
+                return $this->connectOAuth($data, $config);
+            } else {
                 return "there is no auth type in the config";
             }
         }
@@ -386,9 +387,12 @@ class ThirdPartyController extends Controller
     public function token(Request $request){
 
         // dd($request);
-         $token = $request['code'];
+        $token = $request['code'];  // This is a way how to access a query string in laravel, you should put no parameters in the route
         
-         return $this->saveConnection($token);  // This is a way how to access a query string in laravel, you should put no parameters in the route
+        $data = json_decode($request['state'],true);
+        $data = json_encode(['data' => $data, 'token' => $token]);
+
+        return $this->saveConnection($data); 
 
     }
 
@@ -430,7 +434,8 @@ public function connectREST($config){
 
  
 
-public function connectOAuth($config){
+    public function connectOAuth($data, $config)
+    {
 
     $type = $config['config']['type'];
     $url = $config['config']['url'];
@@ -452,17 +457,11 @@ public function connectOAuth($config){
              
         }else if(strcasecmp($type,'get') == 0){
             //$response = Curl::to($url)->withHeaders($arrayOfHeaders)->withData($body)->asJson(true)->get();
-            
-           
             //return $response;
-
-
   //          if type == OAuth2 redirect otherwise send curl get request;
                 
-          return redirect($url);
-
-        
-        }else{
+            return redirect($url . '&state='. $data);
+        } else {
             return "Error request type";
         }
 
@@ -471,36 +470,34 @@ public function connectOAuth($config){
 }
 
 
-public function saveConnection($token){
+    public function saveConnection($response)
+    {
+        $response = json_decode($response, true);
 
-    try {
+        try {
+            // $client_third_parties_id = Client_third_party::select('id')->where('client_id', '=', $request['client_id'])->get();
+            //check if the client was connected to the third party
 
-        // $client_third_parties_id = Client_third_party::select('id')->where('client_id', '=', $request['client_id'])->get();
-         //check if the client was connected to the third party
-          
-         $query = User_third_party::insert([ //inserting array of values 'column' => value
-             'user_id' => Session::get('user_id'),
-             'client_id' => Session::get('client_id'),
-             'platform_id' => Session::get('platform_id'),
-             'third_party_id' => Session::get('third_party_id'),
-             'token' => $token,
-             'status' => 'Active',
-             'expire_date' => \Carbon\Carbon::now(),
-             'created_at' => \Carbon\Carbon::now(),  //since you are using QueryBuilder (insert method) you have to create the timestamp manyally, because Fields created_at,update_at and deleted_at are "part" of Eloquent and you cannot use them in QueryBuilder
-             'updated_at' => \Carbon\Carbon::now(),
-             'deleted' => '0'
-         ]);
-        
-         Session::flush();
-         return "The user has been successfully connected to the third party";
-       
-     } catch (\Illuminate\Database\QueryException $e) {
-         return $e->getMessage();
-     }
+            $query = User_third_party::insert([ //inserting array of values 'column' => value
+                'user_id' => $response['data']['user_id'],
+                'client_id' => $response['data']['client_id'],
+                'platform_id' => $response['data']['platform_id'],
+                'third_party_id' => $response['data']['third_party_id'],
+                'token' => $response['token'],
+                'status' => 'Active',
+                'expire_date' => \Carbon\Carbon::now(),
+                'created_at' => \Carbon\Carbon::now(),  //since you are using QueryBuilder (insert method) you have to create the timestamp manyally, because Fields created_at,update_at and deleted_at are "part" of Eloquent and you cannot use them in QueryBuilder
+                'updated_at' => \Carbon\Carbon::now(),
+                'deleted' => '0'
+            ]);
 
-}
+             return "The user has been successfully connected to the third party";
+        } catch (\Illuminate\Database\QueryException $e) {
+            return $e->getMessage();
+        }
+    }
 
-    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function delete(Request $request)
     {      
