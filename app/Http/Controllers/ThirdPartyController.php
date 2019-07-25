@@ -138,7 +138,7 @@ class ThirdPartyController extends Controller
     public function viewThirdParty($id)
     {
 
-       $thirdparty =  Third_party::select()->where([['id', '=', $data['id']], ['deleted', '=', '0']])->get();
+       $thirdparty =  Third_party::select()->where([['id', '=', $id], ['deleted', '=', '0']])->get();
         
         return $thirdparty;
         
@@ -510,7 +510,7 @@ public function connectREST($config){
                $id= $request['id'];
         try{
             $TPS = DB::Update("UPDATE third_parties SET deleted =1 WHERE id =". $id);
-            $TPS = Third_party::select()->where(["id","=",$id])->getQuery()->get()->all();
+            $TPS = Third_party::select()->where(["id","=",$id])->get();
 
 $TPS->deleted = 1;
 
@@ -533,9 +533,10 @@ $TPS->save();
         try {
 
             //$query = DB::select("SELECT * FROM third_parties WHERE title LIKE '%$key%' or description LIKE '%$key%'");
-
+                
             $query =Third_party::where('title', 'like', '%' . $key . '%')
-            ->orWhere('description', 'like', '%' . $key . '%')->getQuery()->get()->all();
+            ->orWhere('description', 'like', '%' . $key . '%')->get();
+               
               /* $test = Third_party::select()->where([
                     ['id', '=', $key]
                     
