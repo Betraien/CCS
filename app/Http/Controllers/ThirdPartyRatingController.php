@@ -155,6 +155,7 @@ class ThirdPartyRatingController extends Controller
        } catch (\Illuminate\Validation\ValidationException $e){
         return $e->errors();
     }
+    return "Rate has been added to the third party profile";
    }
 
 

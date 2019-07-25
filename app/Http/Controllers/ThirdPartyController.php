@@ -38,6 +38,7 @@ class ThirdPartyController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request)
+
     {
         try {
          $data = $request->validate([
@@ -89,6 +90,8 @@ class ThirdPartyController extends Controller
 
     public function register(Request $request)
     {
+        //allow new third party to register in the system
+        //POST request
         try {
          $data = $request->validate([
             'title' => 'required',
@@ -524,7 +527,7 @@ public function saveConnection($token){
         //searches for every record that has similar words of the key in thier title,description,type,status,website,contact info and returns a json object of the record
         try {
 
-            $query = DB::select("SELECT * FROM third_parties WHERE title LIKE '%$key%' or description LIKE '%$key%' or type LIKE '%$key%' or status = '%$key%' ");
+            $query = DB::select("SELECT * FROM third_parties WHERE title LIKE '%$key%' or description LIKE '%$key%'");
               /* $test = Third_party::select()->where([
                     ['id', '=', $key]
                     
