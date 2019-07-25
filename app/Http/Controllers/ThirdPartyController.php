@@ -137,8 +137,8 @@ class ThirdPartyController extends Controller
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public function viewThirdParty($id)
     {
-
-       $thirdparty =  Third_party::select()->where([['id', '=', $data['id']], ['deleted', '=', '0']])->get();
+ 
+        $thirdparty =  Third_party::select()->where([['id', '=', $id], ['deleted', '=', '0']])->get();
         
         return $thirdparty;
         
