@@ -485,10 +485,11 @@ public function connectREST($config){
          if($request['id']==null){
              return'please type in a third party id';
          }else{
-               $id= $request['id'];
+               $id = $request['id'];
+
         try{
      //       $TPS = DB::Update("UPDATE third_parties SET deleted =1 WHERE id =". $id);
-            $query = Third_party::select()->where(['id','=',$id])->update(['deleted' => 1]);
+            $query = Third_party::select()->where('id', '=', $id)->update(['deleted' => 1]);
  
         } catch (\Illuminate\Database\QueryException $e) {
             return $e->getMessage();
