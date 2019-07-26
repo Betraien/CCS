@@ -596,11 +596,9 @@ public function show_subscribed_third_parties(Request $request)
         }
 
         if ($result != null) {
-              
-
-            
+               
            return $this->beatify($this->sortThirdPartiesAsJson($sResult,'view_order', 'asc')); // used to sort by view_order
-            return ['success' => true, 'data' => $result];
+          // return ['success' => true, 'data' => $result];
         } else {
             return ['success' => false, 'data' => [], 'message' => "NO RESULTS"];
         }
