@@ -94,7 +94,6 @@ class ThirdPartyController extends Controller
         try {
          $data = $request->validate([
             'title' => 'required',
-            'id_token' => 'required',
             'third_party_type_id' => 'required',
             'contact_person' => 'required',
             'contact_phone' => 'required',
@@ -114,9 +113,7 @@ class ThirdPartyController extends Controller
             $thirdparty = new Third_party();
 
             $thirdparty->title = $data['title'];
-            $thirdparty->id_token = $data['id_token'];
             $thirdparty->description = $request['description'];
-            $thirdparty->logo = $request['logo'];
             $thirdparty->third_party_type_id = $data['third_party_type_id'];
             $thirdparty->website = $request['website'];
             $thirdparty->contact_person = $data['contact_person'];
@@ -444,6 +441,30 @@ public function connectREST($config){
         //$this->saveConnection($request['token']);
 
 }
+
+public function disconnectThirdParty($userID,$thirdPartyID,$platformID){
+
+    if($userID==null || $thirdPartyID==null||$platformID==null){
+        return'no IDs were passed';
+    }
+
+   try{
+//       $TPS = DB::Update("UPDATE third_parties SET deleted =1 WHERE id =". $id);
+       $query = User_third_party::select()->where([['user_id', '=',  $userID], ['third_party_id', '=',$thirdPartyID],['platform_id', '=',  $platformID],['deleted', '=',  0]])->update(['deleted' => 1]);
+
+   } catch (\Illuminate\Database\QueryException $e) {
+       return $e->getMessage();
+   }
+
+   if($query == 1){
+       return "Third party is disconnected now!";
+   }else{
+       return "there is no such connection";
+   }
+
+}
+
+
 
 
     public function saveConnection($response)
