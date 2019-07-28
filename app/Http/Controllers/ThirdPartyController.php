@@ -87,7 +87,7 @@ class ThirdPartyController extends Controller
        
     }
 
-    public function register(Request $request)
+    public function requestPartnership(Request $request)
     {
         //allow new third party to register in the system
         //POST request
@@ -155,8 +155,10 @@ class ThirdPartyController extends Controller
     {
 
     try{
-
-         $assoc_array = $this->jsonToArray($request->getContent());
+        
+        // $assoc_array = $this->jsonToArray($request->getContent());
+        // $assoc_array = $this->jsonToArray(json_encode(request()->all()));
+         $assoc_array = request()->all();
 
          unset($assoc_array['id']); //This line is ignoring the id in case the user has put it within the request body
 
@@ -164,7 +166,16 @@ class ThirdPartyController extends Controller
  
 
         } catch (\Illuminate\Database\QueryException $e) {
-            return $e->getMessage();
+            if($e->getCode() == '42S22'){
+               return ['success' => false, 'data' => [], 'message' => "INVALID INPUT"];
+               
+            }else if($e->getCode() == '22007'){
+               return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT"];
+                    
+            }else{
+                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS"];
+            }
+          
         } 
     
           if($query == 1){

@@ -64,7 +64,7 @@ Route::get('ThirdPartyRating/showRatings/{TPid}','ThirdPartyRatingController@sho
 
 Route::get('ThirdParty/viewThirdParty/{x}', 'ThirdPartyController@viewThirdParty');
 Route::post('ThirdParty/reorder/{x}', 'ThirdPartyController@reorder');
-Route::put('ThirdParty/update/{x}', 'ThirdPartyController@update');
+Route::post('ThirdParty/update/{x}', 'ThirdPartyController@update');
 
 Route::post('ThirdParty/show_user_subscriptions', 'ThirdPartyController@show_subscribed_third_parties');
 Route::post('ThirdParty/show_user_avilable_subscriptions', 'ThirdPartyController@show_unsubscribed_third_parties');
