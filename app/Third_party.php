@@ -17,9 +17,9 @@ class Third_party extends Model
         //return $this->belongsTo('App\Third_party_type', 'type_id' , 'id'); this line used when you don't want to use laravel naming convention of foriegn keys
     }
 
-    public function third_party_status(){
+    public function status(){
 
-        return $this->belongsTo('App\Third_party_status');
+        return $this->belongsTo('App\Status');
     }
 
 }

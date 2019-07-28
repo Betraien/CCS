@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 26, 2019 at 07:29 AM
+-- Generation Time: Jul 28, 2019 at 03:47 PM
 -- Server version: 10.3.16-MariaDB
 -- PHP Version: 7.3.6
 
@@ -81,6 +81,47 @@ INSERT INTO `platform_third_parties` (`id`, `platform_id`, `third_party_id`, `cr
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `request_partnership`
+--
+
+CREATE TABLE `request_partnership` (
+  `id` int(11) NOT NULL,
+  `third_party_title` varchar(100) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `website` varchar(255) NOT NULL,
+  `contact_person` varchar(100) NOT NULL,
+  `contact_phone` varchar(50) NOT NULL,
+  `contact_email` varchar(100) NOT NULL,
+  `status_id` int(11) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `deleted` tinyint(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `statuses`
+--
+
+CREATE TABLE `statuses` (
+  `id` int(11) NOT NULL,
+  `status` varchar(50) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `deleted` tinyint(4) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `statuses`
+--
+
+INSERT INTO `statuses` (`id`, `status`, `created_at`, `updated_at`, `deleted`) VALUES
+(1, 'Active', '2019-07-04 00:00:00', '2019-07-27 00:00:00', 0);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `third_parties`
 --
 
@@ -92,7 +133,7 @@ CREATE TABLE `third_parties` (
   `logo` text DEFAULT NULL,
   `third_party_type_id` int(11) NOT NULL,
   `view_order` int(11) NOT NULL,
-  `third_party_status_id` int(11) NOT NULL,
+  `status_id` int(11) NOT NULL,
   `position` varchar(50) NOT NULL,
   `website` varchar(255) DEFAULT NULL,
   `contact_person` varchar(50) NOT NULL,
@@ -110,8 +151,8 @@ CREATE TABLE `third_parties` (
 -- Dumping data for table `third_parties`
 --
 
-INSERT INTO `third_parties` (`id`, `title`, `id_token`, `description`, `logo`, `third_party_type_id`, `view_order`, `third_party_status_id`, `position`, `website`, `contact_person`, `contact_phone`, `contact_email`, `average_rating`, `config`, `public`, `created_at`, `updated_at`, `deleted`) VALUES
-(1, 'get the title', 'TNT', 'hello mr.shabib', 'wregwrgrg/wergoihrg.com', 1, 3, 1, 'xwef', 'Turnitin.com', 'jafri jafri', '+96595', 'ohrwiuhg@woehiug.com', 4.58, '{\"config\":{\r\n\"url\":\"https://classera.tii-sandbox.com/api/v1/submissions\",\r\n\r\n\"header\": {\r\n\"X-Turnitin-Integration-Name\": \"ccs\",\r\n\"X-Turnitin-Integration-Version\": \"v1beta\",\r\n\"Authorization\": \"Bearer 18853c5ef5804f88bc58d90a12a98577\",\r\n\"Content-Type\":\" application/json\"},\r\n\r\n\"body\":{\r\n\"owner\": \"classera\",\r\n\"title\": \"classera_submission\"}\r\n}\r\n}', 1, '2019-07-10 00:00:00', '2019-07-25 14:22:50', 0),
+INSERT INTO `third_parties` (`id`, `title`, `id_token`, `description`, `logo`, `third_party_type_id`, `view_order`, `status_id`, `position`, `website`, `contact_person`, `contact_phone`, `contact_email`, `average_rating`, `config`, `public`, `created_at`, `updated_at`, `deleted`) VALUES
+(1, 'vbn', 'tnt', 'hello mr.shabib', 'wregwrgrg/wergoihrg.com', 1, 3, 1, 'xwef', 'Turnitin.com', 'jafri jafri', '+96595', 'ohrwiuhg@woehiug.com', 4.58, '{\"config\":{\r\n\"url\":\"https://classera.tii-sandbox.com/api/v1/submissions\",\r\n\r\n\"header\": {\r\n\"X-Turnitin-Integration-Name\": \"ccs\",\r\n\"X-Turnitin-Integration-Version\": \"v1beta\",\r\n\"Authorization\": \"Bearer 18853c5ef5804f88bc58d90a12a98577\",\r\n\"Content-Type\":\" application/json\"},\r\n\r\n\"body\":{\r\n\"owner\": \"classera\",\r\n\"title\": \"classera_submission\"}\r\n}\r\n}', 1, '2019-07-10 00:00:00', '2019-07-28 13:27:28', 0),
 (2, 'Dropboxx', 'DB', 'hello mr.shabibb', 'wegwg/tyjtj', 1, 2, 1, 'Jeffri', 'www.dropbox.com', 'rtht erg', '+96658965223', 'ohrwiuhg@woehiug.com', 2.85, '{\r\n    \"config\": {\r\n        \"Auth\": \"OAuth\",\r\n        \"type\": \"Get\",\r\n        \"url\": \"https://www.dropbox.com/oauth2/authorize?client_id=jssbqykrnanwmd8&response_type=code&redirect_uri=http://localhost/GitHub/CCS/public/ThirdParty/token\",\r\n        \"header\": {},\r\n        \"body\": {}\r\n    }\r\n}', 1, '2019-07-19 10:00:17', '2019-07-25 13:58:01', 0),
 (3, 'C8Science', 'g6ek95k5', 'C8Science combines computer & physical exercises to develop the cognitive skills necessary to learn in the classroom and improve math and reading achievement. Assigned by the Director of Student Personnel and Special Services for students who qualify', '', 1, 3, 1, 'Content Gateway', 'https://www.c8sciences.com/', 'Thamer Ahmed', '+96658965223', 'Thamer_Ahmed@gmail.com', 0, '[serialized (platforms, roles, redirect_url, token, etc.)]', 1, '2019-07-19 10:00:17', '2019-07-31 06:26:25', 0),
 (4, 'DD@DD', 'wegweg', 'wegweg', 'images/Thanks.jpg', 1, 1, 1, '1', '1', '1', '1', '2', 0, '{\r\n\"url\":\"https://classera.tii-sandbox.com/api/v1/submissions\",\r\n\r\n\"header\":[\r\n\"X-Turnitin-Integration-Name: ccs\",\r\n\"X-Turnitin-Integration-Version: v1beta\",\r\n\"Authorization: Bearer 18853c5ef5804f88bc58d90a12a98577\",\r\n\"Content-Type: application/json\"],\r\n\r\n\"body\":{\r\n\"owner\": \"classera\",\r\n\"title\": \"classera_submission\"}\r\n\r\n}', 1, '2019-07-07 18:14:59', '2019-07-07 18:14:59', 0),
@@ -148,27 +189,6 @@ CREATE TABLE `third_party_ratings` (
 INSERT INTO `third_party_ratings` (`id`, `user_id`, `platform_id`, `third_party_id`, `rating`, `comment`, `created_at`, `updated_at`, `deleted`) VALUES
 (1, 3, 1, 2, 5, 'Hello this is a comment', '2019-07-18 08:18:32', '2019-07-20 10:38:26', 0),
 (14, 1, 2, 5, 2.85, 'classeraXv9', '2019-07-21 13:22:52', '2019-07-21 13:22:52', 0);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `third_party_statuses`
---
-
-CREATE TABLE `third_party_statuses` (
-  `id` int(11) NOT NULL,
-  `status` varchar(50) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  `deleted` tinyint(4) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `third_party_statuses`
---
-
-INSERT INTO `third_party_statuses` (`id`, `status`, `created_at`, `updated_at`, `deleted`) VALUES
-(1, 'Active', '2019-07-04 00:00:00', '2019-07-27 00:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -288,6 +308,12 @@ ALTER TABLE `platform_third_parties`
   ADD KEY `platform_id` (`platform_id`);
 
 --
+-- Indexes for table `statuses`
+--
+ALTER TABLE `statuses`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `third_parties`
 --
 ALTER TABLE `third_parties`
@@ -302,12 +328,6 @@ ALTER TABLE `third_party_ratings`
   ADD UNIQUE KEY `user_id_2` (`user_id`,`third_party_id`),
   ADD KEY `user_id` (`user_id`,`third_party_id`),
   ADD KEY `platform_id` (`platform_id`);
-
---
--- Indexes for table `third_party_statuses`
---
-ALTER TABLE `third_party_statuses`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `third_party_types`
@@ -355,6 +375,12 @@ ALTER TABLE `platform_third_parties`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `statuses`
+--
+ALTER TABLE `statuses`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `third_parties`
 --
 ALTER TABLE `third_parties`
@@ -365,12 +391,6 @@ ALTER TABLE `third_parties`
 --
 ALTER TABLE `third_party_ratings`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
-
---
--- AUTO_INCREMENT for table `third_party_statuses`
---
-ALTER TABLE `third_party_statuses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `third_party_types`
