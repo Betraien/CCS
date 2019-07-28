@@ -484,7 +484,7 @@ public function disconnectThirdParty($userID,$thirdPartyID,$platformID){
                 'token' => $response['token'],
                 'status' => 'Active',
                 'expire_date' => \Carbon\Carbon::now(),
-                'created_at' => \Carbon\Carbon::now(),  //since you are using QueryBuilder (insert method) you have to create the timestamp manyally, because Fields created_at,update_at and deleted_at are "part" of Eloquent and you cannot use them in QueryBuilder
+                'created_at' => \Carbon\Carbon::now(),  //since you are using QueryBuilder (insert method) you have to create the timestamp manually, because Fields created_at,update_at and deleted_at are "part" of Eloquent and you cannot use them in QueryBuilder
                 'updated_at' => \Carbon\Carbon::now(),
                 'deleted' => '0'
             ]);
@@ -496,7 +496,7 @@ public function disconnectThirdParty($userID,$thirdPartyID,$platformID){
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+    
     public function delete(Request $request)
     {      
         //POST method   /ThirdParty/delete
@@ -568,13 +568,17 @@ public function disconnectThirdParty($userID,$thirdPartyID,$platformID){
       //  DB::Update("UPDATE third_parties SET view_order=? WHERE id =?", [$new_order, $id]);
 
         $TP = Third_party::find($id);
+        if($TP==null){
+            return"third party dosent exist";
+        }
         $TP->view_order = $new_order;
         $TP->save();
-        
+        return"view order has been updated";
 
     } catch (\Illuminate\Database\QueryException $e) {
         return $e->getMessage();
     }
+    return"something went wrong please try again";
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
