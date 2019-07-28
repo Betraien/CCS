@@ -61,10 +61,10 @@ Route::post('ThirdParty/delete','ThirdPartyController@delete');//tested
 Route::get('ThirdParty/search/{key}','ThirdPartyController@search');//tested
 Route::get('ThirdPartyRating/rate/{user_id}/{plat_id}/{third_party_id}/{rating}/{comment}','ThirdPartyRatingController@rate');//tested
 Route::get('ThirdPartyRating/showRatings/{TPid}','ThirdPartyRatingController@showRatings');//tested
-
+ 
 Route::get('ThirdParty/viewThirdParty/{x}', 'ThirdPartyController@viewThirdParty');//tested
 Route::post('ThirdParty/reorder/{x}', 'ThirdPartyController@reorder');//tested
-Route::put('ThirdParty/update/{x}', 'ThirdPartyController@update');
+Route::post('ThirdParty/update/{x}', 'ThirdPartyController@update');
 
 Route::post('ThirdParty/show_user_subscriptions', 'ThirdPartyController@show_subscribed_third_parties');
 Route::post('ThirdParty/show_user_avilable_subscriptions', 'ThirdPartyController@show_unsubscribed_third_parties');
