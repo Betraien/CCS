@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Third_party;
 use App\Client_third_party;
 use App\User_third_party;
-use App\Platform_third_party;
+use App\Request_partnership;
 use DB;
 
 use Illuminate\Http\Request;
@@ -78,7 +78,7 @@ class ThirdPartyController extends Controller
             $thirdparty->save();
             return "third party has been added";
         } catch (\Illuminate\Database\QueryException $e) {
-            return $e->errors();
+            return $e->getMessage();
         }
     }
 
@@ -88,12 +88,13 @@ class ThirdPartyController extends Controller
         //POST request
         try {
             $data = $request->validate([
-                'title' => 'required',
-                'third_party_type_id' => 'required',
+                'third_party_title' => 'required',
+                'description' => 'required',
+                'website' => 'required',
                 'contact_person' => 'required',
                 'contact_phone' => 'required',
-                'contact_email' => 'required',
-                'config' => 'required'
+                'contact_email' => 'required'
+                //'status_id' => 'required'
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return $e->errors();
@@ -103,20 +104,27 @@ class ThirdPartyController extends Controller
         //$query = DB::select('SELECT * from third_parties where title=? AND id_token=?', [$data['title'],$data['id_token']]);
 
         try {
-            $thirdparty = new Third_party();
 
-            $thirdparty->title = $data['title'];
-            $thirdparty->description = $request['description'];
-            $thirdparty->third_party_type_id = $data['third_party_type_id'];
-            $thirdparty->website = $request['website'];
-            $thirdparty->contact_person = $data['contact_person'];
-            $thirdparty->contact_phone = $data['contact_phone'];
-            $thirdparty->contact_email = $data['contact_email'];
-            $thirdparty->config = json_encode(["config" => $data['config']]);
-            $thirdparty->save();
+            $requestPartnership = new Request_partnership();
+
+            $requestPartnership->third_party_title = $data['third_party_title'];
+            $requestPartnership->description = $request['description'];
+            $requestPartnership->website = $data['website'];
+            $requestPartnership->contact_person = $data['contact_person'];
+            $requestPartnership->contact_phone = $data['contact_phone'];
+            $requestPartnership->contact_email = $data['contact_email'];
+            $requestPartnership->status_id =  '2'; // 2 => pending
+            $requestPartnership->save();
+
             return "your data have been added succecfully";
         } catch (\Illuminate\Database\QueryException $e) {
-            return $e->errors();
+            if ($e->getCode() == '42S22') {
+                return ['success' => false, 'data' => [], 'message' => "INVALID INPUT"];
+            } else if ($e->getCode() == '22007') {
+                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT"];
+            } else {
+                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS"];
+            }
         }
     }
 
@@ -211,7 +219,13 @@ class ThirdPartyController extends Controller
                     return "Please select listing type";
                 }
             } catch (\Illuminate\Database\QueryException $e) {
-                return $e->getMessage();
+                if ($e->getCode() == '42S22') {
+                    return ['success' => false, 'data' => [], 'message' => "INVALID INPUT"];
+                } else if ($e->getCode() == '22007') {
+                    return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT"];
+                } else {
+                    return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS"];
+                }
             }
         } catch (\Illuminate\Validation\ValidationException $e) {
             return $e->errors();
@@ -424,7 +438,13 @@ class ThirdPartyController extends Controller
             //       $TPS = DB::Update("UPDATE third_parties SET deleted =1 WHERE id =". $id);
             $query = User_third_party::select()->where([['user_id', '=',  $userID], ['third_party_id', '=', $thirdPartyID], ['platform_id', '=',  $platformID], ['deleted', '=',  0]])->update(['deleted' => 1]);
         } catch (\Illuminate\Database\QueryException $e) {
-            return $e->getMessage();
+            if ($e->getCode() == '42S22') {
+                return ['success' => false, 'data' => [], 'message' => "INVALID INPUT"];
+            } else if ($e->getCode() == '22007') {
+                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT"];
+            } else {
+                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS"];
+            }
         }
 
         if ($query == 1) {
@@ -461,7 +481,13 @@ class ThirdPartyController extends Controller
 
             return "The user has been successfully connected to the third party";
         } catch (\Illuminate\Database\QueryException $e) {
-            return $e->getMessage();
+            if ($e->getCode() == '42S22') {
+                return ['success' => false, 'data' => [], 'message' => "INVALID INPUT"];
+            } else if ($e->getCode() == '22007') {
+                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT"];
+            } else {
+                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS"];
+            }
         }
     }
 
@@ -481,7 +507,13 @@ class ThirdPartyController extends Controller
                 //       $TPS = DB::Update("UPDATE third_parties SET deleted =1 WHERE id =". $id);
                 $query = Third_party::select()->where('id', '=', $id)->update(['deleted' => 1]);
             } catch (\Illuminate\Database\QueryException $e) {
-                return $e->getMessage();
+                if ($e->getCode() == '42S22') {
+                    return ['success' => false, 'data' => [], 'message' => "INVALID INPUT"];
+                } else if ($e->getCode() == '22007') {
+                    return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT"];
+                } else {
+                    return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS"];
+                }
             }
 
             if ($query == 1) {
@@ -521,7 +553,13 @@ class ThirdPartyController extends Controller
                 echo "no data found";
             }
         } catch (\Illuminate\Database\QueryException $e) {
-            return $e->getMessage();
+            if ($e->getCode() == '42S22') {
+                return ['success' => false, 'data' => [], 'message' => "INVALID INPUT"];
+            } else if ($e->getCode() == '22007') {
+                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT"];
+            } else {
+                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS"];
+            }
         }
     }
 
@@ -542,7 +580,13 @@ class ThirdPartyController extends Controller
             $TP->save();
             return "view order has been updated";
         } catch (\Illuminate\Database\QueryException $e) {
-            return $e->getMessage();
+            if ($e->getCode() == '42S22') {
+                return ['success' => false, 'data' => [], 'message' => "INVALID INPUT"];
+            } else if ($e->getCode() == '22007') {
+                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT"];
+            } else {
+                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS"];
+            }
         }
         return "something went wrong please try again";
     }
@@ -557,7 +601,13 @@ class ThirdPartyController extends Controller
 
             $query = User_third_party::select()->where([['user_id', '=',  $request['user_id']], ['deleted', '=', '0']])->get();
         } catch (\Illuminate\Database\QueryException $e) {
-            return $e->getMessage();
+            if ($e->getCode() == '42S22') {
+                return ['success' => false, 'data' => [], 'message' => "INVALID INPUT"];
+            } else if ($e->getCode() == '22007') {
+                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT"];
+            } else {
+                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS"];
+            }
         }
         if (count($query) > 0) {
 
@@ -627,7 +677,13 @@ class ThirdPartyController extends Controller
             $getClientSubscribedList = Client_third_party::select('third_party_id')->where([['client_id', '=',  $data['client_id']], ['deleted', '=', '0']])->get(); // should we add platform_id ?
             $getPrivateNotSubscribedList = Third_party::select()->where([['third_party_status_id', '=',  '1'], ['public', '=', '0'], ['deleted', '=', '0']])->whereIn('id', $getClientSubscribedList)->get();
         } catch (\Illuminate\Database\QueryException $e) {
-            return $e->getMessage();
+            if ($e->getCode() == '42S22') {
+                return ['success' => false, 'data' => [], 'message' => "INVALID INPUT"];
+            } else if ($e->getCode() == '22007') {
+                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT"];
+            } else {
+                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS"];
+            }
         }
         $merged = array();
         foreach ($getPublicNotSubscribedList as $key => $value) {
