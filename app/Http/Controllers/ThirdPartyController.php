@@ -461,7 +461,6 @@ class ThirdPartyController extends Controller
         try {
             //       $TPS = DB::Update("UPDATE third_parties SET deleted =1 WHERE id =". $id);
             $query = User_third_party::select()->where([['user_id', '=',  $userID], ['third_party_id', '=', $thirdPartyID], ['platform_id', '=',  $platformID], ['deleted', '=',  0]])->update(['deleted' => 1]);
-            return 'The user has been disconnected!';
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == '42S22') {
                 return ['success' => false, 'data' => [], 'message' => "INVALID INPUT!"];
