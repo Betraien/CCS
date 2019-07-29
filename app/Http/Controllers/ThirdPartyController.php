@@ -108,7 +108,7 @@ class ThirdPartyController extends Controller
             $requestPartnership = new Request_partnership();
 
             $requestPartnership->third_party_title = $data['third_party_title'];
-            $requestPartnership->description = $request['description'];
+            $requestPartnership->description = $data['description'];
             $requestPartnership->website = $data['website'];
             $requestPartnership->contact_person = $data['contact_person'];
             $requestPartnership->contact_phone = $data['contact_phone'];
@@ -116,14 +116,16 @@ class ThirdPartyController extends Controller
             $requestPartnership->status_id =  '2'; // 2 => pending
             $requestPartnership->save();
 
-            return "your data have been added succecfully";
+            return "your data has been added succecfully";
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == '42S22') {
-                return ['success' => false, 'data' => [], 'message' => "INVALID INPUT"];
+                return ['success' => false, 'data' => [], 'message' => "INVALID INPUT!"];
             } else if ($e->getCode() == '22007') {
-                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT"];
+                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
+            } else if ($e->getCode() == '23000') {
+                return ['success' => false, 'data' => [], 'message' => "THIS REQUEST IS ALREADY EXIST!"];
             } else {
-                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS"];
+                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
             }
         }
     }
@@ -157,11 +159,11 @@ class ThirdPartyController extends Controller
             $query = Third_party::select()->where('id', '=', $id)->update($assoc_array);
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == '42S22') {
-                return ['success' => false, 'data' => [], 'message' => "INVALID INPUT"];
+                return ['success' => false, 'data' => [], 'message' => "INVALID INPUT!"];
             } else if ($e->getCode() == '22007') {
-                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT"];
+                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
             } else {
-                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS"];
+                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
             }
         }
 
@@ -220,11 +222,11 @@ class ThirdPartyController extends Controller
                 }
             } catch (\Illuminate\Database\QueryException $e) {
                 if ($e->getCode() == '42S22') {
-                    return ['success' => false, 'data' => [], 'message' => "INVALID INPUT"];
+                    return ['success' => false, 'data' => [], 'message' => "INVALID INPUT!"];
                 } else if ($e->getCode() == '22007') {
-                    return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT"];
+                    return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
                 } else {
-                    return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS"];
+                    return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
                 }
             }
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -284,10 +286,10 @@ class ThirdPartyController extends Controller
             if ($result != null) {
                 return ['success' => true, 'data' => $result];
             } else {
-                return ['success' => false, 'data' => [], 'message' => "NO RESULTS"];
+                return ['success' => false, 'data' => [], 'message' => "NO RESULTS!"];
             }
         } else {
-            return ['success' => false, 'data' => [], 'message' => "NO RESULTS"];
+            return ['success' => false, 'data' => [], 'message' => "NO RESULTS!"];
         }
     }
 
@@ -439,18 +441,18 @@ class ThirdPartyController extends Controller
             $query = User_third_party::select()->where([['user_id', '=',  $userID], ['third_party_id', '=', $thirdPartyID], ['platform_id', '=',  $platformID], ['deleted', '=',  0]])->update(['deleted' => 1]);
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == '42S22') {
-                return ['success' => false, 'data' => [], 'message' => "INVALID INPUT"];
+                return ['success' => false, 'data' => [], 'message' => "INVALID INPUT!"];
             } else if ($e->getCode() == '22007') {
-                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT"];
+                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
             } else {
-                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS"];
+                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
             }
         }
 
         if ($query == 1) {
             return "Third party is disconnected now!";
         } else {
-            return "there is no such connection";
+            return "there is no such connection!";
         }
     }
 
@@ -479,14 +481,14 @@ class ThirdPartyController extends Controller
                 'deleted' => '0'
             ]);
 
-            return "The user has been successfully connected to the third party";
+            return "The user has been successfully connected to the third party!";
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == '42S22') {
-                return ['success' => false, 'data' => [], 'message' => "INVALID INPUT"];
+                return ['success' => false, 'data' => [], 'message' => "INVALID INPUT!"];
             } else if ($e->getCode() == '22007') {
-                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT"];
+                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
             } else {
-                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS"];
+                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
             }
         }
     }
@@ -508,18 +510,18 @@ class ThirdPartyController extends Controller
                 $query = Third_party::select()->where('id', '=', $id)->update(['deleted' => 1]);
             } catch (\Illuminate\Database\QueryException $e) {
                 if ($e->getCode() == '42S22') {
-                    return ['success' => false, 'data' => [], 'message' => "INVALID INPUT"];
+                    return ['success' => false, 'data' => [], 'message' => "INVALID INPUT!"];
                 } else if ($e->getCode() == '22007') {
-                    return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT"];
+                    return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
                 } else {
-                    return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS"];
+                    return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
                 }
             }
 
             if ($query == 1) {
                 return "Third party has been deleted!";
             } else {
-                return "Error in deleting the third party";
+                return "Error in deleting the third party!";
             }
         }
     }
@@ -554,11 +556,11 @@ class ThirdPartyController extends Controller
             }
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == '42S22') {
-                return ['success' => false, 'data' => [], 'message' => "INVALID INPUT"];
+                return ['success' => false, 'data' => [], 'message' => "INVALID INPUT!"];
             } else if ($e->getCode() == '22007') {
-                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT"];
+                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
             } else {
-                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS"];
+                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
             }
         }
     }
@@ -574,18 +576,18 @@ class ThirdPartyController extends Controller
 
             $TP = Third_party::find($id);
             if ($TP == null) {
-                return "third party dosent exist";
+                return "third party dosent exist!";
             }
             $TP->view_order = $new_order;
             $TP->save();
-            return "view order has been updated";
+            return "view order has been updated!";
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == '42S22') {
-                return ['success' => false, 'data' => [], 'message' => "INVALID INPUT"];
+                return ['success' => false, 'data' => [], 'message' => "INVALID INPUT!"];
             } else if ($e->getCode() == '22007') {
-                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT"];
+                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
             } else {
-                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS"];
+                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
             }
         }
         return "something went wrong please try again";
@@ -602,11 +604,11 @@ class ThirdPartyController extends Controller
             $query = User_third_party::select()->where([['user_id', '=',  $request['user_id']], ['deleted', '=', '0']])->get();
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == '42S22') {
-                return ['success' => false, 'data' => [], 'message' => "INVALID INPUT"];
+                return ['success' => false, 'data' => [], 'message' => "INVALID INPUT!"];
             } else if ($e->getCode() == '22007') {
-                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT"];
+                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
             } else {
-                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS"];
+                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
             }
         }
         if (count($query) > 0) {
@@ -640,10 +642,10 @@ class ThirdPartyController extends Controller
                 return $this->beatify($this->sortThirdPartiesAsJson($sResult, 'view_order', 'asc')); // used to sort by view_order
                 // return ['success' => true, 'data' => $result];
             } else {
-                return ['success' => false, 'data' => [], 'message' => "NO RESULTS"];
+                return ['success' => false, 'data' => [], 'message' => "NO RESULTS!"];
             }
         } else {
-            return ['success' => false, 'data' => [], 'message' => "NO RESULTS"];
+            return ['success' => false, 'data' => [], 'message' => "NO RESULTS!"];
         }
     }
 
@@ -678,11 +680,11 @@ class ThirdPartyController extends Controller
             $getPrivateNotSubscribedList = Third_party::select()->where([['third_party_status_id', '=',  '1'], ['public', '=', '0'], ['deleted', '=', '0']])->whereIn('id', $getClientSubscribedList)->get();
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == '42S22') {
-                return ['success' => false, 'data' => [], 'message' => "INVALID INPUT"];
+                return ['success' => false, 'data' => [], 'message' => "INVALID INPUT!"];
             } else if ($e->getCode() == '22007') {
-                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT"];
+                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
             } else {
-                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS"];
+                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
             }
         }
         $merged = array();
