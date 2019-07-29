@@ -343,17 +343,17 @@ class ThirdPartyController extends Controller
 
             $ConnectionStandard = $config['config']['Connection-standard'];
             $ConnectionStandard = strtolower($ConnectionStandard);
-            
+
             if ($ConnectionStandard == 'rest') {
                 return $this->connectREST($data, $config);
             } else if ($ConnectionStandard == 'oauth') {
                 return $this->connectOAuth($data, $config);
             } else {
-             return ['success' => false, 'data' => [], 'message' => "THE CONNECTION STANDARD IN THE CONFIG IS NOT SUPPORTED!"]; 
+             return ['success' => false, 'data' => [], 'message' => "THE CONNECTION STANDARD IN THE CONFIG IS NOT SUPPORTED!"];
              }
         } else {
 
-            return ['success' => false, 'data' => [], 'message' => "YOU ARE ALREADY CONNECTED TO THIS THIRD PARTY!"]; 
+            return ['success' => false, 'data' => [], 'message' => "YOU ARE ALREADY CONNECTED TO THIS THIRD PARTY!"];
         }
         //return $config['header']['Authorization'];
     }
@@ -461,6 +461,7 @@ class ThirdPartyController extends Controller
         try {
             //       $TPS = DB::Update("UPDATE third_parties SET deleted =1 WHERE id =". $id);
             $query = User_third_party::select()->where([['user_id', '=',  $userID], ['third_party_id', '=', $thirdPartyID], ['platform_id', '=',  $platformID], ['deleted', '=',  0]])->update(['deleted' => 1]);
+            return 'The user has been disconnected!';
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == '42S22') {
                 return ['success' => false, 'data' => [], 'message' => "INVALID INPUT!"];
@@ -483,7 +484,7 @@ class ThirdPartyController extends Controller
 
     public function saveConnection($response)
     {
- 
+
         try {
             // $client_third_parties_id = Client_third_party::select('id')->where('client_id', '=', $request['client_id'])->get();
             //check if the client was connected to the third party
@@ -508,7 +509,7 @@ class ThirdPartyController extends Controller
             } else if ($e->getCode() == '22007') {
                 return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
             } else if ($e->getCode() == '23000') {
-                return ['success' => false, 'data' => [], 'message' => "YOU ARE ALREADY CONNECTED TO THIS THIRD PARTY!"]; 
+                return ['success' => false, 'data' => [], 'message' => "YOU ARE ALREADY CONNECTED TO THIS THIRD PARTY!"];
             } else {
                 return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
             }
@@ -521,7 +522,7 @@ class ThirdPartyController extends Controller
     {
         //POST method   /ThirdParty/delete
         //takes a third party id as a parameter
-        //delets a third party softly from the database 
+        //delets a third party softly from the database
         if ($request['id'] == null) {
             return 'please type in a third party id';
         } else {
@@ -553,7 +554,7 @@ class ThirdPartyController extends Controller
     public function search($key)
     {
         //GET method      /ThirdParty/search/{key}
-        //takes a key as the search term 
+        //takes a key as the search term
         //searches for every record that has similar words of the key in thier title,description,type,status,website,contact info and returns a json object of the record
         try {
 
@@ -564,9 +565,9 @@ class ThirdPartyController extends Controller
 
             /* $test = Third_party::select()->where([
                     ['id', '=', $key]
-                    
-                    
-                    ])->getQuery()->get()->all();   
+
+
+                    ])->getQuery()->get()->all();
 */
             //  return dd($test);
             if (count($query) > 0) {
@@ -771,7 +772,7 @@ class ThirdPartyController extends Controller
     }
 }
 
-/* 
+/*
 this is a template for the config column in the thirdparty table
 
 
