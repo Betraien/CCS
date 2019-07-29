@@ -298,6 +298,20 @@ class ThirdPartyController extends Controller
     public function connect_third_party(Request $request)
     {
 
+        try {
+
+            $data = $request->validate([
+                'user_id' => 'required',
+                'client_id' => 'required',
+                'platform_id' => 'required',
+                'third_party_id' => 'required'
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return $e->errors();
+        }
+
+
+
         $data = json_encode([
             'user_id' => $request['user_id'],
             'client_id' => $request['client_id'],
@@ -327,12 +341,12 @@ class ThirdPartyController extends Controller
             //Connect third party to the CCS
             $config = json_decode($connect[0]['config'], true);
 
-            $auth = $config['config']['Auth'];
-            $auth = strtolower($auth);
+            $ConnectionStandard = $config['config']['Connection-standard'];
+            $ConnectionStandard = strtolower($ConnectionStandard);
 
-            if ($auth == 'rest') {
+            if ($ConnectionStandard == 'rest') {
                 return $this->connectREST($config);
-            } else if ($auth == 'oauth') {
+            } else if ($ConnectionStandard == 'oauth') {
                 return $this->connectOAuth($data, $config);
             } else {
                 return "there is no auth type in the config";
@@ -410,6 +424,8 @@ class ThirdPartyController extends Controller
 
         //return strcasecmp($type,'post');
         if (strcasecmp($type, 'post') == 0) { // ignoraing the case of the request type;
+
+            ///////////////////////////////////////////////////////////////THIS BLOCK REQEUST HAS NOT BEEN TESTED YET !!!! ///////////////////////////////////////////
             $response = Curl::to($url)->withHeaders($arrayOfHeaders)->withData($body)->asJson(true)->post();
             //return $response;
 
@@ -756,7 +772,7 @@ this is a template for the config column in the thirdparty table
 {
         "config": {
             "connection-standard": "OAuth/LIT/Rest",
-            "HTTP request type": "GET/POST/PUT",
+            "HTTP-request-type": "GET/POST/PUT",
             "url": "url required for the connection",
             "header": {
                 "a group of header segmants required for the connection"
