@@ -116,7 +116,7 @@ class ThirdPartyController extends Controller
             $requestPartnership->status_id =  '2'; // 2 => pending
             $requestPartnership->save();
 
-            return "your data has been added succecfully";
+            return "your request has been added successfully";
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == '42S22') {
                 return ['success' => false, 'data' => [], 'message' => "INVALID INPUT!"];
