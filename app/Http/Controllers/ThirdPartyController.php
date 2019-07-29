@@ -343,17 +343,17 @@ class ThirdPartyController extends Controller
 
             $ConnectionStandard = $config['config']['Connection-standard'];
             $ConnectionStandard = strtolower($ConnectionStandard);
-
+            
             if ($ConnectionStandard == 'rest') {
-                return $this->connectREST($config);
+                return $this->connectREST($data, $config);
             } else if ($ConnectionStandard == 'oauth') {
                 return $this->connectOAuth($data, $config);
             } else {
-                return "there is no auth type in the config";
-            }
+             return ['success' => false, 'data' => [], 'message' => "THE CONNECTION STANDARD IN THE CONFIG IS NOT SUPPORTED!"]; 
+             }
         } else {
 
-            return "you are already subscribed to this third party";
+            return ['success' => false, 'data' => [], 'message' => "YOU ARE ALREADY CONNECTED TO THIS THIRD PARTY!"]; 
         }
         //return $config['header']['Authorization'];
     }
@@ -365,12 +365,14 @@ class ThirdPartyController extends Controller
     {
 
         $token = $request['code'];  // This is a way how to access a query string in laravel, you should put no parameters in the route
-        $data = json_encode(['data' => $request['state'], 'token' => $token]);
+        $data = ['data' => $request['state'], 'token' => $token];
+        $data['data'] = json_decode(decrypt($data['data']), true); // decrypting data
+
         return $this->saveConnection($data);
     }
 
 
-    public function connectREST($config)
+    public function connectREST($data, $config)
     {
 
         $type = $config['config']['type'];
@@ -401,7 +403,11 @@ class ThirdPartyController extends Controller
             return "Error request type";
         }
 
-        return  $this->saveConnection($request['token']);
+
+        $token = $request['token'];  // This is a way how to access a query string in laravel, you should put no parameters in the route
+        $data = ['data' => json_decode($data,true), 'token' => $token];
+        //$response = json_decode($data, true);
+        return  $this->saveConnection($data);
     }
 
 
@@ -477,13 +483,11 @@ class ThirdPartyController extends Controller
 
     public function saveConnection($response)
     {
-        $response = json_decode($response, true);
-        $response['data'] = json_decode(decrypt($response['data']), true); // decrypting data
-
+ 
         try {
             // $client_third_parties_id = Client_third_party::select('id')->where('client_id', '=', $request['client_id'])->get();
             //check if the client was connected to the third party
-
+          //  return $response;
             $query = User_third_party::insert([ //inserting array of values 'column' => value
                 'user_id' => $response['data']['user_id'],
                 'client_id' => $response['data']['client_id'],
@@ -503,6 +507,8 @@ class ThirdPartyController extends Controller
                 return ['success' => false, 'data' => [], 'message' => "INVALID INPUT!"];
             } else if ($e->getCode() == '22007') {
                 return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
+            } else if ($e->getCode() == '23000') {
+                return ['success' => false, 'data' => [], 'message' => "YOU ARE ALREADY CONNECTED TO THIS THIRD PARTY!"]; 
             } else {
                 return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
             }
