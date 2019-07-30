@@ -265,12 +265,12 @@ class ThirdPartyController extends Controller
                         ];
                         $result[$i] =  $object;
                     } else {
-                        //return $row->Third_party->third_party_status_id;
+                        //return $row->Third_party->status_id;
                         if (empty($row->Third_party) == true) {
                             $i--;
                             continue;
                         }
-                        if ($row->Third_party->deleted == 1 || $row->Third_party->third_party_status_id != 1) {
+                        if ($row->Third_party->deleted == 1 || $row->Third_party->status_id != 1) {
                             $i--;
                             continue;
                         }
@@ -696,16 +696,16 @@ class ThirdPartyController extends Controller
         try {
 
             // to show the user the third parties that he can subscribe
-            // $unsubscribed_public = DB::select("SELECT * from third_parties where deleted = 0 AND third_party_status_id = 1 AND public = 1 AND id not in (SELECT third_party_id from user_third_parties where user_id=?)",[$data['user_id']]);
+            // $unsubscribed_public = DB::select("SELECT * from third_parties where deleted = 0 AND status_id = 1 AND public = 1 AND id not in (SELECT third_party_id from user_third_parties where user_id=?)",[$data['user_id']]);
             // $unsubscribed_private = DB::select("SELECT * from third_parties where deleted = 0  AND public = 0 AND id in (select third_party_id from client_third_parties where client_id=?)", [$data['client_id']]);
 
 
             $getUserSubscribedList = User_third_party::select('third_party_id')->where([['user_id', '=',  $data['user_id']], ['deleted', '=', '0']])->get();
-            $getPublicNotSubscribedList = Third_party::select()->where([['third_party_status_id', '=',  '1'], ['public', '=', '1'], ['deleted', '=', '0']])->whereNotIn('id', $getUserSubscribedList)->get();
+            $getPublicNotSubscribedList = Third_party::select()->where([['status_id', '=',  '1'], ['public', '=', '1'], ['deleted', '=', '0']])->whereNotIn('id', $getUserSubscribedList)->get();
 
 
             $getClientSubscribedList = Client_third_party::select('third_party_id')->where([['client_id', '=',  $data['client_id']], ['deleted', '=', '0']])->get(); // should we add platform_id ?
-            $getPrivateNotSubscribedList = Third_party::select()->where([['third_party_status_id', '=',  '1'], ['public', '=', '0'], ['deleted', '=', '0']])->whereIn('id', $getClientSubscribedList)->get();
+            $getPrivateNotSubscribedList = Third_party::select()->where([['status_id', '=',  '1'], ['public', '=', '0'], ['deleted', '=', '0']])->whereIn('id', $getClientSubscribedList)->get();
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == '42S22') {
                 return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
