@@ -601,15 +601,14 @@ class ThirdPartyController extends Controller
   
             try {
                 //  DB::Update("UPDATE third_parties SET view_order=? WHERE id =?", [$new_order, $id]);
-
-                $TP = Third_party::find($id);
-                if ($TP == null) {
-                    return "third party dosent exist!";
+                 if($request['view_order'] == null){
+                    return ['success' => false, 'data' => [], 'message' => "PLEASE CHECK YOUR INPUTS!"];
                 }
-                $TP->view_order = $new_order;
-                $TP->save();
-                return "view order has been updated!";
-            } catch (\Illuminate\Database\QueryException $e) {
+                 $query = Third_party::select()->where('id', '=', $id)->update(['view_order' => $request['view_order']]);
+ 
+                 return ['success' => true, 'data' => [], 'message' => " View order for the selected Third Party has been updated!"];
+
+                } catch (\Illuminate\Database\QueryException $e) {
                 if ($e->getCode() == '42S22') {
                     return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
                 } else if ($e->getCode() == '22007') {
@@ -618,7 +617,8 @@ class ThirdPartyController extends Controller
                     return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
                 }
             }
-            return "something went wrong please try again";
+            return ['success' => false, 'data' => [], 'message' => "something went wrong please try again!"];
+            
         }  
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
