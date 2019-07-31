@@ -35,64 +35,65 @@ class ThirdPartyController extends Controller
      */
     public function create(Request $request)
     {
-     
-            try {
-                $data = $request->validate([
-                    'title' => 'required',
-                    'id_token' => 'required',
-                    'third_party_type_id' => 'required',
-                    'view_order' => 'required',
-                    'status_id' => 'required',
-                    'position' => 'required',
-                    'contact_person' => 'required',
-                    'contact_phone' => 'required',
-                    'contact_email' => 'required',
-                    'config' => 'required'
-                ]);
-            } catch (\Illuminate\Validation\ValidationException $e) {
-                return $e->errors();
-            }
+
+        try {
+            $data = $request->validate([
+                'title' => 'required',
+                'id_token' => 'required',
+                'third_party_type_id' => 'required',
+                'view_order' => 'required',
+                'status_id' => 'required',
+                'position' => 'required',
+                'contact_person' => 'required',
+                'contact_phone' => 'required',
+                'contact_email' => 'required',
+                'config' => 'required'
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return $e->errors();
+        }
 
 
-            // $query = DB::select('SELECT * from third_parties where title=? AND id_token=?', [$data['title'],$data['id_token']]);
-            try {
-                $thirdparty = new Third_party();
+        // $query = DB::select('SELECT * from third_parties where title=? AND id_token=?', [$data['title'],$data['id_token']]);
+        try {
+            $thirdparty = new Third_party();
 
-                $thirdparty->title = $data['title'];
-                $thirdparty->id_token = $data['id_token'];
-                $thirdparty->description = $request['description'];
-               
+            $thirdparty->title = $data['title'];
+            $thirdparty->id_token = $data['id_token'];
+            $thirdparty->description = $request['description'];
+
+            if (isset($request['logo'])) {
                 $logo = $request['logo'];
                 $fileName = $logo->getClientOriginalName();
                 $logo->move('images', $fileName);
+                $thirdparty->logo = 'images/' . $fileName;
+            }
 
-                $thirdparty->logo = 'images/'. $fileName;
-                $thirdparty->third_party_type_id = $data['third_party_type_id'];
-                $thirdparty->view_order = $data['view_order'];
-                $thirdparty->status_id = $data['status_id'];
-                $thirdparty->position = $data['position'];
-                $thirdparty->website = $request['website'];
-                $thirdparty->contact_person = $data['contact_person'];
-                $thirdparty->contact_phone = $data['contact_phone'];
-                $thirdparty->contact_email = $data['contact_email'];
-                $thirdparty->public = $request['public'];
-                $thirdparty->config = json_encode(["config" => $data['config']]);
-                $thirdparty->save();
+            $thirdparty->third_party_type_id = $data['third_party_type_id'];
+            $thirdparty->view_order = $data['view_order'];
+            $thirdparty->status_id = $data['status_id'];
+            $thirdparty->position = $data['position'];
+            $thirdparty->website = $request['website'];
+            $thirdparty->contact_person = $data['contact_person'];
+            $thirdparty->contact_phone = $data['contact_phone'];
+            $thirdparty->contact_email = $data['contact_email'];
+            $thirdparty->public = $request['public'];
+            $thirdparty->config = json_encode(["config" => $data['config']]);
+            $thirdparty->save();
 
-                
-                return "third party has been added";
-            } catch (\Illuminate\Database\QueryException $e) {
-                if ($e->getCode() == '42S22') {
-                    return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
-                } else if ($e->getCode() == '22007') {
-                    return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
-                } else if ($e->getCode() == '23000') {
-                    return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
-                } else {
-                    return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
-                }
-            
-        } 
+
+            return "third party has been added";
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->getCode() == '42S22') {
+                return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
+            } else if ($e->getCode() == '22007') {
+                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
+            } else if ($e->getCode() == '23000') {
+                return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
+            } else {
+                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
+            }
+        }
     }
 
     public function requestPartnership(Request $request)
@@ -161,32 +162,35 @@ class ThirdPartyController extends Controller
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     public function update($id)
     {
-     
-            try {
 
-                $assoc_array = request()->all();
-                unset($assoc_array['id']); //This line is ignoring the id in case the user has put it within the request body
-                $query = Third_party::select()->where('id', '=', $id)->update($assoc_array);
+        try {
 
-                if ($query == 1) {
-                    return "Third party has been updated!";
-                } else {
-                    return "The selected third party was not found!";
-                }
-
-
-
-            } catch (\Illuminate\Database\QueryException $e) {
-                if ($e->getCode() == '42S22') {
-                    return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
-                } else if ($e->getCode() == '22007') {
-                    return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT FOR ONE OR MORE OF YOUR INPUTS!"];
-                } else {
-                    return ['success' => false, 'data' => [], 'message' => "PLEASE CHECK YOUR INPUTS!"];
-                }
+            $assoc_array = request()->all();
+            unset($assoc_array['id']); //This line is ignoring the id in case the user has put it within the request body
+         
+            if (isset($assoc_array['logo'])) {
+                $logo = $assoc_array['logo'];
+                $fileName = $logo->getClientOriginalName();
+                $logo->move('images', $fileName);
+                $assoc_array['logo'] = 'images/' . $fileName;
             }
- 
-        } 
+            $query = Third_party::select()->where('id', '=', $id)->update($assoc_array);
+
+            if ($query == 1) {
+                return "Third party has been updated!";
+            } else {
+                return "The selected third party was not found!";
+            }
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->getCode() == '42S22') {
+                return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
+            } else if ($e->getCode() == '22007') {
+                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT FOR ONE OR MORE OF YOUR INPUTS!"];
+            } else {
+                return ['success' => false, 'data' => [], 'message' => "PLEASE CHECK YOUR INPUTS!"];
+            }
+        }
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -198,113 +202,113 @@ class ThirdPartyController extends Controller
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public function list_third_party(Request $request)
     {
- 
+
+        try {
+
+            $data = $request->validate(['type' => 'required']);
+
+
+            $option = strtolower($data['type']);
+            $query = null;
+
             try {
 
-                $data = $request->validate(['type' => 'required']);
+                if ($option == 'client') {
+                    //validating client_id and platform_id before querying the database
+                    $data = $request->validate(['client_id' => 'required', 'platform_id' => 'required']);
+                    $query = Client_third_party::select()->where([['client_id', '=', $data['client_id']], ['platform_id', '=', $data['platform_id']], ['deleted', '=', '0']])->get();
+                } else if ($option == 'user') {
+                    //validating user_id and platform_id before querying the database
+                    $data = $request->validate(['user_id' => 'required', 'platform_id' => 'required']);
+                    $query = User_third_party::select()->where([['user_id', '=', $data['user_id']], ['platform_id', '=', $data['platform_id']], ['deleted', '=', '0']])->get();
+                } else if ($option == 'platform') {
+                    //validating user_id and platform_id before querying the database
+                    $data = $request->validate(['platform_id' => 'required']);
+                    $query = User_third_party::select()->where([['platform_id', '=', $data['platform_id']], ['deleted', '=', '0']])->get();
+                } else if ($option == 'order') {
 
+                    if ($request['orderType'] == null) {
 
-                $option = strtolower($data['type']);
-                $query = null;
-
-                try {
-
-                    if ($option == 'client') {
-                        //validating client_id and platform_id before querying the database
-                        $data = $request->validate(['client_id' => 'required', 'platform_id' => 'required']);
-                        $query = Client_third_party::select()->where([['client_id', '=', $data['client_id']], ['platform_id', '=', $data['platform_id']], ['deleted', '=', '0']])->get();
-                    } else if ($option == 'user') {
-                        //validating user_id and platform_id before querying the database
-                        $data = $request->validate(['user_id' => 'required', 'platform_id' => 'required']);
-                        $query = User_third_party::select()->where([['user_id', '=', $data['user_id']], ['platform_id', '=', $data['platform_id']], ['deleted', '=', '0']])->get();
-                    } else if ($option == 'platform') {
-                        //validating user_id and platform_id before querying the database
-                        $data = $request->validate(['platform_id' => 'required']);
-                        $query = User_third_party::select()->where([['platform_id', '=', $data['platform_id']], ['deleted', '=', '0']])->get();
-                    } else if ($option == 'order') {
-
-                        if ($request['orderType'] == null) {
-
-                            $query = Third_party::select()->where('deleted', '=', '0')->orderBy('view_order', 'asc')->get();
-                        } else {
-
-                            $query = Third_party::select()->where('deleted', '=', '0')->orderBy('view_order', $request['orderType'])->get();
-                        }
+                        $query = Third_party::select()->where('deleted', '=', '0')->orderBy('view_order', 'asc')->get();
                     } else {
-                        return "Please select listing type";
+
+                        $query = Third_party::select()->where('deleted', '=', '0')->orderBy('view_order', $request['orderType'])->get();
                     }
-                } catch (\Illuminate\Database\QueryException $e) {
-                    if ($e->getCode() == '42S22') {
-                        return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
-                    } else if ($e->getCode() == '22007') {
-                        return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
-                    } else {
-                        return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
-                    }
-                }
-            } catch (\Illuminate\Validation\ValidationException $e) {
-                return $e->errors();
-            }
-            if (count($query) > 0) {
-
-
-                $result = null;
-                $i = 0;
-                foreach ($query as $row) {
-                    $i++;
-                    if ($option == 'order') {
-
-                        if ($row->deleted == 1 || $row->status != 'Active') {
-                            //check what does ACTIVE THIRD PARTIES MEANS WITH ASHMAAWIIIIIIII
-                            $i--;
-                            continue;
-                        }
-
-                        $object = [
-                            'logo' => $row->logo,
-                            'title' => $row->title,
-                            'description' => $row->description,
-                            'website' => $row->website,
-                            'id_token' => $row->id_token,
-                            'created_at' => $row->created_at,
-                            'updated_at' => $row->updated_at
-
-                        ];
-                        $result[$i] =  $object;
-                    } else {
-                        //return $row->Third_party->status_id;
-                        if (empty($row->Third_party) == true) {
-                            $i--;
-                            continue;
-                        }
-                        if ($row->Third_party->deleted == 1 || $row->Third_party->status_id != 1) {
-                            $i--;
-                            continue;
-                        }
-
-
-                        $object = [
-                            'logo' => $row->Third_party->logo,
-                            'title' => $row->Third_party->title,
-                            'description' => $row->Third_party->description,
-                            'website' => $row->Third_party->website,
-                            'id_token' => $row->Third_party->id_token,
-                            'created_at' => $row->Third_party->created_at,
-                            'updated_at' => $row->Third_party->updated_at
-                        ];
-                        $result[$i] = $object;
-                    }
-                }
-
-                if ($result != null) {
-                    return ['success' => true, 'data' => $result];
                 } else {
-                    return ['success' => false, 'data' => [], 'message' => "NO RESULTS!"];
+                    return "Please select listing type";
                 }
+            } catch (\Illuminate\Database\QueryException $e) {
+                if ($e->getCode() == '42S22') {
+                    return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
+                } else if ($e->getCode() == '22007') {
+                    return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
+                } else {
+                    return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
+                }
+            }
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return $e->errors();
+        }
+        if (count($query) > 0) {
+
+
+            $result = null;
+            $i = 0;
+            foreach ($query as $row) {
+                $i++;
+                if ($option == 'order') {
+
+                    if ($row->deleted == 1 || $row->status != 'Active') {
+                        //check what does ACTIVE THIRD PARTIES MEANS WITH ASHMAAWIIIIIIII
+                        $i--;
+                        continue;
+                    }
+
+                    $object = [
+                        'logo' => $row->logo,
+                        'title' => $row->title,
+                        'description' => $row->description,
+                        'website' => $row->website,
+                        'id_token' => $row->id_token,
+                        'created_at' => $row->created_at,
+                        'updated_at' => $row->updated_at
+
+                    ];
+                    $result[$i] =  $object;
+                } else {
+                    //return $row->Third_party->status_id;
+                    if (empty($row->Third_party) == true) {
+                        $i--;
+                        continue;
+                    }
+                    if ($row->Third_party->deleted == 1 || $row->Third_party->status_id != 1) {
+                        $i--;
+                        continue;
+                    }
+
+
+                    $object = [
+                        'logo' => $row->Third_party->logo,
+                        'title' => $row->Third_party->title,
+                        'description' => $row->Third_party->description,
+                        'website' => $row->Third_party->website,
+                        'id_token' => $row->Third_party->id_token,
+                        'created_at' => $row->Third_party->created_at,
+                        'updated_at' => $row->Third_party->updated_at
+                    ];
+                    $result[$i] = $object;
+                }
+            }
+
+            if ($result != null) {
+                return ['success' => true, 'data' => $result];
             } else {
                 return ['success' => false, 'data' => [], 'message' => "NO RESULTS!"];
             }
-        }  
+        } else {
+            return ['success' => false, 'data' => [], 'message' => "NO RESULTS!"];
+        }
+    }
 
     //////////////////////////////////////////////connect///////////////////////////////////////////////////////
 
@@ -535,32 +539,32 @@ class ThirdPartyController extends Controller
         //POST method   /ThirdParty/delete
         //takes a third party id as a parameter
         //delets a third party softly from the database 
- 
-            if ($request['id'] == null) {
-                return 'please type in a third party id';
-            } else {
-                $id = $request['id'];
 
-                try {
-                    //       $TPS = DB::Update("UPDATE third_parties SET deleted =1 WHERE id =". $id);
-                    $query = Third_party::select()->where('id', '=', $id)->update(['deleted' => 1]);
-                } catch (\Illuminate\Database\QueryException $e) {
-                    if ($e->getCode() == '42S22') {
-                        return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
-                    } else if ($e->getCode() == '22007') {
-                        return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
-                    } else {
-                        return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
-                    }
-                }
+        if ($request['id'] == null) {
+            return 'please type in a third party id';
+        } else {
+            $id = $request['id'];
 
-                if ($query == 1) {
-                    return "Third party has been deleted!";
+            try {
+                //       $TPS = DB::Update("UPDATE third_parties SET deleted =1 WHERE id =". $id);
+                $query = Third_party::select()->where('id', '=', $id)->update(['deleted' => 1]);
+            } catch (\Illuminate\Database\QueryException $e) {
+                if ($e->getCode() == '42S22') {
+                    return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
+                } else if ($e->getCode() == '22007') {
+                    return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
                 } else {
-                    return "Error in deleting the third party!";
+                    return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
                 }
             }
-        }  
+
+            if ($query == 1) {
+                return "Third party has been deleted!";
+            } else {
+                return "Error in deleting the third party!";
+            }
+        }
+    }
 
 
     public function search($key)
@@ -605,28 +609,26 @@ class ThirdPartyController extends Controller
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public function reorder(Request $request, $id)
     {
-  
-            try {
-                //  DB::Update("UPDATE third_parties SET view_order=? WHERE id =?", [$new_order, $id]);
-                 if($request['view_order'] == null){
-                    return ['success' => false, 'data' => [], 'message' => "PLEASE CHECK YOUR INPUTS!"];
-                }
-                 $query = Third_party::select()->where('id', '=', $id)->update(['view_order' => $request['view_order']]);
- 
-                 return ['success' => true, 'data' => [], 'message' => " View order for the selected Third Party has been updated!"];
 
-                } catch (\Illuminate\Database\QueryException $e) {
-                if ($e->getCode() == '42S22') {
-                    return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
-                } else if ($e->getCode() == '22007') {
-                    return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
-                } else {
-                    return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
-                }
+        try {
+            //  DB::Update("UPDATE third_parties SET view_order=? WHERE id =?", [$new_order, $id]);
+            if ($request['view_order'] == null) {
+                return ['success' => false, 'data' => [], 'message' => "PLEASE CHECK YOUR INPUTS!"];
             }
-            return ['success' => false, 'data' => [], 'message' => "something went wrong please try again!"];
-            
-        }  
+            $query = Third_party::select()->where('id', '=', $id)->update(['view_order' => $request['view_order']]);
+
+            return ['success' => true, 'data' => [], 'message' => " View order for the selected Third Party has been updated!"];
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->getCode() == '42S22') {
+                return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
+            } else if ($e->getCode() == '22007') {
+                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
+            } else {
+                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
+            }
+        }
+        return ['success' => false, 'data' => [], 'message' => "something went wrong please try again!"];
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public function show_subscribed_third_parties(Request $request)
@@ -782,7 +784,6 @@ class ThirdPartyController extends Controller
 
         return $assoc_array;
     }
- 
  
 }
 
