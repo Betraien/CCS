@@ -40,9 +40,9 @@ class ThirdPartyController extends Controller
                 $data = $request->validate([
                     'title' => 'required',
                     'id_token' => 'required',
-                    'type' => 'required',
+                    'third_party_type_id' => 'required',
                     'view_order' => 'required',
-                    'status' => 'required',
+                    'status_id' => 'required',
                     'position' => 'required',
                     'contact_person' => 'required',
                     'contact_phone' => 'required',
@@ -61,10 +61,15 @@ class ThirdPartyController extends Controller
                 $thirdparty->title = $data['title'];
                 $thirdparty->id_token = $data['id_token'];
                 $thirdparty->description = $request['description'];
-                $thirdparty->logo = $request['logo'];
-                $thirdparty->type = $data['type'];
+               
+                $logo = $request['logo'];
+                $fileName = $logo->getClientOriginalName();
+                $logo->move('images', $fileName);
+
+                $thirdparty->logo = 'images/'. $fileName;
+                $thirdparty->third_party_type_id = $data['third_party_type_id'];
                 $thirdparty->view_order = $data['view_order'];
-                $thirdparty->status = $data['status'];
+                $thirdparty->status_id = $data['status_id'];
                 $thirdparty->position = $data['position'];
                 $thirdparty->website = $request['website'];
                 $thirdparty->contact_person = $data['contact_person'];
@@ -73,6 +78,8 @@ class ThirdPartyController extends Controller
                 $thirdparty->public = $request['public'];
                 $thirdparty->config = json_encode(["config" => $data['config']]);
                 $thirdparty->save();
+
+                
                 return "third party has been added";
             } catch (\Illuminate\Database\QueryException $e) {
                 if ($e->getCode() == '42S22') {
@@ -80,7 +87,7 @@ class ThirdPartyController extends Controller
                 } else if ($e->getCode() == '22007') {
                     return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
                 } else if ($e->getCode() == '23000') {
-                    return ['success' => false, 'data' => [], 'message' => "THE ENTERED THIRD PARTY IS ALREADY EXIST!"];
+                    return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
                 } else {
                     return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
                 }
@@ -129,7 +136,7 @@ class ThirdPartyController extends Controller
             } else if ($e->getCode() == '22007') {
                 return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
             } else if ($e->getCode() == '23000') {
-                return ['success' => false, 'data' => [], 'message' => "THIS REQUEST IS ALREADY EXIST!"];
+                return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
             } else {
                 return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
             }

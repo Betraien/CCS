@@ -28,7 +28,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 
 Route::resource('Client', 'ClientController');
-Route::resource('ClientThirdParty', 'ClientThirdPartyController');
+//Route::resource('ClientThirdParty', 'ClientThirdPartyController');
 Route::resource('ClientType', 'ClientTypeController');
 //Route::resource('Product', 'ProductController');
 //Route::resource('ThirdParty', 'ThirdPartyController');
