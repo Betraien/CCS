@@ -36,6 +36,7 @@ try{
           return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
       }
     }
+    
     try{
    $check= client_third_party::select()->where([['platform_id', '=', $request['platform_id']], ['deleted', '=', '0'],['client_id', '=', $request['client_id']],['third_party_id', '=', $request['third_party_id']]])->get();
   }catch (\Illuminate\Database\QueryException $e) {
@@ -51,7 +52,7 @@ try{
   }
     
         
-        if(isset($query) && count($check)<=0){
+        if(count($query)>0 && count($check)<=0){
           $client_third_party = new Client_third_party();
           $client_third_party->client_id = $data['client_id'];
           $client_third_party->third_party_id = $data['third_party_id'];
