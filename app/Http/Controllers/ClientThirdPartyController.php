@@ -50,6 +50,7 @@ try{
         return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
     }
   }
+  
     
         
         if(count($query)>0 && count($check)<=0){
@@ -58,7 +59,7 @@ try{
           $client_third_party->third_party_id = $data['third_party_id'];
           $client_third_party->platform_id= $data['platform_id'];
           $client_third_party->save();
-          return "third party added!";
+          return "third party has been added!";
         } else {
           return "Sorry, we couldn't add the third party..";
         }

@@ -148,7 +148,21 @@ class ThirdPartyController extends Controller
     public function viewThirdParty($id)
     {
 
-        $thirdparty =  Third_party::select()->where([['id', '=', $id], ['deleted', '=', '0']])->get();
+       try{
+            $thirdparty =  Third_party::select()->where([['id', '=', $id], ['deleted', '=', '0']])->get();
+        }catch (\Illuminate\Database\QueryException $e) {
+            if ($e->getCode() == '42S22') {
+                return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
+            } else if ($e->getCode() == '22007') {
+                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
+            } else if ($e->getCode() == '23000') {
+                return ['success' => false, 'data' => [], 'message' => "THE ENTERED THIRD PARTY IS ALREADY EXIST!"];
+            } else {
+                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
+            }
+          }
+         
+           
         return $thirdparty;
     }
 
