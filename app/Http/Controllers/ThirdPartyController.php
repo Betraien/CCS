@@ -457,7 +457,7 @@ class ThirdPartyController extends Controller
 
     }
 
-    public function disconnectThirdParty($userID, $thirdPartyID, $platformID)
+    public function disconnectThirdParty($userID, $platformID, $thirdPartyID)
     {
 
         if ($userID == null || $thirdPartyID == null || $platformID == null) {
