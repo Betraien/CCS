@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 29, 2019 at 10:08 AM
+-- Generation Time: Aug 01, 2019 at 04:32 PM
 -- Server version: 10.3.16-MariaDB
 -- PHP Version: 7.3.6
 
@@ -53,6 +53,25 @@ INSERT INTO `client_third_parties` (`id`, `client_id`, `platform_id`, `third_par
 (8, 1, 5, 5, '2019-07-21 16:10:24', '2019-07-21 16:10:24', 0),
 (9, 2, 1, 3, '2019-07-21 16:10:28', '2019-07-21 16:10:28', 0),
 (10, 3, 0, 5, '2019-07-21 16:10:31', '2019-07-21 16:10:31', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `password_resets`
+--
+
+CREATE TABLE `password_resets` (
+  `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `password_resets`
+--
+
+INSERT INTO `password_resets` (`email`, `token`, `created_at`) VALUES
+('x@x.com', '$2y$10$RSnupzifBxuNpGoQGaPyFePQUFq8Z1U9SZMizDK4g2XmLclq8pGhW', '2019-08-01 10:55:14');
 
 -- --------------------------------------------------------
 
@@ -114,6 +133,7 @@ INSERT INTO `request_partnerships` (`id`, `third_party_title`, `description`, `w
 CREATE TABLE `statuses` (
   `id` int(11) NOT NULL,
   `status` varchar(50) NOT NULL,
+  `table_name` varchar(50) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   `deleted` tinyint(4) NOT NULL DEFAULT 0
@@ -123,9 +143,10 @@ CREATE TABLE `statuses` (
 -- Dumping data for table `statuses`
 --
 
-INSERT INTO `statuses` (`id`, `status`, `created_at`, `updated_at`, `deleted`) VALUES
-(1, 'Active', '2019-07-04 00:00:00', '2019-07-27 00:00:00', 0),
-(2, 'pending', '2019-07-10 00:00:00', '2019-07-05 00:00:00', 0);
+INSERT INTO `statuses` (`id`, `status`, `table_name`, `created_at`, `updated_at`, `deleted`) VALUES
+(1, 'Active', 'third_parties', '2019-07-04 00:00:00', '2019-07-27 00:00:00', 0),
+(2, 'pending', 'user_third_parties', '2019-07-10 00:00:00', '2019-07-05 00:00:00', 0),
+(3, 'agreement', 'request_partnerships', '2019-08-16 00:00:00', '2019-08-07 12:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -160,17 +181,22 @@ CREATE TABLE `third_parties` (
 --
 
 INSERT INTO `third_parties` (`id`, `title`, `id_token`, `description`, `logo`, `third_party_type_id`, `view_order`, `status_id`, `position`, `website`, `contact_person`, `contact_phone`, `contact_email`, `average_rating`, `config`, `public`, `created_at`, `updated_at`, `deleted`) VALUES
-(1, 'TNTN\r\n', 'tnt', 'hello mr.shabib', 'wregwrgrg/wergoihrg.com', 1, 3, 1, 'xwef', 'Turnitin.com', 'jafri jafri', '+96595', 'ohrwiuhg@woehiug.com', 4.58, '{\"config\":{\r\n        \"Connection-standard\": \"Rest\",\r\n        \"type\": \"Post\",\r\n\"url\":\"https://classera.tii-sandbox.com/api/v1/submissions\",\r\n\r\n\"header\": {\r\n\"X-Turnitin-Integration-Name\": \"ccs\",\r\n\"X-Turnitin-Integration-Version\": \"v1beta\",\r\n\"Authorization\": \"Bearer 18853c5ef5804f88bc58d90a12a98577\",\r\n\"Content-Type\":\" application/json\"},\r\n\r\n\"body\":{\r\n\"owner\": \"classera\",\r\n\"title\": \"classera_submission\"}\r\n}\r\n}', 1, '2019-07-10 00:00:00', '2019-07-28 17:42:12', 0),
+(1, 'updateTest', 'tnt', 'erge23rrg', 'images/background.png', 1, 34, 1, 'xwef', 'Turnitin.com', 'jafri jafri', '+96595', 'ohrwiuhg@woehiug.com', 4.58, '{\"config\":{\r\n        \"Connection-standard\": \"Rest\",\r\n        \"type\": \"Post\",\r\n\"url\":\"https://classera.tii-sandbox.com/api/v1/submissions\",\r\n\r\n\"header\": {\r\n\"X-Turnitin-Integration-Name\": \"ccs\",\r\n\"X-Turnitin-Integration-Version\": \"v1beta\",\r\n\"Authorization\": \"Bearer 18853c5ef5804f88bc58d90a12a98577\",\r\n\"Content-Type\":\" application/json\"},\r\n\r\n\"body\":{\r\n\"owner\": \"classera\",\r\n\"title\": \"classera_submission\"}\r\n}\r\n}', 1, '2019-07-10 00:00:00', '2019-07-31 07:37:47', 0),
 (2, 'Dropboxx', 'DB', 'hello mr.shabibb', 'wegwg/tyjtj', 1, 2, 1, 'Jeffri', 'www.dropbox.com', 'rtht erg', '+96658965223', 'ohrwiuhg@woehiug.com', 2.85, '{\r\n    \"config\": {\r\n        \"Auth\": \"OAuth\",\r\n        \"type\": \"Get\",\r\n        \"url\": \"https://www.dropbox.com/oauth2/authorize?client_id=jssbqykrnanwmd8&response_type=code&redirect_uri=http://localhost/GitHub/CCS/public/ThirdParty/token\",\r\n        \"header\": {},\r\n        \"body\": {}\r\n    }\r\n}', 1, '2019-07-19 10:00:17', '2019-07-25 13:58:01', 0),
 (3, 'C8Science', 'g6ek95k5', 'C8Science combines computer & physical exercises to develop the cognitive skills necessary to learn in the classroom and improve math and reading achievement. Assigned by the Director of Student Personnel and Special Services for students who qualify', '', 1, 3, 1, 'Content Gateway', 'https://www.c8sciences.com/', 'Thamer Ahmed', '+96658965223', 'Thamer_Ahmed@gmail.com', 0, '[serialized (platforms, roles, redirect_url, token, etc.)]', 1, '2019-07-19 10:00:17', '2019-07-31 06:26:25', 0),
 (4, 'DD@DD', 'wegweg', 'wegweg', 'images/Thanks.jpg', 1, 1, 1, '1', '1', '1', '1', '2', 0, '{\r\n\"url\":\"https://classera.tii-sandbox.com/api/v1/submissions\",\r\n\r\n\"header\":[\r\n\"X-Turnitin-Integration-Name: ccs\",\r\n\"X-Turnitin-Integration-Version: v1beta\",\r\n\"Authorization: Bearer 18853c5ef5804f88bc58d90a12a98577\",\r\n\"Content-Type: application/json\"],\r\n\r\n\"body\":{\r\n\"owner\": \"classera\",\r\n\"title\": \"classera_submission\"}\r\n\r\n}', 1, '2019-07-07 18:14:59', '2019-07-07 18:14:59', 0),
-(5, 'Dropboxx', 'DB', 'hello mr.shabibb', 'wegwg/tyjtj', 1, 2, 1, 'Jeffri', 'www.dropbox.com', 'rtht erg', '+96658965223', 'ohrwiuhg@woehiug.com', 2.85, '{\r\n    \"config\": {\r\n        \"Connection-standard\": \"OAuth\",\r\n        \"type\": \"Get\",\r\n        \"url\": \"https://www.dropbox.com/oauth2/authorize?client_id=jssbqykrnanwmd8&response_type=code&redirect_uri=http://localhost/GitHub/CCS/public/ThirdParty/token\",\r\n        \"header\": {},\r\n        \"body\": {}\r\n    }\r\n}', 1, '0000-00-00 00:00:00', '2019-07-25 12:22:29', 0),
+(5, 'Dropboxx', '2e', 'hello mr.shabibb', 'wegwg/tyjtj', 1, 6, 1, 'Jeffri', 'www.dropbox.com', 'rtht erg', '+96658965223', 'ohrwiuhg@woehiug.com', 2.85, '{\r\n    \"config\": {\r\n        \"Connection-standard\": \"OAuth\",\r\n        \"type\": \"Get\",\r\n        \"url\": \"https://www.dropbox.com/oauth2/authorize?client_id=jssbqykrnanwmd8&response_type=code&redirect_uri=http://localhost/GitHub/CCS/public/ThirdParty/token\",\r\n        \"header\": {},\r\n        \"body\": {}\r\n    }\r\n}', 1, '0000-00-00 00:00:00', '2019-07-29 09:16:51', 0),
 (47, 'sad 1', 'noob', 'it is decri', 'logoPath', 1, 3, 1, 'xxxx', 'rth', 'Jeff John', '+1 659 875 469', 'Jeff@jemmy.jeff', 0, '{\"config\":\"{\\\"config\\\":{\\\"url\\\":\\\"www.shabib.com\\\",\\\"header\\\":{\\\"Authorization\\\":\\\"0599193936\\\",\\\"content-type\\\":\\\"application\\\\\\/json\\\"}}}\"}', 0, '2019-07-21 08:38:53', '2019-07-21 08:38:53', 0),
 (48, 'wefwegeg', 'sd', 'it is decri', 'logoPath', 1, 5, 1, 'wgweg', 'https://jeff.com', 'Jeff John', '+1 659 875 469', 'Jeff@jemmy.jeff', 0, '{\"config\":\"{\\\"config\\\":{\\\"url\\\":\\\"www.shabib.com\\\",\\\"header\\\":{\\\"Authorization\\\":\\\"0565826926\\\",\\\"content-type\\\":\\\"application\\\\\\/json\\\"}}}\"}', 1, '2019-07-21 10:05:59', '2019-07-21 10:05:59', 0),
-(49, 'Gtyhtyjtyjtyjtyjty 1', 'noob', 'it is decri', 'logoPath', 1, 5, 1, 'xxxx', 'https://jeff.com', 'Jeff John', '+1 659 875 469', 'Jeff@jemmy.jeff', 0, '{\"config\":{\"url\":\"www.shabib.com\",\"header\":{\"Authorization\":\"0599193936\",\"content-type\":\"application\\/json\"}}}', 1, '2019-07-21 13:28:56', '2019-07-21 13:28:56', 0),
-(50, 'wef 1', 'noob', 'it is decri', 'logoPath', 1, 5, 1, 'xxxx', 'https://jeff.com', 'Jeff John', '+1 659 875 469', 'Jeff@jemmy.jeff', 0, '{\"config\":{\"url\":\"www.shabib.com\",\"header\":{\"Authorization\":\"0599193936\",\"content-type\":\"application\\/json\"}}}', 1, '2019-07-21 13:29:07', '2019-07-21 13:29:07', 0),
-(51, 'wefe 1', 'noob', 'it is decri', 'logoPath', 1, 5, 1, 'xxxx', 'https://jeff.com', 'Jeff John', '+1 659 875 469', 'Jeff@jemmy.jeff', 0, '{\"config\":{\"url\":\"www.shabib.com\",\"header\":{\"Authorization\":\"0599193936\",\"content-type\":\"application\\/json\"}}}', 1, '2019-07-21 13:29:42', '2019-07-21 13:29:42', 0),
-(52, 'wqefe 1', 'noob', 'it is decri', 'logoPath', 1, 5, 1, 'xxxx', 'https://jeff.com', 'Jeff John', '+1 659 875 469', 'Jeff@jemmy.jeff', 0, '{\"config\":{\"url\":\"www.shabib.com\",\"header\":{\"Authorization\":\"0599193936\",\"content-type\":\"application\\/json\"}}}', 1, '2019-07-21 13:32:21', '2019-07-21 13:32:21', 0);
+(49, 'Gtyhtyjtyjtyjtyjty 1', 'noo23b', 'it is decri', 'logoPath', 1, 5, 1, 'xxxx', 'https://jeff.com', 'Jeff John', '+1 659 875 469', 'Jeff@jemmy.jeff', 0, '{\"config\":{\"url\":\"www.shabib.com\",\"header\":{\"Authorization\":\"0599193936\",\"content-type\":\"application\\/json\"}}}', 1, '2019-07-21 13:28:56', '2019-07-21 13:28:56', 0),
+(50, 'wef 1', 'nooeb', 'it is decri', 'logoPath', 1, 5, 1, 'xxxx', 'https://jeff.com', 'Jeff John', '+1 659 875 469', 'Jeff@jemmy.jeff', 0, '{\"config\":{\"url\":\"www.shabib.com\",\"header\":{\"Authorization\":\"0599193936\",\"content-type\":\"application\\/json\"}}}', 1, '2019-07-21 13:29:07', '2019-07-21 13:29:07', 0),
+(51, 'wefe 1', '12', 'it is decri', 'logoPath', 1, 5, 1, 'xxxx', 'https://jeff.com', 'Jeff John', '+1 659 875 469', 'Jeff@jemmy.jeff', 0, '{\"config\":{\"url\":\"www.shabib.com\",\"header\":{\"Authorization\":\"0599193936\",\"content-type\":\"application\\/json\"}}}', 1, '2019-07-21 13:29:42', '2019-07-21 13:29:42', 0),
+(52, 'wqefe 1', 'noobe', 'it is decri', 'logoPath', 1, 5, 1, 'xxxx', 'https://jeff.com', 'Jeff John', '+1 659 875 469', 'Jeff@jemmy.jeff', 0, '{\"config\":{\"url\":\"www.shabib.com\",\"header\":{\"Authorization\":\"0599193936\",\"content-type\":\"application\\/json\"}}}', 1, '2019-07-21 13:32:21', '2019-07-21 13:32:21', 0),
+(57, '2134fweg', '324r', 'erge23rrg', 'images/1.jpg', 1, 5, 1, 'xxxx', 'https://jeg.com', 'Jeff John', '+1 659 875 469', 'Jeff@jehhmmy.jeff', 0, '{\"config\":\"{\\\"url\\\":\\\"www.shabib.com\\\", \\\"header\\\":{\\\"Authorization\\\": \\\"0599193936\\\", \\\"content-type\\\": \\\"application\\/json\\\"}}\"}', 1, '2019-07-31 06:43:00', '2019-07-31 06:43:00', 0),
+(58, '2134fweg', '324rf', 'erge23rrg', 'images/1.jpg', 1, 5, 1, 'xxxx', 'https://jeg.com', 'Jeff John', '+1 659 875 469', 'Jeff@jehhmmy.jeff', 0, '{\"config\":\"{\\\"url\\\":\\\"www.shabib.com\\\", \\\"header\\\":{\\\"Authorization\\\": \\\"0599193936\\\", \\\"content-type\\\": \\\"application\\/json\\\"}}\"}', 1, '2019-07-31 06:43:22', '2019-07-31 06:43:22', 0),
+(60, 'aefwegwerg', 'ewfwef', 'erge23rrg', 'images/moh_2.phd', 1, 5, 1, 'xxxx', 'https://jeg.com', 'Jeff John', '+1 659 875 469', 'Jeff@jehhmmy.jeff', 0, '{\"config\":\"{\\\"url\\\":\\\"www.shabib.com\\\", \\\"header\\\":{\\\"Authorization\\\": \\\"0599193936\\\", \\\"content-type\\\": \\\"application\\/json\\\"}}\"}', 1, '2019-07-31 07:39:58', '2019-07-31 07:39:58', 0),
+(62, 'TestT', 'wef', 'erge23rrg', NULL, 1, 5, 1, 'xxxx', 'https://jeg.com', 'Jeff John', '+1 659 875 469', 'Jeff@jehhmmy.jeff', 0, '{\"config\":\"{\\\"url\\\":\\\"www.shabib.com\\\", \\\"header\\\":{\\\"Authorization\\\": \\\"0599193936\\\", \\\"content-type\\\": \\\"application\\/json\\\"}}\"}', 1, '2019-07-31 07:40:32', '2019-07-31 07:40:32', 0),
+(64, 'TestT', 'wef3', 'erge23rrg', NULL, 1, 5, 1, 'xxxx', 'https://jeg.com', 'Jeff John', '+1 659 875 469', 'Jeff@jehhmmy.jeff', 0, '{\"config\":\"{\\\"url\\\":\\\"www.shabib.com\\\", \\\"header\\\":{\\\"Authorization\\\": \\\"0599193936\\\", \\\"content-type\\\": \\\"application\\/json\\\"}}\"}', 1, '2019-08-01 08:14:51', '2019-08-01 08:14:51', 0);
 
 -- --------------------------------------------------------
 
@@ -222,38 +248,53 @@ INSERT INTO `third_party_types` (`id`, `type`, `created_at`, `updated_at`, `dele
 -- --------------------------------------------------------
 
 --
--- Table structure for table `usercps`
---
-
-CREATE TABLE `usercps` (
-  `id` int(11) NOT NULL,
-  `client_id` int(11) NOT NULL,
-  `platform_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `usercps`
---
-
-INSERT INTO `usercps` (`id`, `client_id`, `platform_id`) VALUES
-(1, 1, 1);
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email_verified_at` timestamp NULL DEFAULT NULL,
+  `password` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+(6, 'app1test', 'x@x.com', NULL, '$2y$10$JvhmUIZtQHBG57tlPJMq2uLJP6vmLraLXLlBldK3P7I8sae7fsNTa', NULL, '2019-08-01 05:10:54', '2019-08-01 05:10:54'),
+(7, 'app1test', 'a@a.com', NULL, '$2y$10$/cG75G3vTBreiaDEUHvSuu.pqJyOkagtdLvYx7nreN4tV.yBiCv5.', NULL, '2019-08-01 10:56:49', '2019-08-01 10:56:49');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users_x`
+--
+
+CREATE TABLE `users_x` (
   `id` int(11) UNSIGNED NOT NULL,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `username` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `expiry_date` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `users_x`
+--
+
+INSERT INTO `users_x` (`id`, `name`, `password`, `email`, `token`, `expiry_date`, `created_at`, `updated_at`, `deleted`) VALUES
+(1, 'admin', 'admin', 'admin@admin.com', '', '2019-07-29 10:44:50', NULL, '2019-07-29 08:44:50', 0),
+(10, 'jeff', '$2y$10$nCwZc.M2Eih252QBEcA2J.5.ff1HxW5lIbKzwmKU8OXpRjH8xGjaO', 'admin3@admin.com', NULL, NULL, '2019-07-30 05:46:39', '2019-07-30 05:46:39', 0);
 
 -- --------------------------------------------------------
 
@@ -268,7 +309,7 @@ CREATE TABLE `user_third_parties` (
   `client_id` int(11) NOT NULL,
   `third_party_id` int(11) NOT NULL,
   `token` varchar(100) NOT NULL,
-  `status` varchar(30) NOT NULL,
+  `status_id` int(11) NOT NULL,
   `expire_date` datetime NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
@@ -279,27 +320,11 @@ CREATE TABLE `user_third_parties` (
 -- Dumping data for table `user_third_parties`
 --
 
-INSERT INTO `user_third_parties` (`id`, `user_id`, `platform_id`, `client_id`, `third_party_id`, `token`, `status`, `expire_date`, `created_at`, `updated_at`, `deleted`) VALUES
-(1, 3, 2, 3, 5, '', 'Active', '2019-07-03 03:12:05', '2019-07-10 04:00:16', '2019-07-19 07:23:00', 0),
-(2, 3, 2, 3, 2, 'vendor123647', 'Active', '2019-07-03 03:12:05', '2019-03-03 10:00:16', '2019-09-19 12:23:00', 0),
-(3, 3, 2, 3, 3, 'vendor373783', 'xxxxx', '2019-07-03 03:12:05', '2019-03-03 10:00:16', '2019-09-19 12:23:00', 0),
-(39, 2, 5, 3, 5, 'YQR3vaGQARAAAAAAAAAAMMvJjbulCSKWugpTHe0sg1s', 'Active', '2019-07-25 08:15:11', '2019-07-25 08:15:11', '2019-07-25 08:15:11', 0),
-(43, 2, 8, 2, 5, 'YQR3vaGQARAAAAAAAAAAM0JcxgGuEKql8w5K3Epi1gQ', 'Active', '2019-07-25 08:52:50', '2019-07-25 08:52:50', '2019-07-25 08:52:50', 0),
-(45, 2, 9, 2, 5, 'YQR3vaGQARAAAAAAAAAAM0JcxgGuEKql8w5K3Epi1gQ', 'Active', '2019-07-25 08:54:35', '2019-07-25 08:54:35', '2019-07-25 08:54:35', 0),
-(46, 2, 6, 2, 5, 'YQR3vaGQARAAAAAAAAAAM0JcxgGuEKql8w5K3Epi1gQ', 'Active', '2019-07-25 09:00:36', '2019-07-25 09:00:36', '2019-07-25 09:00:36', 0),
-(47, 23, 23, 412, 5, 'YQR3vaGQARAAAAAAAAAANNDLSB7mW2BuGPwxHS3Eno4', 'Active', '2019-07-25 09:19:43', '2019-07-25 09:19:43', '2019-07-25 09:19:43', 0),
-(48, 2, 16, 4, 5, 'YQR3vaGQARAAAAAAAAAANVhrcZaWKrMiABIKlson50s', 'Active', '2019-07-25 09:21:49', '2019-07-25 09:21:49', '2019-07-25 09:21:49', 0),
-(49, 232, 232, 232, 5, 'YQR3vaGQARAAAAAAAAAANr-wBJaqdtfu0dX5SkZQyP0', 'Active', '2019-07-25 09:26:58', '2019-07-25 09:26:58', '2019-07-25 09:26:58', 0),
-(51, 232, 123, 123, 5, 'YQR3vaGQARAAAAAAAAAAOO8oRm_LMVVC0XvkvW1BXtE', 'Active', '2019-07-25 09:53:22', '2019-07-25 09:53:22', '2019-07-25 09:53:22', 0),
-(52, 7, 7, 9, 5, 'YQR3vaGQARAAAAAAAAAAOXyVp3KdpPMasn70dBZX7vo', 'Active', '2019-07-25 10:06:00', '2019-07-25 10:06:00', '2019-07-25 10:06:00', 0),
-(56, 1, 4, 1, 5, 'YQR3vaGQARAAAAAAAAAAPTxkqkoLwk6UDo2wLkI0Qb0', 'Active', '2019-07-25 10:11:49', '2019-07-25 10:11:49', '2019-07-25 10:11:49', 0),
-(57, 123, 123, 123, 5, 'YQR3vaGQARAAAAAAAAAAPvzIKyUDR76l_RShAdH37YU', 'Active', '2019-07-29 07:29:47', '2019-07-29 07:29:47', '2019-07-29 07:29:47', 0),
-(58, 2, 1, 3, 1, '33e7547c-a8b7-4ade-b422-332fda2df6ac', 'Active', '2019-07-29 07:51:28', '2019-07-29 07:51:28', '2019-07-29 07:51:28', 0),
-(59, 123, 3454, 122, 5, 'YQR3vaGQARAAAAAAAAAAP9WQqrduZB9rm1ghuu0oW2Y', 'Active', '2019-07-29 07:52:08', '2019-07-29 07:52:08', '2019-07-29 07:52:08', 0),
-(63, 324, 234, 234, 5, 'YQR3vaGQARAAAAAAAAAAQIIdfBbmhiICOe85fMbKRqw', 'Active', '2019-07-29 07:58:21', '2019-07-29 07:58:21', '2019-07-29 07:58:21', 0),
-(65, 546, 345, 658, 5, 'YQR3vaGQARAAAAAAAAAAQVzrSA2KIhkG8qnBtma6kHY', 'Active', '2019-07-29 08:01:48', '2019-07-29 08:01:48', '2019-07-29 08:01:48', 0),
-(66, 857, 999, 965, 5, 'YQR3vaGQARAAAAAAAAAAQk2p0AW0ezZpn0pezUeMAKo', 'Active', '2019-07-29 08:06:30', '2019-07-29 08:06:30', '2019-07-29 08:06:30', 0),
-(67, 777, 777, 777, 1, 'dd32c5bf-603e-4981-bbe9-dd46d6f7d000', 'Active', '2019-07-29 08:06:50', '2019-07-29 08:06:50', '2019-07-29 08:06:50', 0);
+INSERT INTO `user_third_parties` (`id`, `user_id`, `platform_id`, `client_id`, `third_party_id`, `token`, `status_id`, `expire_date`, `created_at`, `updated_at`, `deleted`) VALUES
+(68, 5, 46, 6, 5, 'YQR3vaGQARAAAAAAAAAAQ_pov6sM2ZkP0LITXw_0kjE', 2, '2019-08-01 08:46:31', '2019-08-01 08:46:31', '2019-08-01 08:46:31', 0),
+(69, 1, 1, 1, 1, 'a436035c-2990-499e-bcfc-92b1758f23f2', 1, '2019-08-01 08:48:11', '2019-08-01 08:48:11', '2019-08-01 08:48:11', 0),
+(70, 1, 12, 3, 5, 'YQR3vaGQARAAAAAAAAAARKcV2YnwTNWU-PHjjBtkAis', 1, '2019-08-01 08:48:54', '2019-08-01 08:48:54', '2019-08-01 08:48:54', 0),
+(71, 1, 12, 1, 1, 'a0251bc8-830e-4d52-9319-96b8cb453680', 2, '2019-08-01 08:49:09', '2019-08-01 08:49:09', '2019-08-01 08:49:09', 0);
 
 --
 -- Indexes for dumped tables
@@ -314,6 +339,12 @@ ALTER TABLE `client_third_parties`
   ADD KEY `client_id` (`client_id`),
   ADD KEY `third_party_id` (`third_party_id`),
   ADD KEY `i` (`platform_id`);
+
+--
+-- Indexes for table `password_resets`
+--
+ALTER TABLE `password_resets`
+  ADD KEY `password_resets_email_index` (`email`);
 
 --
 -- Indexes for table `platform_third_parties`
@@ -334,13 +365,15 @@ ALTER TABLE `request_partnerships`
 -- Indexes for table `statuses`
 --
 ALTER TABLE `statuses`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `table_name` (`table_name`);
 
 --
 -- Indexes for table `third_parties`
 --
 ALTER TABLE `third_parties`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `id_token` (`id_token`),
   ADD KEY `title` (`title`,`third_party_type_id`);
 
 --
@@ -359,18 +392,18 @@ ALTER TABLE `third_party_types`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `usercps`
---
-ALTER TABLE `usercps`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `users_email_unique` (`email`),
-  ADD UNIQUE KEY `username` (`username`);
+  ADD UNIQUE KEY `users_email_unique` (`email`);
+
+--
+-- Indexes for table `users_x`
+--
+ALTER TABLE `users_x`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `users_email_unique` (`email`);
 
 --
 -- Indexes for table `user_third_parties`
@@ -407,13 +440,13 @@ ALTER TABLE `request_partnerships`
 -- AUTO_INCREMENT for table `statuses`
 --
 ALTER TABLE `statuses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `third_parties`
 --
 ALTER TABLE `third_parties`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
 
 --
 -- AUTO_INCREMENT for table `third_party_ratings`
@@ -428,22 +461,22 @@ ALTER TABLE `third_party_types`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `usercps`
---
-ALTER TABLE `usercps`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `users_x`
+--
+ALTER TABLE `users_x`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `user_third_parties`
 --
 ALTER TABLE `user_third_parties`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -26,6 +26,12 @@ class ThirdPartyController extends Controller
         //return view('Third_party.Store');
     }
 
+   
+    public function connect()
+    {
+
+        return view('Third_party.connect');
+     }
 
 
     /**

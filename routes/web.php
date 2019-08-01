@@ -17,25 +17,25 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/', 'PagesController@index');
+//Route::get('/', 'PagesController@index');
 
-Route::resource('Posts', 'PostsController');
+//Route::resource('Posts', 'PostsController');
 
-Route::get('/home', 'HomeController@index')->name('home');
-
-
+//Route::get('/home', 'HomeController@index')->name('home');
 
 
-Route::resource('Client', 'ClientController');
+
+
+//Route::resource('Client', 'ClientController');
 //Route::resource('ClientThirdParty', 'ClientThirdPartyController');
-Route::resource('ClientType', 'ClientTypeController');
+//Route::resource('ClientType', 'ClientTypeController');
 //Route::resource('Product', 'ProductController');
 //Route::resource('ThirdParty', 'ThirdPartyController');
 Route::resource('ThirdPartyRating', 'ThirdPartyRatingController');
 Route::resource('UserThirdParty', 'UserThirdPartyController');
 
 
-Route::get('ThirdParty/index', 'ThirdPartyController@index');
+Route::get('ThirdParty/connect', 'ThirdPartyController@connect')->middleware('auth');
 Route::get('ThirdParty/disconnectThirdParty/{userID}/{platform_id}/{third_party_ID}', 'ThirdPartyController@disconnectThirdParty');
 Route::get('ThirdParty/listThirdPartyBy/{type}/{type_id}/{platform_id}', ['as' => 'ThirdParty.list_third_party', 'uses' =>'ThirdPartyController@listThirdPartyBy']);
 Route::get('ThirdParty/listThirdPartyBy/{type}/{platform_id_OR_orderType}', ['as' => 'ThirdParty.list_third_party', 'uses' =>'ThirdPartyController@listThirdPartyBy']);
