@@ -35,7 +35,7 @@ Route::resource('ThirdPartyRating', 'ThirdPartyRatingController');
 Route::resource('UserThirdParty', 'UserThirdPartyController');
 
 
-Route::get('ThirdParty/connect', 'ThirdPartyController@connect')->middleware('auth');
+Route::get('ThirdParty/connect', 'ThirdPartyController@connect')->middleware('auth');//TESTing Purposes
 Route::get('ThirdParty/disconnectThirdParty/{userID}/{platform_id}/{third_party_ID}', 'ThirdPartyController@disconnectThirdParty');
 Route::get('ThirdParty/listThirdPartyBy/{type}/{type_id}/{platform_id}', ['as' => 'ThirdParty.list_third_party', 'uses' =>'ThirdPartyController@listThirdPartyBy']);
 Route::get('ThirdParty/listThirdPartyBy/{type}/{platform_id_OR_orderType}', ['as' => 'ThirdParty.list_third_party', 'uses' =>'ThirdPartyController@listThirdPartyBy']);
