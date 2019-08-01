@@ -21,7 +21,6 @@ Route::get('/', 'PagesController@index');
 
 Route::resource('Posts', 'PostsController');
 
-Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 
@@ -79,3 +78,7 @@ Route::get('ThirdParty/token', 'ThirdPartyController@token');
 Route::post('ThirdParty/ClientThirdParty/create', ['as' => 'ClientThirdParty.create', 'uses' => 'ClientThirdPartyController@create']);
 Route::post('ThirdParty/ClientThirdParty/delete', ['as' => 'ClientThirdParty.delete', 'uses' => 'ClientThirdPartyController@delete']);
 //Route::get('ThirdParty/dropboxToeken/{x}', ['as' => 'ThirdParty.dropboxToeken', 'uses' =>'ThirdPartyController@dropboxToeken']);
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
