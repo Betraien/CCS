@@ -79,7 +79,3 @@ Route::post('ClientThirdParty/create', ['as' => 'ClientThirdParty.create', 'uses
 Route::post('ClientThirdParty/delete', ['as' => 'ClientThirdParty.delete', 'uses' => 'ClientThirdPartyController@delete']);
 Route::post('ClientThirdParty/delete', 'ClientThirdPartyController@delete');
 //Route::get('ThirdParty/dropboxToeken/{x}', ['as' => 'ThirdParty.dropboxToeken', 'uses' =>'ThirdPartyController@dropboxToeken']);
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
