@@ -31,8 +31,8 @@
                                 <td><?php echo $data[$i]['id_token']; ?></td>
                                 <td><?php echo $data[$i]['status_id']; ?></td>
                                 <td><?php echo $data[$i]['website']; ?></td>
-                                <td><a  style = "border-radius: 5px;" href="/GitHub/CCS/public/ThirdParty/update?data={{$data[$i]['id']}}" type="button" class="btn btn-primary">Edit</a></td>
-                                <td><a  style = "border-radius: 5px;" href="/GitHub/CCS/public/ThirdParty/update/{{$data[$i]['id']}}" type="button" class="btn btn-danger">Delete</a></td>
+                                <td><a style = "border-radius: 5px;" href="/GitHub/CCS/public/ThirdParty/viewThirdParty/{{$data[$i]['id']}}" type="button" class="btn btn-primary">Edit</a></td>
+                                <td><a style = "border-radius: 5px;" href="/GitHub/CCS/public/ThirdParty/delete/{{$data[$i]['id']}}" type="button" class="btn btn-danger">Delete</a></td>
                             
                             </tr>
                     
@@ -43,8 +43,8 @@
                                 <td><?php echo $data[$i]['id_token']; ?></td>
                                 <td><?php echo $data[$i]['status_id']; ?></td>
                                 <td><?php echo $data[$i]['website']; ?></td>
-                                <td><a href="/GitHub/CCS/public/ThirdParty/update?data={{$data[$i]['id']}}" type="button" class="btn btn-primary">Edit</a></td>
-                                <td><a  href="/GitHub/CCS/public/ThirdParty/update/{{$data[$i]['id']}}" type="button" class="btn btn-danger">Delete</a></td>
+                                <td><a href="/GitHub/CCS/public/ThirdParty/viewThirdParty/{{$data[$i]['id']}}" type="button" class="btn btn-primary">Edit</a></td>
+                                <td><a href="/GitHub/CCS/public/ThirdParty/delete/{{$data[$i]['id']}}" type="button" class="btn btn-danger">Delete</a></td>
                             </tr>
                     
 

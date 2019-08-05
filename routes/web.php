@@ -67,7 +67,7 @@ Route::post('ThirdParty/delete_client_third_party', ['as' => 'ThirdParty.delete_
 
 Route::post('ThirdParty/create', ['as' => 'ThirdParty.create', 'uses' => 'ThirdPartyController@create']);
 Route::post('ThirdParty/register','ThirdPartyController@register');
-Route::post('ThirdParty/delete','ThirdPartyController@delete');//tested
+Route::get('ThirdParty/delete/{x}','ThirdPartyController@delete');//tested
 //Route::get('ThirdParty/delete/{id}','ThirdPartyController@delete');
 Route::get('ThirdParty/search/{key}','ThirdPartyController@search');//tested
 Route::get('ThirdPartyRating/rate/{user_id}/{plat_id}/{third_party_id}/{rating}/{comment}','ThirdPartyRatingController@rate');//tested
@@ -81,9 +81,9 @@ Route::get('ThirdParty/update', function () {
     return view('Third_party.update')->with('id' , request()->all());
 });
 
-Route::get('ThirdParty/delete', function () {
-    return view('Third_party.delete')->with('id' , request()->all());
-});
+// Route::get('ThirdParty/delete', function () {
+//     return view('Third_party.delete')->with('id' , request()->all());
+// });
 Route::post('ThirdParty/show_user_subscriptions', 'ThirdPartyController@show_subscribed_third_parties');
 Route::post('ThirdParty/show_user_avilable_subscriptions', 'ThirdPartyController@show_unsubscribed_third_parties');
 

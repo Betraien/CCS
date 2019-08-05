@@ -165,7 +165,7 @@ class ThirdPartyController extends Controller
     {
 
         try {
-            $thirdparty =  Third_party::select()->where([['id', '=', $id], ['deleted', '=', '0']])->get();
+            $thirdparty =  Third_party::select()->where([['id', '=', $id], ['deleted', '=', '0']])->get()->all();
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == '42S22') {
                 return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
@@ -179,7 +179,7 @@ class ThirdPartyController extends Controller
         }
 
 
-        return $thirdparty;
+        return view('Third_party.view')->with('tp', $thirdparty);
     }
 
     /**
@@ -388,7 +388,7 @@ class ThirdPartyController extends Controller
             //Connect third party to the CCS
             $config = json_decode($connect[0]['config'], true);
 
-            $ConnectionStandard = $config['config']['Requests']['1']['Connection-standard'];
+            $ConnectionStandard = $config['config']['Requests']['1']['Authentication-type'];
             $ConnectionStandard = strtolower($ConnectionStandard);
 
             if ($ConnectionStandard == 'rest') {
@@ -564,17 +564,16 @@ class ThirdPartyController extends Controller
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public function delete(Request $request)
+    public function delete($id)
     {
         //POST method   /ThirdParty/delete
         //takes a third party id as a parameter
         //delets a third party softly from the database 
 
-        if ($request['id'] == null) {
+        if ($id == null) {
             return 'please type in a third party id';
         } else {
-            $id = $request['id'];
-
+ 
             try {
                 //       $TPS = DB::Update("UPDATE third_parties SET deleted =1 WHERE id =". $id);
                 $query = Third_party::select()->where('id', '=', $id)->update(['deleted' => 1]);
@@ -823,7 +822,7 @@ this is a template for the config column in the thirdparty table
     "config": {
         "Requests": {
             "1": {
-                "Connection-standard": "Rest",
+                "Authentication-type": "Rest",
                 "type": "Post",
                 "url": "https://classera.tii-sandbox.com/api/v1/submissions",
                 "header": {
