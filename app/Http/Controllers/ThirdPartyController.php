@@ -25,6 +25,16 @@ class ThirdPartyController extends Controller
         return view('Third_party.index');
         //return view('Third_party.Store');
     }
+    public function dashboard(){    
+
+        $data = Third_party::select()->where([['deleted', '=', '0']])->get();
+      //   return $this->jsonToArray($data[0]);
+         return view('Third_party.dashboard')->with('data',$data);
+         //view('Third_party.index');
+        
+    }
+
+
 
    
     public function connect()

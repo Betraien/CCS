@@ -87,7 +87,9 @@ class ThirdPartyRatingController extends Controller
 
      public function showRatings($TPid){
 
-       try{ $TPs=DB::select("SELECT* FROM third_party_ratings WHERE third_party_id='$TPid'");
+       try{ //$TPs=DB::select("SELECT* FROM third_party_ratings WHERE third_party_id='$TPid'");
+
+        Third_party_rating::select()->where([["third_party_id","=",$TPid]])->get();
 
        
 
@@ -141,6 +143,7 @@ class ThirdPartyRatingController extends Controller
          $count=0;
          $total=0;
          $rate=0;
+         if(count($TPs)>0){
          foreach ($TPs as $key => $TP) {
            
            $total += $TP->rating;   
@@ -148,7 +151,7 @@ class ThirdPartyRatingController extends Controller
 
          }
 
-         if($count != 0){
+         
          $rate = $total / $count;
      }
     } catch (\Illuminate\Database\QueryException $e){
