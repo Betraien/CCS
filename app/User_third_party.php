@@ -16,8 +16,10 @@ class User_third_party extends Model
         return $this->belongsTo('App\Third_party');
     }
     
-    public function product(){
-    
-        return $this->belongsTo('App\Product');
+
+    public function status(){
+
+        return $this->belongsTo('App\Status');
     }
+
 }

@@ -17,11 +17,12 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/', 'PagesController@index');
+//Route::get('/', 'PagesController@index');
 
-Route::resource('Posts', 'PostsController');
+//Route::resource('Posts', 'PostsController');
 
-Auth::routes();
+
+//Route::get('/home', 'HomeController@index')->name('home');
 
 //Route::post('/index', 'HomeController@index');
 
@@ -41,6 +42,8 @@ Route::resource('UserThirdParty', 'UserThirdPartyController');
 
 //Route::get('ThirdParty/index', 'ThirdPartyController@index');
 Route::get('ThirdParty/disconnectThirdParty/{userID}/{third_party_ID}/{platform_id}', 'ThirdPartyController@disconnectThirdParty');
+Route::get('ThirdParty/connect', 'ThirdPartyController@connect')->middleware('auth');//TESTing Purposes
+Route::get('ThirdParty/disconnectThirdParty/{userID}/{platform_id}/{third_party_ID}', 'ThirdPartyController@disconnectThirdParty');
 Route::get('ThirdParty/listThirdPartyBy/{type}/{type_id}/{platform_id}', ['as' => 'ThirdParty.list_third_party', 'uses' =>'ThirdPartyController@listThirdPartyBy']);
 Route::get('ThirdParty/listThirdPartyBy/{type}/{platform_id_OR_orderType}', ['as' => 'ThirdParty.list_third_party', 'uses' =>'ThirdPartyController@listThirdPartyBy']);
 Route::get('ThirdParty/listThirdPartyBy/{type}', ['as' => 'ThirdParty.list_third_party', 'uses' =>'ThirdPartyController@listThirdPartyBy']);
@@ -97,3 +100,8 @@ Route::post('ThirdParty/ClientThirdParty/delete', ['as' => 'ClientThirdParty.del
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::post('ClientThirdParty/create', ['as' => 'ClientThirdParty.create', 'uses' => 'ClientThirdPartyController@create']);
+Route::post('ClientThirdParty/delete', ['as' => 'ClientThirdParty.delete', 'uses' => 'ClientThirdPartyController@delete']);
+Route::post('ClientThirdParty/delete', 'ClientThirdPartyController@delete');
+//Route::get('ThirdParty/dropboxToeken/{x}', ['as' => 'ThirdParty.dropboxToeken', 'uses' =>'ThirdPartyController@dropboxToeken']);

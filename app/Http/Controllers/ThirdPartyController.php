@@ -36,6 +36,12 @@ class ThirdPartyController extends Controller
 
 
 
+   
+    public function connect()
+    {
+
+        return view('Third_party.connect');
+     }
 
 
     /**
@@ -158,9 +164,9 @@ class ThirdPartyController extends Controller
     public function viewThirdParty($id)
     {
 
-       try{
+        try {
             $thirdparty =  Third_party::select()->where([['id', '=', $id], ['deleted', '=', '0']])->get();
-        }catch (\Illuminate\Database\QueryException $e) {
+        } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == '42S22') {
                 return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
             } else if ($e->getCode() == '22007') {
@@ -170,9 +176,9 @@ class ThirdPartyController extends Controller
             } else {
                 return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
             }
-          }
-         
-           
+        }
+
+
         return $thirdparty;
     }
 
@@ -191,7 +197,7 @@ class ThirdPartyController extends Controller
 
             $assoc_array = request()->all();
             unset($assoc_array['id']); //This line is ignoring the id in case the user has put it within the request body
-         
+
             if (isset($assoc_array['logo'])) {
                 $logo = $assoc_array['logo'];
                 $fileName = $logo->getClientOriginalName();
@@ -808,7 +814,6 @@ class ThirdPartyController extends Controller
 
         return $assoc_array;
     }
- 
 }
 
 /* 
