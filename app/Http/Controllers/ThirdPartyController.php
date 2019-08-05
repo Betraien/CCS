@@ -378,7 +378,7 @@ class ThirdPartyController extends Controller
             //Connect third party to the CCS
             $config = json_decode($connect[0]['config'], true);
 
-            $ConnectionStandard = $config['config']['Connection-standard'];
+            $ConnectionStandard = $config['config']['Requests']['1']['Connection-standard'];
             $ConnectionStandard = strtolower($ConnectionStandard);
 
             if ($ConnectionStandard == 'rest') {
@@ -412,10 +412,10 @@ class ThirdPartyController extends Controller
     public function connectREST($data, $config)
     {
 
-        $type = $config['config']['type'];
-        $url = $config['config']['url'];
-        $headers = $config['config']['header'];
-        $body = $config['config']['body'];
+        $type = $config['config']['Requests']['1']['type'];
+        $url = $config['config']['Requests']['1']['url'];
+        $headers = $config['config']['Requests']['1']['header'];
+        $body = $config['config']['Requests']['1']['body'];
 
         $arrayOfHeaders = array();
 
@@ -452,10 +452,10 @@ class ThirdPartyController extends Controller
     public function connectOAuth($data, $config)
     {
 
-        $type = $config['config']['type'];
-        $url = $config['config']['url'];
-        $headers = $config['config']['header'];
-        $body = $config['config']['body'];
+        $type = $config['config']['Requests']['1']['type'];
+        $url = $config['config']['Requests']['1']['url'];
+        $headers = $config['config']['Requests']['1']['header'];
+        $body = $config['config']['Requests']['1']['body'];
 
         $arrayOfHeaders = array();
 
@@ -531,7 +531,7 @@ class ThirdPartyController extends Controller
                 'platform_id' => $response['data']['platform_id'],
                 'third_party_id' => $response['data']['third_party_id'],
                 'token' => $response['token'],
-                'status' => 'Active',
+                'status_id' => '1',
                 'expire_date' => \Carbon\Carbon::now(),
                 'created_at' => \Carbon\Carbon::now(),  //since you are using QueryBuilder (insert method) you have to create the timestamp manually, because Fields created_at,update_at and deleted_at are "part" of Eloquent and you cannot use them in QueryBuilder
                 'updated_at' => \Carbon\Carbon::now(),
@@ -809,18 +809,25 @@ class ThirdPartyController extends Controller
 /* 
 this is a template for the config column in the thirdparty table
 
-s
 {
-        "config": {
-            "connection-standard": "OAuth/LIT/Rest",
-            "HTTP-request-type": "GET/POST/PUT",
-            "url": "url required for the connection",
-            "header": {
-                "a group of header segmants required for the connection"
-            },
-            "body": {
-
-                "a group of body segmants required for the connection"
+    "config": {
+        "Requests": {
+            "1": {
+                "Connection-standard": "Rest",
+                "type": "Post",
+                "url": "https://classera.tii-sandbox.com/api/v1/submissions",
+                "header": {
+                    "X-Turnitin-Integration-Name": "ccs",
+                    "X-Turnitin-Integration-Version": "v1beta",
+                    "Authorization": "Bearer 18853c5ef5804f88bc58d90a12a98577",
+                    "Content-Type": " application/json"
+                },
+                "body": {
+                    "owner": "classera",
+                    "title": "classera_submission"
+                }
             }
         }
+    }
+}
     }*/
