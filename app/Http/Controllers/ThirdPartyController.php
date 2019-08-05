@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use DB;
+use App\Status;
 use App\Third_party;
 use App\Client_third_party;
+use App\Third_party_type;
 use App\User_third_party;
 use App\Request_partnership;
 // use App\User;
@@ -25,23 +27,24 @@ class ThirdPartyController extends Controller
         return view('Third_party.index');
         //return view('Third_party.Store');
     }
-    public function dashboard(){    
+    public function dashboard()
+    {
 
         $data = Third_party::select()->where([['deleted', '=', '0']])->get();
-      //   return $this->jsonToArray($data[0]);
-         return view('Third_party.dashboard')->with('data',$data);
-         //view('Third_party.index');
-        
+        //   return $this->jsonToArray($data[0]);
+        return view('Third_party.dashboard')->with('data', $data);
+        //view('Third_party.index');
+
     }
 
 
 
-   
+
     public function connect()
     {
 
         return view('Third_party.connect');
-     }
+    }
 
 
     /**
@@ -96,7 +99,6 @@ class ThirdPartyController extends Controller
             $thirdparty->public = $request['public'];
             $thirdparty->config = json_encode(["config" => $data['config']]);
             $thirdparty->save();
-
 
             return "third party has been added";
         } catch (\Illuminate\Database\QueryException $e) {
@@ -163,6 +165,7 @@ class ThirdPartyController extends Controller
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public function viewThirdParty($id)
     {
+        $callerFunction = debug_backtrace()[1]['function'];   //retrieve the caller function
 
         try {
             $thirdparty =  Third_party::select()->where([['id', '=', $id], ['deleted', '=', '0']])->get()->all();
@@ -178,8 +181,13 @@ class ThirdPartyController extends Controller
             }
         }
 
-
-        return view('Third_party.view')->with('tp', $thirdparty);
+        if ($callerFunction == 'update') {
+            $status = Status::select()->where('deleted', '=', '0')->get();
+            $third_party_types = Third_party_type::select()->where('deleted', '=', '0')->get();
+            return view('Third_party.update')->with(['tp' => $thirdparty, 'status' => $status, 'third_party_types' => $third_party_types ]);
+        } else {
+            return view('Third_party.view')->with('tp', $thirdparty);
+        }
     }
 
     /**
@@ -190,34 +198,38 @@ class ThirdPartyController extends Controller
      * @return \Illuminate\Http\Response
      */
     /////////////////////////////////////////////////////////////////////////////////////////////////////
-    public function update($id)
+    public function update(Request $request, $id)
     {
 
-        try {
+        if (strtolower($request->getMethod()) == 'get') {
+            return $this->viewThirdParty($id);
+        } else if (strtolower($request->getMethod()) == 'post') {
+            try {
 
-            $assoc_array = request()->all();
-            unset($assoc_array['id']); //This line is ignoring the id in case the user has put it within the request body
+                $assoc_array = request()->all();
+                unset($assoc_array['id']); //This line is ignoring the id in case the user has put it within the request body
 
-            if (isset($assoc_array['logo'])) {
-                $logo = $assoc_array['logo'];
-                $fileName = $logo->getClientOriginalName();
-                $logo->move('images', $fileName);
-                $assoc_array['logo'] = 'images/' . $fileName;
-            }
-            $query = Third_party::select()->where('id', '=', $id)->update($assoc_array);
+                if (isset($assoc_array['logo'])) {
+                    $logo = $assoc_array['logo'];
+                    $fileName = $logo->getClientOriginalName();
+                    $logo->move('images', $fileName);
+                    $assoc_array['logo'] = 'images/' . $fileName;
+                }
+                $query = Third_party::select()->where('id', '=', $id)->update($assoc_array);
 
-            if ($query == 1) {
-                return "Third party has been updated!";
-            } else {
-                return "The selected third party was not found!";
-            }
-        } catch (\Illuminate\Database\QueryException $e) {
-            if ($e->getCode() == '42S22') {
-                return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
-            } else if ($e->getCode() == '22007') {
-                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT FOR ONE OR MORE OF YOUR INPUTS!"];
-            } else {
-                return ['success' => false, 'data' => [], 'message' => "PLEASE CHECK YOUR INPUTS!"];
+                if ($query == 1) {
+                    return "Third party has been updated!";
+                } else {
+                    return "The selected third party was not found!";
+                }
+            } catch (\Illuminate\Database\QueryException $e) {
+                if ($e->getCode() == '42S22') {
+                    return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
+                } else if ($e->getCode() == '22007') {
+                    return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT FOR ONE OR MORE OF YOUR INPUTS!"];
+                } else {
+                    return ['success' => false, 'data' => [], 'message' => "PLEASE CHECK YOUR INPUTS!"];
+                }
             }
         }
     }
@@ -573,7 +585,7 @@ class ThirdPartyController extends Controller
         if ($id == null) {
             return 'please type in a third party id';
         } else {
- 
+
             try {
                 //       $TPS = DB::Update("UPDATE third_parties SET deleted =1 WHERE id =". $id);
                 $query = Third_party::select()->where('id', '=', $id)->update(['deleted' => 1]);
@@ -596,13 +608,13 @@ class ThirdPartyController extends Controller
     }
 
 
-    public function search($key)
+    public function search(Request $request)
     {
         //GET method      /ThirdParty/search/{key}
         //takes a key as the search term 
         //searches for every record that has similar words of the key in thier title,description,type,status,website,contact info and returns a json object of the record
         try {
-
+            $key =  $request['key'];
             //$query = DB::select("SELECT * FROM third_parties WHERE title LIKE '%$key%' or description LIKE '%$key%'");
 
             $query = Third_party::where('title', 'like', '%' . $key . '%')
@@ -616,8 +628,7 @@ class ThirdPartyController extends Controller
 */
             //  return dd($test);
             if (count($query) > 0) {
-
-
+ 
                 return $this->beatify($query);
             } else {
                 echo "no data found";

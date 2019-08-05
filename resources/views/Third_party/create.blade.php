@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<form method="POST" action="/GitHub/CCS/public/ThirdParty/create">
+<form method="post" action={{ route('create') }} enctype="multipart/form-data">
         <fieldset>
           <legend>Create Third Party</legend>
           <div class="form-group">
@@ -54,7 +54,7 @@
               </div>
               <div class="form-group">
                 <label >type</label>
-                <select class="form-control" id="status" name="type_id">
+                <select class="form-control" id="status" name="third_party_type_id">
                   <option name="type1" value=1>type1</option>
                   <option name="type2" value=2>type2</option>
                   <option>...</option>
@@ -66,9 +66,8 @@
           </div>
           <div class="form-group">
             <label>Logo</label>
-            <input type="file" class="form-control-file" id="Logo" aria-describedby="fileHelp" name="logo">
-            <small id="fileHelp" class="form-text text-muted"></small>
-          </div>
+            <input type="file" id="Logo" name="logo">
+           </div>
           <fieldset class="form-group">
           <button type="submit" class="btn btn-primary">Submit</button>
         </fieldset>
