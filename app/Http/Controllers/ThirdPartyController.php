@@ -47,6 +47,7 @@ class ThirdPartyController extends Controller
             $admin->username = $data['username'];
             $admin->password = $request['password'];
             $admin->email = $data['email'];
+            $admin->save();
            
 
             return "Admin has been added";

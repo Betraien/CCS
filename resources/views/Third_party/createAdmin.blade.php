@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<form method="POST" action={{rout(createAdmin)}}>
+<form method="POST" action={{route('addAdmin')}}>
         <fieldset>
           <legend>Add New Admin</legend>
           <div class="form-group">
