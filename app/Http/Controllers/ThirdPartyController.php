@@ -48,13 +48,7 @@ class ThirdPartyController extends Controller
     }
 
 
-    public function create_interface()
-    {
 
-        $status = Status::select()->where('deleted', '=', '0')->get();
-        $third_party_types = Third_party_type::select()->where('deleted', '=', '0')->get();
-        return view('Third_party.create')->with(['status' => $status, 'third_party_types' => $third_party_types]);
-    }
 
     public function connect()
     {
@@ -197,50 +191,55 @@ class ThirdPartyController extends Controller
             }
         }
 
-        if ($callerFunction == 'update_interface') {
+        if ($callerFunction == 'update') {
             $status = Status::select()->where('deleted', '=', '0')->get();
             $third_party_types = Third_party_type::select()->where('deleted', '=', '0')->get();
-            return view('Third_party.update')->with(['tp' => $thirdparty, 'status' => $status, 'third_party_types' => $third_party_types]);
+            return view('Third_party.update')->with(['tp' => $thirdparty, 'status' => $status, 'third_party_types' => $third_party_types ]);
         } else {
             return view('Third_party.view')->with('tp', $thirdparty);
         }
     }
 
-    public function update_interface($id)
-    {
-        return $this->viewThirdParty($id);
-    }
-
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\third_party  $third_party
+     * @return \Illuminate\Http\Response
+     */
     /////////////////////////////////////////////////////////////////////////////////////////////////////
-    public function update($id)
+    public function update(Request $request, $id)
     {
 
+        if (strtolower($request->getMethod()) == 'get') {
+            return $this->viewThirdParty($id);
+        } else if (strtolower($request->getMethod()) == 'post') {
+            try {
 
-        try {
+                $assoc_array = request()->all();
+                unset($assoc_array['id']); //This line is ignoring the id in case the user has put it within the request body
 
-            $assoc_array = request()->all();
-            unset($assoc_array['id']); //This line is ignoring the id in case the user has put it within the request body
+                if (isset($assoc_array['logo'])) {
+                    $logo = $assoc_array['logo'];
+                    $fileName = $logo->getClientOriginalName();
+                    $logo->move('images', $fileName);
+                    $assoc_array['logo'] = 'images/' . $fileName;
+                }
+                $query = Third_party::select()->where('id', '=', $id)->update($assoc_array);
 
-            if (isset($assoc_array['logo'])) {
-                $logo = $assoc_array['logo'];
-                $fileName = $logo->getClientOriginalName();
-                $logo->move('images', $fileName);
-                $assoc_array['logo'] = 'images/' . $fileName;
-            }
-            $query = Third_party::select()->where('id', '=', $id)->update($assoc_array);
-
-            if ($query == 1) {
-                return "Third party has been updated!";
-            } else {
-                return "The selected third party was not found!";
-            }
-        } catch (\Illuminate\Database\QueryException $e) {
-            if ($e->getCode() == '42S22') {
-                return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
-            } else if ($e->getCode() == '22007') {
-                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT FOR ONE OR MORE OF YOUR INPUTS!"];
-            } else {
-                return ['success' => false, 'data' => [], 'message' => "PLEASE CHECK YOUR INPUTS!"];
+                if ($query == 1) {
+                    return "Third party has been updated!";
+                } else {
+                    return "The selected third party was not found!";
+                }
+            } catch (\Illuminate\Database\QueryException $e) {
+                if ($e->getCode() == '42S22') {
+                    return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
+                } else if ($e->getCode() == '22007') {
+                    return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT FOR ONE OR MORE OF YOUR INPUTS!"];
+                } else {
+                    return ['success' => false, 'data' => [], 'message' => "PLEASE CHECK YOUR INPUTS!"];
+                }
             }
         }
     }
@@ -614,6 +613,37 @@ class ThirdPartyController extends Controller
                 return "Third party has been deleted!";
             } else {
                 return "Error in deleting the third party!";
+            }
+        }
+    }
+
+    public function accept_third_party($id)
+    {
+        //POST method   /ThirdParty/delete
+        //takes a third party id as a parameter
+        //delets a third party softly from the database
+
+        if ($id == null) {
+            return 'please type in a request id';
+        } else {
+
+            try {
+                //       $TPS = DB::Update("UPDATE third_parties SET deleted =1 WHERE id =". $id);
+                $query = Request_partnership::select()->where('id', '=', $id)->update(['deleted' => 1]);
+            } catch (\Illuminate\Database\QueryException $e) {
+                if ($e->getCode() == '42S22') {
+                    return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
+                } else if ($e->getCode() == '22007') {
+                    return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
+                } else {
+                    return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
+                }
+            }
+
+            if ($query == 1) {
+                return "Request has been rejected!";
+            } else {
+                return "Error in rejecting request!";
             }
         }
     }
