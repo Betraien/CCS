@@ -28,6 +28,7 @@ Auth::routes();
 
 
 
+Route::get('ThirdParty/request', 'ThirdPartyController@getRequests')->name('requests')->middleware('auth');
 Route::get('ThirdParty/dashboard', 'ThirdPartyController@dashboard')->name('dashboard')->middleware('auth');
 Route::get('ThirdParty/index', 'ThirdPartyController@index');
 
@@ -74,11 +75,12 @@ Route::post('ThirdParty/delete_client_third_party', ['as' => 'ThirdParty.delete_
 Route::post('ThirdParty/create', ['as' => 'create', 'uses' => 'ThirdPartyController@create'])->middleware('auth');
 Route::post('ThirdParty/register','ThirdPartyController@register');
 Route::get('ThirdParty/delete/{x}','ThirdPartyController@delete')->name('delete')->middleware('auth');//tested
+Route::get('ThirdParty/reject/{x}','ThirdPartyController@reject_third_party')->name('reject')->middleware('auth');//tested
 //Route::get('ThirdParty/delete/{id}','ThirdPartyController@delete');
 Route::get('ThirdParty/search','ThirdPartyController@search')->name('search')->middleware('auth');//tested
 Route::get('ThirdPartyRating/rate/{user_id}/{plat_id}/{third_party_id}/{rating}/{comment}','ThirdPartyRatingController@rate');//tested
 Route::get('ThirdPartyRating/showRatings/{TPid}','ThirdPartyRatingController@showRatings');//tested
- 
+
 Route::get('ThirdParty/viewThirdParty/{x}', 'ThirdPartyController@viewThirdParty')->name('viewThirdParty')->middleware('auth');//tested
 Route::post('ThirdParty/reorder/{x}', 'ThirdPartyController@reorder')->name('reorder')->middleware('auth');//tested
 Route::post('ThirdParty/update/{x}', 'ThirdPartyController@update')->name('update')->middleware('auth');
