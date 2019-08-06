@@ -50,7 +50,11 @@
                 <select class="form-control" id="status" name="status_id">
 
                     @foreach ($status as $row)
+                    @if($row['id'] == $tp[0]['status_id'])
+                    <option name={{ $row->status }} value={{ $row->id }} selected="selected">{{ $row->status }}</option>
+                    @else
                     <option name={{ $row->status }} value={{ $row->id }}>{{ $row->status }}</option>
+                    @endif
                     @endforeach
 
                 </select>
@@ -60,9 +64,12 @@
                 <select class="form-control" id="status" name="third_party_type_id">
 
                     @foreach ($third_party_types as $row)
+                    @if($row['id'] == $tp[0]['third_party_type_id'])
+                    <option name={{ $row->type }} value={{ $row->id }} selected="selected">{{ $row->type }}</option>
+                    @else
                     <option name={{ $row->type }} value={{ $row->id }}>{{ $row->type }}</option>
+                    @endif
                     @endforeach
-                    
                  </select>
               </div>
               <div class="form-group">

@@ -48,7 +48,13 @@ class ThirdPartyController extends Controller
     }
 
 
+    public function create_interface()
+    {
 
+        $status = Status::select()->where('deleted', '=', '0')->get();
+        $third_party_types = Third_party_type::select()->where('deleted', '=', '0')->get();
+        return view('Third_party.create')->with(['status' => $status, 'third_party_types' => $third_party_types]);
+    }
 
     public function connect()
     {
@@ -191,55 +197,50 @@ class ThirdPartyController extends Controller
             }
         }
 
-        if ($callerFunction == 'update') {
+        if ($callerFunction == 'update_interface') {
             $status = Status::select()->where('deleted', '=', '0')->get();
             $third_party_types = Third_party_type::select()->where('deleted', '=', '0')->get();
-            return view('Third_party.update')->with(['tp' => $thirdparty, 'status' => $status, 'third_party_types' => $third_party_types ]);
+            return view('Third_party.update')->with(['tp' => $thirdparty, 'status' => $status, 'third_party_types' => $third_party_types]);
         } else {
             return view('Third_party.view')->with('tp', $thirdparty);
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\third_party  $third_party
-     * @return \Illuminate\Http\Response
-     */
+    public function update_interface($id)
+    {
+        return $this->viewThirdParty($id);
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////
-    public function update(Request $request, $id)
+    public function update($id)
     {
 
-        if (strtolower($request->getMethod()) == 'get') {
-            return $this->viewThirdParty($id);
-        } else if (strtolower($request->getMethod()) == 'post') {
-            try {
 
-                $assoc_array = request()->all();
-                unset($assoc_array['id']); //This line is ignoring the id in case the user has put it within the request body
+        try {
 
-                if (isset($assoc_array['logo'])) {
-                    $logo = $assoc_array['logo'];
-                    $fileName = $logo->getClientOriginalName();
-                    $logo->move('images', $fileName);
-                    $assoc_array['logo'] = 'images/' . $fileName;
-                }
-                $query = Third_party::select()->where('id', '=', $id)->update($assoc_array);
+            $assoc_array = request()->all();
+            unset($assoc_array['id']); //This line is ignoring the id in case the user has put it within the request body
 
-                if ($query == 1) {
-                    return "Third party has been updated!";
-                } else {
-                    return "The selected third party was not found!";
-                }
-            } catch (\Illuminate\Database\QueryException $e) {
-                if ($e->getCode() == '42S22') {
-                    return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
-                } else if ($e->getCode() == '22007') {
-                    return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT FOR ONE OR MORE OF YOUR INPUTS!"];
-                } else {
-                    return ['success' => false, 'data' => [], 'message' => "PLEASE CHECK YOUR INPUTS!"];
-                }
+            if (isset($assoc_array['logo'])) {
+                $logo = $assoc_array['logo'];
+                $fileName = $logo->getClientOriginalName();
+                $logo->move('images', $fileName);
+                $assoc_array['logo'] = 'images/' . $fileName;
+            }
+            $query = Third_party::select()->where('id', '=', $id)->update($assoc_array);
+
+            if ($query == 1) {
+                return "Third party has been updated!";
+            } else {
+                return "The selected third party was not found!";
+            }
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->getCode() == '42S22') {
+                return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
+            } else if ($e->getCode() == '22007') {
+                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT FOR ONE OR MORE OF YOUR INPUTS!"];
+            } else {
+                return ['success' => false, 'data' => [], 'message' => "PLEASE CHECK YOUR INPUTS!"];
             }
         }
     }

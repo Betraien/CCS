@@ -49,10 +49,14 @@ Route::get('ThirdParty/listThirdPartyBy/{type}/{type_id}/{platform_id}', ['as' =
 Route::get('ThirdParty/listThirdPartyBy/{type}/{platform_id_OR_orderType}', ['as' => 'ThirdParty.list_third_party', 'uses' =>'ThirdPartyController@listThirdPartyBy']);
 Route::get('ThirdParty/listThirdPartyBy/{type}', ['as' => 'ThirdParty.list_third_party', 'uses' =>'ThirdPartyController@listThirdPartyBy']);
 
-Route::get('ThirdParty/create', function () {
-    return view('Third_party.create');
-})->name('create_interface')->middleware('auth');
+Route::get('ThirdParty/create', 'ThirdPartyController@create_interface')->name('create_interface')->middleware('auth');//TESTing Purposes
 
+
+// Route::get('ThirdParty/create', function () {
+//     return view('Third_party.create_interface');
+// })->name('create_interface')->middleware('auth');
+
+//return view('Third_party.create');
 
 
 Route::get('ThirdParty/createAdmin', function () {
@@ -81,7 +85,7 @@ Route::get('ThirdParty/viewThirdParty/{x}', 'ThirdPartyController@viewThirdParty
 Route::post('ThirdParty/reorder/{x}', 'ThirdPartyController@reorder')->name('reorder')->middleware('auth');//tested
 Route::post('ThirdParty/update/{x}', 'ThirdPartyController@update')->name('update')->middleware('auth');
 
-Route::get('ThirdParty/update/{x}', 'ThirdPartyController@update')->name('update_interface')->middleware('auth');//tested
+Route::get('ThirdParty/update/{x}', 'ThirdPartyController@update_interface')->name('update_interface')->middleware('auth');//tested
 
 // Route::get('ThirdParty/update/{x}', function () {
 //     return view('Third_party.update')->with('id' , request()->all());
