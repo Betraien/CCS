@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-<form method="POST" action="/GitHub/CCS/public/ThirdParty/create">
+
+<form method="post" action={{ route('create') }} enctype="multipart/form-data">
         <fieldset>
           <legend>Create Third Party</legend>
           <div class="form-group">
@@ -45,30 +46,36 @@
                 <input type="text" name="website" class="form-control" placeholder="Enter email">
                 </div>
 
-          <div class="form-group">
-                <label >status</label>
-                <select class="form-control" id="status" name="status_id">
-                  <option name="Active" value=1>Active</option>
-                  <option name="Pending" value=2>Pending</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label >type</label>
-                <select class="form-control" id="status" name="type_id">
-                  <option name="type1" value=1>type1</option>
-                  <option name="type2" value=2>type2</option>
-                  <option>...</option>
-                </select>
-              </div>
+
+                <div class="form-group">
+                    <label>status</label>
+                    <select class="form-control" id="status" name="status_id">
+    
+                        @foreach ($status as $row)
+                        <option name={{ $row->status }} value={{ $row->id }}>{{ $row->status }}</option>
+                        @endforeach
+    
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>type</label>
+                    <select class="form-control" id="status" name="third_party_type_id">
+    
+                        @foreach ($third_party_types as $row)
+                        <option name={{ $row->type }} value={{ $row->id }}>{{ $row->type }}</option>
+                        @endforeach
+                        
+                     </select>
+                  </div>
+
           <div class="form-group">
             <label >Configration info</label>
             <textarea class="form-control" id="config" rows="10" name="config"></textarea>
           </div>
           <div class="form-group">
             <label>Logo</label>
-            <input type="file" class="form-control-file" id="Logo" aria-describedby="fileHelp" name="logo">
-            <small id="fileHelp" class="form-text text-muted"></small>
-          </div>
+            <input type="file" id="Logo" name="logo">
+           </div>
           <fieldset class="form-group">
           <button type="submit" class="btn btn-primary">Submit</button>
         </fieldset>

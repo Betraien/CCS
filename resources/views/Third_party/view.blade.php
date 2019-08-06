@@ -52,7 +52,7 @@
     </div>
     <div class="form-group">
         <label>type</label>
-        <select class="form-control" id="status" name="type_id" disabled>
+        <select class="form-control" id="status" name="third_party_type_id" disabled>
             <option name="type_id" value=1>{{ $tp[0]['third_party_type_id'] }}</option>
          </select>
     </div>
