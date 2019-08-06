@@ -212,7 +212,7 @@ class ThirdPartyController extends Controller
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     public function update($id)
     {
- 
+
             try {
 
                 $assoc_array = request()->all();
@@ -621,35 +621,13 @@ class ThirdPartyController extends Controller
 
     public function accept_third_party($id)
     {
-        //POST method   /ThirdParty/delete
-        //takes a third party id as a parameter
-        //delets a third party softly from the database
+      $third_party_types = Third_party_type::select()->where('deleted', '=', '0')->get();
+      $status = Status::select()->where('deleted', '=', '0')->get();
+      $requested_third_party = Request_partnership::select()->where('id', '=', $id)->get();
+      return view('Third_party.accept')->with(['tp' => $requested_third_party, 'status' => $status, 'third_party_types' => $third_party_types]);
 
-        if ($id == null) {
-            return 'please type in a request id';
-        } else {
 
-            try {
-                //       $TPS = DB::Update("UPDATE third_parties SET deleted =1 WHERE id =". $id);
-                $query = Request_partnership::select()->where('id', '=', $id)->update(['deleted' => 1]);
-            } catch (\Illuminate\Database\QueryException $e) {
-                if ($e->getCode() == '42S22') {
-                    return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
-                } else if ($e->getCode() == '22007') {
-                    return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
-                } else {
-                    return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
-                }
-            }
-
-            if ($query == 1) {
-                return "Request has been rejected!";
-            } else {
-                return "Error in rejecting request!";
-            }
-        }
     }
-
     public function reject_third_party($id)
     {
         //POST method   /ThirdParty/delete

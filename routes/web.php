@@ -76,6 +76,7 @@ Route::post('ThirdParty/create', ['as' => 'create', 'uses' => 'ThirdPartyControl
 Route::post('ThirdParty/register','ThirdPartyController@register');
 Route::get('ThirdParty/delete/{x}','ThirdPartyController@delete')->name('delete')->middleware('auth');//tested
 Route::get('ThirdParty/reject/{x}','ThirdPartyController@reject_third_party')->name('reject')->middleware('auth');//tested
+Route::get('ThirdParty/accept/{x}','ThirdPartyController@accept_third_party')->name('accept')->middleware('auth');//tested
 //Route::get('ThirdParty/delete/{id}','ThirdPartyController@delete');
 Route::get('ThirdParty/search','ThirdPartyController@search')->name('search')->middleware('auth');//tested
 Route::get('ThirdPartyRating/rate/{user_id}/{plat_id}/{third_party_id}/{rating}/{comment}','ThirdPartyRatingController@rate');//tested
