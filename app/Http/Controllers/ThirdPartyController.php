@@ -196,7 +196,7 @@ class ThirdPartyController extends Controller
             }
         }
 
-        if ($callerFunction == 'update') {
+        if ($callerFunction == 'update_interface') {
             $status = Status::select()->where('deleted', '=', '0')->get();
             $third_party_types = Third_party_type::select()->where('deleted', '=', '0')->get();
             return view('Third_party.update')->with(['tp' => $thirdparty, 'status' => $status, 'third_party_types' => $third_party_types ]);
@@ -204,21 +204,15 @@ class ThirdPartyController extends Controller
             return view('Third_party.view')->with('tp', $thirdparty);
         }
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\third_party  $third_party
-     * @return \Illuminate\Http\Response
-     */
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
-    public function update(Request $request, $id)
+    public function update_interface($id)
     {
+        return $this->viewThirdParty($id);
+    }
 
-        if (strtolower($request->getMethod()) == 'get') {
-            return $this->viewThirdParty($id);
-        } else if (strtolower($request->getMethod()) == 'post') {
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    public function update($id)
+    {
+ 
             try {
 
                 $assoc_array = request()->all();
