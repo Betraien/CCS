@@ -407,6 +407,7 @@ class ThirdPartyController extends Controller
                     }
   
                     $object = [
+                        'id' => $row->id,
                         'logo' => $row->logo,
                         'title' => $row->title,
                         'description' => $row->description,
@@ -428,6 +429,7 @@ class ThirdPartyController extends Controller
                         continue;
                     }
                     $object = [
+                        'id' => $row->id,
                         'logo' => $row->Third_party->logo,
                         'title' => $row->Third_party->title,
                         'description' => $row->Third_party->description,
@@ -440,12 +442,15 @@ class ThirdPartyController extends Controller
                 }
             }
             if ($result != null) {
-                return ['success' => true, 'data' => $result];
+               // return ['success' => true, 'data' => $result];
+                return view('Third_party.listThirdParty', ['success' => true, 'data' => $result, 'message' => "Search Completed!"] );
             } else {
-                return ['success' => false, 'data' => [], 'message' => "NO RESULTS"];
+               // return ['success' => false, 'data' => [], 'message' => "NO RESULTS"];
+                return view('Third_party.listThirdParty', ['success' => true, 'data' => [], 'message' => "NO RESULTS"] );
             }
         } else {
-            return ['success' => false, 'data' => [], 'message' => "NO RESULTS"];
+           // return ['success' => false, 'data' => [], 'message' => "NO RESULTS"];
+            return view('Third_party.listThirdParty', ['success' => true, 'data' => [], 'message' => "NO RESULTS"] );
         }
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -807,9 +812,12 @@ class ThirdPartyController extends Controller
             }
 
             if ($query == 1) {
-                return "Third party has been deleted!";
+                //return "Third party has been deleted!";
+                return redirect(route('index', ['success' => true, 'data' => [], 'message' => "Third party has been deleted!"] ));
+
             } else {
                 return "Error in deleting the third party!";
+                //return view('Third_party.dashboard', ['success' => false, 'data' => $query, 'message' => "Error in deleting the third party!"] );
             }
         }
     }
@@ -874,18 +882,23 @@ class ThirdPartyController extends Controller
 */
             //  return dd($test);
             if (count($query) > 0) {
-
-                return $this->beatify($query);
+                 return view('Third_party.searchResults', ['success' => true, 'data' => $query, 'message' => "Search Completed!"] );
             } else {
-                echo "no data found";
+                return redirect(route('index', ['success' => false, 'data' => [], 'message' => 'No data found'] ));
             }
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == '42S22') {
-                return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
+                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]] ));
+                //return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
             } else if ($e->getCode() == '22007') {
-                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
+                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"] ));
+                //return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
+            } else if ($e->getCode() == '23000') {
+                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]] ));
+               //return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
             } else {
-                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
+                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"] ));
+                //return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
             }
         }
     }

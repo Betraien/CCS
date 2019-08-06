@@ -47,12 +47,13 @@ Route::resource('UserThirdParty', 'UserThirdPartyController');
 Route::get('ThirdParty/disconnectThirdParty/{userID}/{third_party_ID}/{platform_id}', 'ThirdPartyController@disconnectThirdParty');
 Route::get('ThirdParty/connect', 'ThirdPartyController@connect')->middleware('auth');//TESTing Purposes
 Route::get('ThirdParty/disconnectThirdParty/{userID}/{platform_id}/{third_party_ID}', 'ThirdPartyController@disconnectThirdParty');
-Route::get('ThirdParty/listThirdPartyBy/{type}/{type_id}/{platform_id}', ['as' => 'ThirdParty.list_third_party', 'uses' =>'ThirdPartyController@listThirdPartyBy']);
-Route::get('ThirdParty/listThirdPartyBy/{type}/{platform_id_OR_orderType}', ['as' => 'ThirdParty.list_third_party', 'uses' =>'ThirdPartyController@listThirdPartyBy']);
-Route::get('ThirdParty/listThirdPartyBy/{type}', ['as' => 'ThirdParty.list_third_party', 'uses' =>'ThirdPartyController@listThirdPartyBy']);
+
+Route::get('ThirdParty/listThirdPartyBy/{type}/{type_id}/{platform_id}', ['as' => 'listThirdPartyBy', 'uses' =>'ThirdPartyController@listThirdPartyBy']);
+Route::get('ThirdParty/listThirdPartyBy/{type}/{platform_id_OR_orderType}', ['as' => 'listThirdPartyBy', 'uses' =>'ThirdPartyController@listThirdPartyBy']);
+Route::get('ThirdParty/listThirdPartyBy/{type}', ['as' => 'listThirdPartyBy', 'uses' =>'ThirdPartyController@listThirdPartyBy']);
 
 Route::get('ThirdParty/create', 'ThirdPartyController@create_interface')->name('create_interface')->middleware('auth');//TESTing Purposes
-
+ 
 
 // Route::get('ThirdParty/create', function () {
 //     return view('Third_party.create_interface');
@@ -64,6 +65,10 @@ Route::get('ThirdParty/create', 'ThirdPartyController@create_interface')->name('
 Route::get('ThirdParty/createAdmin', function () {
     return view('Third_party.createAdmin');
 });
+
+// Route::get('ThirdParty/listThirdParty', function () {
+//     return view('Third_party.listThirdParty', []);
+// })->name('listThirdParty')->middleware('auth');
 
 Route::post('ThirdParty/list_third_party', ['as' => 'ThirdParty.list_third_party', 'uses' =>'ThirdPartyController@list_third_party']);
 

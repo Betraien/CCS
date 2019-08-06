@@ -8,9 +8,11 @@
 
   <div class="collapse navbar-collapse" id="navbarColor02" style="margin-left: 72% ;">
     <form class="form-inline my-2 my-lg-0"  method="get" action={{ route('search') }}>
-      <input class="form-control mr-sm-2" type="text" placeholder="Search">
+      <input class="form-control mr-sm-2" type="text" name="key" placeholder="Search">
       <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
     </form>
+
+    
     <ul class="navbar-nav ml-auto">
         <!-- Authentication Links -->
         @guest
@@ -55,6 +57,7 @@
 <a href={{ route('create_interface')}}>Create Third Party</a>
 <a href={{ route('dashboard')}}>Manage Third Parties</a>
 <a href={{ route('records')}}>Third Party Records</a>
+ 
 </div>
 
 <script>
