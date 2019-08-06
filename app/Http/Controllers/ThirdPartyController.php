@@ -106,16 +106,21 @@ class ThirdPartyController extends Controller
             $thirdparty->config = json_encode(["config" => $data['config']]);
             $thirdparty->save();
 
-            return "third party has been added";
+            return redirect(route('dashboard', ['success' => true, 'data' => [], 'message' => "third party has been added"] ));
+           // return "third party has been added";
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == '42S22') {
-                return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
+                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]] ));
+                //return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
             } else if ($e->getCode() == '22007') {
-                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
+                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"] ));
+                //return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
             } else if ($e->getCode() == '23000') {
-                return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
+                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]] ));
+               //return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
             } else {
-                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
+                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"] ));
+                //return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
             }
         }
     }
@@ -220,17 +225,21 @@ class ThirdPartyController extends Controller
             $query = Third_party::select()->where('id', '=', $id)->update($assoc_array);
 
             if ($query == 1) {
-                return "Third party has been updated!";
+                return redirect(route('dashboard', ['success' => true, 'data' => [], 'message' => "Third party has been updated!"] ));
+               // return "Third party has been updated!";
             } else {
                 return "The selected third party was not found!";
             }
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == '42S22') {
-                return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
+                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]] ));
+               // return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
             } else if ($e->getCode() == '22007') {
-                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT FOR ONE OR MORE OF YOUR INPUTS!"];
+                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => "WRONG FORMAT FOR ONE OR MORE OF YOUR INPUTS!"] ));
+               // return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT FOR ONE OR MORE OF YOUR INPUTS!"];
             } else {
-                return ['success' => false, 'data' => [], 'message' => "PLEASE CHECK YOUR INPUTS!"];
+                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => "PLEASE CHECK YOUR INPUTS!"] ));
+              //  return ['success' => false, 'data' => [], 'message' => "PLEASE CHECK YOUR INPUTS!"];
             }
         }
     }

@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
 <form method="post" action={{ route('create') }} enctype="multipart/form-data">
         <fieldset>
           <legend>Create Third Party</legend>
@@ -66,7 +67,7 @@
                         
                      </select>
                   </div>
-                  
+
           <div class="form-group">
             <label >Configration info</label>
             <textarea class="form-control" id="config" rows="10" name="config"></textarea>

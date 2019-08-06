@@ -2,7 +2,19 @@
 
 @section('content')
 
-<div></div>
+<div class="text-center" >
+@if(request()['success'] != null && request()['success'] == false)
+<div class="alert alert-dismissible alert-danger">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Something went wrong,</strong> {{ strtolower(request()['message']) }}
+  </div>
+@elseif(request()['success'] != null && request()['success'] == true)
+<div class="alert alert-dismissible alert-success">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Well done!</strong> {{ strtolower(request()['message']) }}
+  </div>
+@endif
+</div>
 
 <div class="card text-center" >
     <div class="card-header" >

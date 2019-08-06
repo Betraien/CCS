@@ -1,7 +1,7 @@
 @extends('layouts.app')
  
 @section('content')
-<form method="post" action={{ route('update', $tp[0]['id']) }}>
+<form method="post" action={{ route('update', $tp[0]['id']) }} enctype="multipart/form-data">
         <fieldset>
           <legend>Edit Third Party</legend>
           <div class="form-group">
