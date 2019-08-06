@@ -38,6 +38,18 @@ class ThirdPartyController extends Controller
         //view('Third_party.index');
 
     }
+
+    public function index()
+    {
+
+        $data = Third_party::select()->where([['deleted', '=', '0']])->get();
+        //   return $this->jsonToArray($data[0]);
+        return view('Third_party.index')->with('data', $data);
+        //view('Third_party.index');
+
+    }
+
+
     public function createAdmin(request $request){
 
         try {
@@ -46,7 +58,7 @@ class ThirdPartyController extends Controller
                 'username' => 'required',
                 'password' => 'required',
                 'email' => 'required',
-               
+
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return $e->errors();
@@ -60,7 +72,7 @@ class ThirdPartyController extends Controller
             $admin->password = $request['password'];
             $admin->email = $data['email'];
             $admin->save();
-           
+
 
             return "Admin has been added";
         } catch (\Illuminate\Database\QueryException $e) {
@@ -85,6 +97,29 @@ class ThirdPartyController extends Controller
         $data = Request_partnership::select()->where([['deleted', '=', '0']])->get();
         //   return $this->jsonToArray($data[0]);
         return view('Third_party.request')->with('data', $data);
+        //view('Third_party.index');
+
+    }
+
+    public function getRecords()
+    {
+
+        $data = Third_party::select()->where([['deleted', '=', '1']])->get();
+        //   return $this->jsonToArray($data[0]);
+        return view('Third_party.record')->with('data', $data);
+        //view('Third_party.index');
+
+    }
+
+    public function restore_third_party($id)
+    {
+
+        $data = Third_party::select()->where('id', '=', $id)->update(['deleted'=>'0']);
+        //   return $this->jsonToArray($data[0]);
+        echo "<script>alert('Third Party Restored Successfully');</script>";
+
+        return redirect(route('dashboard', ['success' => true, 'data' => [], 'message' => "Third Party Has BEen Restored!"] ));
+
         //view('Third_party.index');
 
     }

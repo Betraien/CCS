@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@extends('layouts.nav')
 
 @section('content')
 
@@ -50,21 +51,21 @@
                 <div class="form-group">
                     <label>status</label>
                     <select class="form-control" id="status" name="status_id">
-    
+
                         @foreach ($status as $row)
                         <option name={{ $row->status }} value={{ $row->id }}>{{ $row->status }}</option>
                         @endforeach
-    
+
                     </select>
                   </div>
                   <div class="form-group">
                     <label>type</label>
                     <select class="form-control" id="status" name="third_party_type_id">
-    
+
                         @foreach ($third_party_types as $row)
                         <option name={{ $row->type }} value={{ $row->id }}>{{ $row->type }}</option>
                         @endforeach
-                        
+
                      </select>
                   </div>
 
