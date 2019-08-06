@@ -21,12 +21,13 @@ class ThirdPartyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    // public function index()
+    // {
+    //     $data = Third_party::select()->where([['deleted', '=', '0']])->get();
 
-        return view('Third_party.dashboard');
-        //return view('Third_party.Store');
-    }
+    //     return view('Third_party.dashboard')->with('data', $data);
+    //     //return view('Third_party.Store');
+    // }
     public function dashboard()
     {
 

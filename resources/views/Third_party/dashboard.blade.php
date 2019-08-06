@@ -6,7 +6,7 @@
 @if(request()['success'] != null && request()['success'] == false)
 <div class="alert alert-dismissible alert-danger">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <strong>Something went wrong,</strong> {{ strtolower(request()['message']) }}
+    <strong>Something went wrong, </strong> {{ strtolower(request()['message']) }}
   </div>
 @elseif(request()['success'] != null && request()['success'] == true)
 <div class="alert alert-dismissible alert-success">

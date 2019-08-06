@@ -28,7 +28,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/ThirdParty/connect';
+    protected $redirectTo = '/ThirdParty/dashboard';
 
     /**
      * Create a new controller instance.
