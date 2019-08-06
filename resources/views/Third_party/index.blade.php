@@ -24,6 +24,7 @@
         <table class="table table-hover">
             <thead>
               <tr>
+                <th scope="col">Logo</th>
                 <th scope="col">Title</th>
                 <th scope="col">Identification Token</th>
                 <th scope="col">Status</th>
@@ -37,24 +38,22 @@
                 if ($i % 2 == 0 ){?>
 
                         <tr>
+                                <td><img src="{{ asset($data[$i]['logo']) }}" width="50px" height="50px"></td>
                                 <th scope="row"><a href={{ route('viewThirdParty', $data[$i]['id']) }}>{{ $data[$i]['title'] }}</a></th>
                                 <td>{{ $data[$i]['id_token'] }}</td>
                                 <td>{{ $data[$i]->status['status'] }}</td>
                                 <td>{{ $data[$i]['website'] }}</td>
-                                <td><a style = "border-radius: 5px;" href={{ route('update_interface', $data[$i]['id']) }} type="button" class="btn btn-primary">Edit</a></td>
-                                <td><a style = "border-radius: 5px;" href={{ route('delete', $data[$i]['id']) }} type="button" class="btn btn-danger">Delete</a></td>
 
                             </tr>
 
                     <?php  } else{ ?>
 
                         <tr class="table-active">
+                                <td><img src="{{ asset($data[$i]['logo']) }}" width="50px" height="50px"></td>
                                 <th scope="row"><a href={{ route('viewThirdParty', $data[$i]['id']) }}>{{ $data[$i]['title'] }}</a></th>
                                 <td>{{ $data[$i]['id_token'] }}</td>
                                 <td>{{ $data[$i]->status['status'] }}</td>
                                 <td>{{ $data[$i]['website'] }}</td>
-                                <td><a href={{ route('update_interface', $data[$i]['id']) }} type="button" class="btn btn-primary">Edit</a></td>
-                                <td><a href={{ route('delete', $data[$i]['id']) }} type="button" class="btn btn-danger">Delete</a></td>
                             </tr>
 
 

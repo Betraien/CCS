@@ -29,9 +29,9 @@ Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 
 Route::get('ThirdParty/request', 'ThirdPartyController@getRequests')->name('requests')->middleware('auth');
-Route::get('ThirdParty/dashboard', 'ThirdPartyController@dashboard')->name('dashboard')->middleware('auth');
-Route::get('ThirdParty/index', 'ThirdPartyController@dashboard')->middleware('auth');
-Route::get('ThirdParty', 'ThirdPartyController@dashboard')->middleware('auth');
+Route::get('ThirdParty/Manage', 'ThirdPartyController@dashboard')->name('dashboard')->middleware('auth');
+Route::get('ThirdParty/index', 'ThirdPartyController@index')->name('index')->middleware('auth');
+Route::get('ThirdParty', 'ThirdPartyController@index')->middleware('auth');
 
 
 //Route::resource('Client', 'ClientController');
@@ -79,6 +79,8 @@ Route::post('ThirdParty/register','ThirdPartyController@register');
 Route::get('ThirdParty/delete/{x}','ThirdPartyController@delete')->name('delete')->middleware('auth');//tested
 Route::get('ThirdParty/reject/{x}','ThirdPartyController@reject_third_party')->name('reject')->middleware('auth');//tested
 Route::get('ThirdParty/accept/{x}','ThirdPartyController@accept_third_party')->name('accept')->middleware('auth');//tested
+Route::get('ThirdParty/records','ThirdPartyController@getRecords')->name('records')->middleware('auth');//tested
+Route::get('ThirdParty/restore_third_part/{x}','ThirdPartyController@restore_third_party')->name('restore')->middleware('auth');//tested
 //Route::get('ThirdParty/delete/{id}','ThirdPartyController@delete');
 Route::get('ThirdParty/search','ThirdPartyController@search')->name('search')->middleware('auth');//tested
 Route::get('ThirdPartyRating/rate/{user_id}/{plat_id}/{third_party_id}/{rating}/{comment}','ThirdPartyRatingController@rate');//tested
