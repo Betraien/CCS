@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-
+Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 //Route::get('/', 'PagesController@index');
 
 //Route::resource('Posts', 'PostsController');
@@ -30,7 +30,9 @@ Auth::routes();
 
 Route::get('ThirdParty/request', 'ThirdPartyController@getRequests')->name('requests')->middleware('auth');
 Route::get('ThirdParty/dashboard', 'ThirdPartyController@dashboard')->name('dashboard')->middleware('auth');
-Route::get('ThirdParty/index', 'ThirdPartyController@index');
+Route::get('ThirdParty/index', 'ThirdPartyController@dashboard')->middleware('auth');
+Route::get('ThirdParty', 'ThirdPartyController@dashboard')->middleware('auth');
+
 
 //Route::resource('Client', 'ClientController');
 Route::resource('ClientThirdParty', 'ClientThirdPartyController');
