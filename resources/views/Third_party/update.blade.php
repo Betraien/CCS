@@ -1,48 +1,48 @@
 @extends('layouts.app')
- 
+
 @section('content')
 <form method="post" action={{ route('update', $tp[0]['id']) }} enctype="multipart/form-data">
         <fieldset>
           <legend>Edit Third Party</legend>
           <div class="form-group">
                 <label>Title</label>
-                <input type="text" name="title" class="form-control" value={{ $tp[0]['title'] }} >
+                <input type="text" name="title" class="form-control" value="{{ $tp[0]['title'] }}" >
             </div>
             <div class="form-group">
                 <label>description</label>
-                <input type="text" name="description" class="form-control" value={{ $tp[0]['description'] }} >
+                <input type="text" name="description" class="form-control" value="{{ $tp[0]['description'] }}" >
             </div>
             <div class="form-group">
                 <label>position</label>
-                <input type="text" name="position" class="form-control" value={{ $tp[0]['position'] }} >
+                <input type="text" name="position" class="form-control" value="{{ $tp[0]['position'] }}" >
             </div>
             <div class="form-group">
                 <label>public</label>
-                <input type="text" name="public" class="form-control" value={{ $tp[0]['public'] }} >
+                <input type="text" name="public" class="form-control" value="{{ $tp[0]['public'] }}" >
             </div>
             <div class="form-group">
                 <label>Identification Token</label>
-                <input type="text" name="id_token" class="form-control" value={{ $tp[0]['id_token'] }} >
+                <input type="text" name="id_token" class="form-control" value="{{ $tp[0]['id_token'] }}" >
             </div>
             <div class="form-group">
                 <label>order</label>
-                <input type="text" name="view_order" class="form-control" value={{ $tp[0]['view_order'] }}  >
+                <input type="text" name="view_order" class="form-control" value="{{ $tp[0]['view_order'] }}"  >
             </div>
             <div class="form-group">
                 <label>contact person name</label>
-                <input type="text" name="contact_person" class="form-control" value={{ $tp[0]['contact_person'] }} >
+                <input type="text" name="contact_person" class="form-control" value="{{ $tp[0]['contact_person'] }}" >
             </div>
             <div class="form-group">
                 <label>contact person number</label>
-                <input type="text" name="contact_phone" class="form-control" value={{ $tp[0]['contact_phone'] }} >
+                <input type="text" name="contact_phone" class="form-control" value="{{ $tp[0]['contact_phone'] }}" >
             </div>
             <div class="form-group">
                 <label>contact person email</label>
-                <input type="text" name="contact_email" class="form-control" value={{ $tp[0]['contact_email'] }} >
+                <input type="text" name="contact_email" class="form-control" value="{{ $tp[0]['contact_email'] }}" >
             </div>
             <div class="form-group">
                 <label>website</label>
-                <input type="text" name="website" class="form-control" value={{ $tp[0]['contact_person'] }} >
+                <input type="text" name="website" class="form-control" value="{{ $tp[0]['contact_person'] }}" >
             </div>
 
           <div class="form-group">
