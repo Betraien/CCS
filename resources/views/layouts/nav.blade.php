@@ -7,7 +7,7 @@
   </button>
 
   <div class="collapse navbar-collapse" id="navbarColor02" style="margin-left: 72% ;">
-    <form class="form-inline my-2 my-lg-0">
+    <form class="form-inline my-2 my-lg-0"  method="get" action={{ route('search') }}>
       <input class="form-control mr-sm-2" type="text" placeholder="Search">
       <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
     </form>
@@ -49,15 +49,14 @@
 </nav>
 
 <div id="mySidenav" class="sidenav">
-<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-<a href="createTP">Create Third Party</a>
-<a href="#">Recorder</a>
-<a href="#">Clients</a>
-<a href="#">Clients</a>
-<a href="#">Clients</a>
-<a href="#">Logout</a>
-<a href="#">Logout</a>
-</div>
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href={{ route('create_interface') }}>Create Third Party</a>
+    <a href="#">Reorder</a>
+    <a href="#">Clients</a>
+    <a href="#">Clients</a>
+    <a href="#">Clients</a>
+  
+  </div>
 
 <script>
 function openNav() {
