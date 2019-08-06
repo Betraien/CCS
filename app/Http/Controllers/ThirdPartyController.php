@@ -37,6 +37,16 @@ class ThirdPartyController extends Controller
 
     }
 
+    public function getRequests()
+    {
+
+        $data = Request_partnership::select()->where([['deleted', '=', '0']])->get();
+        //   return $this->jsonToArray($data[0]);
+        return view('Third_party.request')->with('data', $data);
+        //view('Third_party.index');
+
+    }
+
 
 
 
@@ -580,7 +590,7 @@ class ThirdPartyController extends Controller
     {
         //POST method   /ThirdParty/delete
         //takes a third party id as a parameter
-        //delets a third party softly from the database 
+        //delets a third party softly from the database
 
         if ($id == null) {
             return 'please type in a third party id';
@@ -607,11 +617,41 @@ class ThirdPartyController extends Controller
         }
     }
 
+    public function reject_third_party($id)
+    {
+        //POST method   /ThirdParty/delete
+        //takes a third party id as a parameter
+        //delets a third party softly from the database
+
+        if ($id == null) {
+            return 'please type in a request id';
+        } else {
+
+            try {
+                //       $TPS = DB::Update("UPDATE third_parties SET deleted =1 WHERE id =". $id);
+                $query = Request_partnership::select()->where('id', '=', $id)->update(['deleted' => 1]);
+            } catch (\Illuminate\Database\QueryException $e) {
+                if ($e->getCode() == '42S22') {
+                    return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
+                } else if ($e->getCode() == '22007') {
+                    return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
+                } else {
+                    return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
+                }
+            }
+
+            if ($query == 1) {
+                return "Request has been rejected!";
+            } else {
+                return "Error in rejecting request!";
+            }
+        }
+    }
 
     public function search(Request $request)
     {
         //GET method      /ThirdParty/search/{key}
-        //takes a key as the search term 
+        //takes a key as the search term
         //searches for every record that has similar words of the key in thier title,description,type,status,website,contact info and returns a json object of the record
         try {
             $key =  $request['key'];
@@ -622,13 +662,13 @@ class ThirdPartyController extends Controller
 
             /* $test = Third_party::select()->where([
                     ['id', '=', $key]
-                    
-                    
-                    ])->getQuery()->get()->all();   
+
+
+                    ])->getQuery()->get()->all();
 */
             //  return dd($test);
             if (count($query) > 0) {
- 
+
                 return $this->beatify($query);
             } else {
                 echo "no data found";
@@ -826,7 +866,7 @@ class ThirdPartyController extends Controller
     }
 }
 
-/* 
+/*
 this is a template for the config column in the thirdparty table
 
 {
