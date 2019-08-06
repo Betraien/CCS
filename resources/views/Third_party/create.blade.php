@@ -45,21 +45,28 @@
                 <input type="text" name="website" class="form-control" placeholder="Enter email">
                 </div>
 
-          <div class="form-group">
-                <label >status</label>
-                <select class="form-control" id="status" name="status_id">
-                  <option name="Active" value=1>Active</option>
-                  <option name="Pending" value=2>Pending</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label >type</label>
-                <select class="form-control" id="status" name="third_party_type_id">
-                  <option name="type1" value=1>type1</option>
-                  <option name="type2" value=2>type2</option>
-                  <option>...</option>
-                </select>
-              </div>
+
+                <div class="form-group">
+                    <label>status</label>
+                    <select class="form-control" id="status" name="status_id">
+    
+                        @foreach ($status as $row)
+                        <option name={{ $row->status }} value={{ $row->id }}>{{ $row->status }}</option>
+                        @endforeach
+    
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>type</label>
+                    <select class="form-control" id="status" name="third_party_type_id">
+    
+                        @foreach ($third_party_types as $row)
+                        <option name={{ $row->type }} value={{ $row->id }}>{{ $row->type }}</option>
+                        @endforeach
+                        
+                     </select>
+                  </div>
+                  
           <div class="form-group">
             <label >Configration info</label>
             <textarea class="form-control" id="config" rows="10" name="config"></textarea>
