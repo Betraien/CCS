@@ -7,6 +7,7 @@ use App\Third_party;
 use App\Client_third_party;
 use App\User_third_party;
 use App\Request_partnership;
+use App\User;
 // use App\User;
 // use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -24,6 +25,44 @@ class ThirdPartyController extends Controller
 
         return view('Third_party.index');
         //return view('Third_party.Store');
+    }
+    public function createAdmin(request $request){
+
+        try {
+            $data = $request->validate([
+                'name' => 'required',
+                'username' => 'required',
+                'password' => 'required',
+                'email' => 'required',
+               
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return $e->errors();
+        }
+
+        try {
+            $admin = new user();
+
+            $admin->name = $data['name'];
+            $admin->username = $data['username'];
+            $admin->password = $request['password'];
+            $admin->email = $data['email'];
+           
+
+            return "Admin has been added";
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->getCode() == '42S22') {
+                return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
+            } else if ($e->getCode() == '22007') {
+                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
+            } else if ($e->getCode() == '23000') {
+                return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
+            } else {
+                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
+            }
+        }
+
+
     }
     public function dashboard(){    
 
