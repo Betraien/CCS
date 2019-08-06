@@ -24,7 +24,7 @@ class ThirdPartyController extends Controller
     public function index()
     {
 
-        return view('Third_party.index');
+        return view('Third_party.dashboard');
         //return view('Third_party.Store');
     }
     public function dashboard()
