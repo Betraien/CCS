@@ -170,6 +170,13 @@ class ThirdPartyController extends Controller
             }
         }
     }
+    public function create_interface()
+    {
+
+        $status = Status::select()->where('deleted', '=', '0')->get();
+        $third_party_types = Third_party_type::select()->where('deleted', '=', '0')->get();
+        return view('Third_party.create')->with(['status' => $status, 'third_party_types' => $third_party_types]);
+    }
 
     public function requestPartnership(Request $request)
     {
