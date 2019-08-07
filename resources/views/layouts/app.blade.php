@@ -91,6 +91,7 @@
   <a href={{ route('create_interface')}}>Create Third Party</a>
   <a href={{ route('dashboard')}}>Manage Third Parties</a>
   <a href={{ route('records')}}>Third Party Records</a>
+  <a href={{ route('newAdmin')}}>Create new admin</a>
   </div>
   
   <script>
