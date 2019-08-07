@@ -65,7 +65,7 @@ Route::get('ThirdParty/create', 'ThirdPartyController@create_interface')->name('
 
 Route::get('ThirdParty/createAdmin', function () {
     return view('Third_party.createAdmin');
-})->middleware('auth');
+})->name('newAdmin')->middleware('auth');
 
 // Route::get('ThirdParty/listThirdParty', function () {
 //     return view('Third_party.listThirdParty', []);
