@@ -50,8 +50,10 @@
           <td>{{ $data[$i]['contact_person'] }}</td>
           <td>{{ $data[$i]['contact_phone'] }}</td>
           <td>{{ $data[$i]['contact_email'] }}</td>
-          <td><a href={{ route('accept', $data[$i]['id']) }} type="button" class="btn btn-primary">Edit</a></td>
-          <td><a href={{ route('reject', $data[$i]['id']) }} type="button" class="btn btn-danger">Delete</a></td>
+          <td><a style="border-radius: 5px;" href={{ route('accept', $data[$i]['id']) }} type="button"
+            class="btn btn-primary">Accept</a></td>
+        <td><a style="border-radius: 5px;" href={{ route('reject', $data[$i]['id']) }} type="button"
+            class="btn btn-danger">Reject</a></td>
         </tr>
 
 
