@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use DB;
 use App\Status;
@@ -52,7 +53,7 @@ class ThirdPartyController extends Controller
 
 
     public function createAdmin(request $request){
-        dd('STOP LYING');
+      
         try {
             $data = $request->validate([
                 'name' => 'required',
@@ -66,14 +67,14 @@ class ThirdPartyController extends Controller
         }
 
         try {
-            return User::create([
+             User::create([
                 'name' => $request['name'],
                 'email' => $request['email'],
                 'password' => Hash::make($request['password']),
             ]);
            
 
-            return "Admin has been added";
+            return redirect()->route('dashboard');
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == '42S22') {
                 return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];

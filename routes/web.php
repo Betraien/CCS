@@ -65,7 +65,7 @@ Route::get('ThirdParty/create', 'ThirdPartyController@create_interface')->name('
 
 Route::get('ThirdParty/createAdmin', function () {
     return view('Third_party.createAdmin');
-});
+})->middleware('auth');
 
 // Route::get('ThirdParty/listThirdParty', function () {
 //     return view('Third_party.listThirdParty', []);
@@ -75,7 +75,7 @@ Route::post('ThirdParty/list_third_party', ['as' => 'ThirdParty.list_third_party
 
 
 Route::post('ThirdParty/connect_third_party', ['as' => 'ThirdParty.connect_third_party', 'uses' =>'ThirdPartyController@connect_third_party']);
-Route::post('ThirdParty/createAdmin','ThirdPartyController@createAdmin')->name('addAdmin');
+Route::post('ThirdParty/createAdmin','ThirdPartyController@createAdmin')->name('addAdmin')->middleware('auth');
 
 Route::post('ThirdParty/add_to_client', ['as' => 'ThirdParty.add_to_client', 'uses' => 'ThirdPartyController@add_to_client']);
 Route::post('ThirdParty/delete_client_third_party', ['as' => 'ThirdParty.delete_client_third_party', 'uses' => 'ThirdPartyController@delete_client_third_party']);
