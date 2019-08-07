@@ -9,6 +9,7 @@ use App\Client_third_party;
 use App\Third_party_type;
 use App\User_third_party;
 use App\Request_partnership;
+use App\Platform_third_party;
 use App\User;
 // use App\User;
 // use Carbon\Carbon;
@@ -38,7 +39,18 @@ class ThirdPartyController extends Controller
         //view('Third_party.index');
 
     }
-    
+
+    public function index()
+    {
+
+        $data = Third_party::select()->where([['deleted', '=', '0']])->get();
+        //   return $this->jsonToArray($data[0]);
+        return view('Third_party.index')->with('data', $data);
+        //view('Third_party.index');
+
+    }
+
+
     public function createAdmin(request $request){
         dd('STOP LYING');
         try {
@@ -47,7 +59,7 @@ class ThirdPartyController extends Controller
                 
                 'password' => 'required',
                 'email' => 'required',
-               
+
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return $e->errors();
@@ -84,6 +96,29 @@ class ThirdPartyController extends Controller
         $data = Request_partnership::select()->where([['deleted', '=', '0']])->get();
         //   return $this->jsonToArray($data[0]);
         return view('Third_party.request')->with('data', $data);
+        //view('Third_party.index');
+
+    }
+
+    public function getRecords()
+    {
+
+        $data = Third_party::select()->where([['deleted', '=', '1']])->get();
+        //   return $this->jsonToArray($data[0]);
+        return view('Third_party.record')->with('data', $data);
+        //view('Third_party.index');
+
+    }
+
+    public function restore_third_party($id)
+    {
+
+        $data = Third_party::select()->where('id', '=', $id)->update(['deleted'=>'0']);
+        //   return $this->jsonToArray($data[0]);
+        //echo "<script>alert('Third Party Restored Successfully');</script>";
+
+        return redirect(route('dashboard', ['success' => true, 'data' => [], 'message' => "Third Party Has Been Restored!"] ));
+
         //view('Third_party.index');
 
     }
@@ -172,7 +207,7 @@ class ThirdPartyController extends Controller
     public function create_interface()
     {
 
-        $status = Status::select()->where('deleted', '=', '0')->get();
+        $status = Status::select()->where([['table_name', '=', 'third_parties'],['deleted', '=', '0']])->get();
         $third_party_types = Third_party_type::select()->where('deleted', '=', '0')->get();
         return view('Third_party.create')->with(['status' => $status, 'third_party_types' => $third_party_types]);
     }
@@ -245,7 +280,7 @@ class ThirdPartyController extends Controller
         }
 
         if ($callerFunction == 'update_interface') {
-            $status = Status::select()->where('deleted', '=', '0')->get();
+            $status = Status::select()->where([['table_name', '=', 'third_parties'],['deleted', '=', '0']])->get();
             $third_party_types = Third_party_type::select()->where('deleted', '=', '0')->get();
             return view('Third_party.update')->with(['tp' => $thirdparty, 'status' => $status, 'third_party_types' => $third_party_types ]);
         } else {
@@ -294,13 +329,128 @@ class ThirdPartyController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\third_party  $third_party
-     * @return \Illuminate\Http\Response
-     */
+    public function listThirdPartyBy($type, $type_id, $platform_id = null)
+    {
+        /*
+            The method takes three or two paramteres depends on the type and there are two possiblities:
+                
+                1 - if the type was either client or user it will take three parameters, $type, $type_id and $platform_id where $type is the listing type (user or client) , $type_id is the id of either client or user
+                    and the platform_id which is the platform id 
+                2 - if the type was either platform or order it will take two parameters, $type and $type_id where $type is the listing type (platform or order).
+                   
+                        Note that $type_id in this case will have two possiblites depends on the type: 
+                              - if the type was platform then $type_id will be processed as it is the platform_id.
+                              - if the type was order then $type_id will be processed as it is the orderType which is either (asc, desc).
+        
+        */
+        try {
+            $option = strtolower($type);
+            $query = null;
+            if ($platform_id != null) {
+                if ($option == 'client') {
+                    $query = Client_third_party::select()->where([['client_id', '=', $type_id], ['platform_id', '=', $platform_id], ['deleted', '=', '0']])->get();
+                } else if ($option == 'user') {
+                    //check if the thirdparty is in the platform unless it assumed that the platform is connected to the thirdparty
+                    // $Platform_third_party = Platform_third_party::select()->where([['platform_id', '=', $platform_id], ['deleted', '=', '0']])->get();
 
+                    $query = User_third_party::select()->where([['user_id', '=', $type_id], ['platform_id', '=', $platform_id], ['deleted', '=', '0']])->get();
+                } else if ($option == 'platform') {
+                    return "listing third party by platform needs only one parameter to be passed";
+                } else {
+                    return "Please check your inputs";
+                }
+            } else {
+                $platform_id = $type_id;
+                if ($option == 'platform') {
+                    // $query = Client_third_party::select('platform_id', 'third_party_id')
+                    //     ->where([['platform_id', '=', $platform_id], ['deleted', '=', '0']])
+                    //     ->groupBy(['platform_id', 'third_party_id'])
+                    //     ->get();
+                    $query = Platform_third_party::select()->where([['platform_id', '=', $platform_id], ['deleted', '=', '0']])->get();
+                } else if ($option == 'order') {
+                    $orderType = strtolower($platform_id);
+                    if ($orderType == null) {
+                        $query = Third_party::select()->where('deleted', '=', '0')->orderBy('view_order', 'asc')->get();
+                    } else {
+                        if ($orderType == 'asc' || $orderType == 'desc') {
+                            $query = Third_party::select()->where('deleted', '=', '0')->orderBy('view_order', $orderType)->get();
+                        } else {
+                            return "please select a valid order type";
+                        }
+                    }
+                } else {
+                    if (($option == 'client' || $option == 'user') && $type_id != null) {
+                        return " please type the platform id";
+                    } else if ($option == 'client' || $option == 'user') {
+                        return "Please type the " . $option . " id";
+                    } else {
+                        return "listing type is missing";
+                    }
+                }
+            }
+        } catch (\Illuminate\Database\QueryException $e) {
+            return $e->getMessage();
+        }
+        if (count($query) > 0) {
+            $result = null;
+            $i = 0;
+            foreach ($query as $row) {
+                $i++;
+                if ($option == 'order') {
+                    if ($row->deleted == 1 || $row->status_id != 1) {
+                        //check what does ACTIVE THIRD PARTIES MEANS WITH ASHMAAWIIIIIIII
+                        //STATUS TABLE NEED TO BE CREATED IN THE DATABASE
+                        $i--;
+                        continue;
+                    }
+  
+                    $object = [
+                        'id' => $row->id,
+                        'logo' => $row->logo,
+                        'title' => $row->title,
+                        'description' => $row->description,
+                        'website' => $row->website,
+                        'id_token' => $row->id_token,
+                        'created_at' => $row->created_at,
+                        'updated_at' => $row->updated_at
+                    ];
+                    
+                    $result[$i] =  $object;
+                    
+                } else {
+                    if (empty($row->Third_party) == true) {
+                        $i--;
+                        continue;
+                    }
+                    if ($row->Third_party->deleted == 1 || $row->Third_party->status_id != 1) {
+                        $i--;
+                        continue;
+                    }
+                    $object = [
+                        'id' => $row->id,
+                        'logo' => $row->Third_party->logo,
+                        'title' => $row->Third_party->title,
+                        'description' => $row->Third_party->description,
+                        'website' => $row->Third_party->website,
+                        'id_token' => $row->Third_party->id_token,
+                        'created_at' => $row->Third_party->created_at,
+                        'updated_at' => $row->Third_party->updated_at
+                    ];
+                    $result[$i] = $object;
+                }
+            }
+            if ($result != null) {
+               // return ['success' => true, 'data' => $result];
+                return view('Third_party.listThirdParty', ['success' => true, 'data' => $result, 'message' => "Search Completed!"] );
+            } else {
+               // return ['success' => false, 'data' => [], 'message' => "NO RESULTS"];
+                return view('Third_party.listThirdParty', ['success' => true, 'data' => [], 'message' => "NO RESULTS"] );
+            }
+        } else {
+           // return ['success' => false, 'data' => [], 'message' => "NO RESULTS"];
+            return view('Third_party.listThirdParty', ['success' => true, 'data' => [], 'message' => "NO RESULTS"] );
+        }
+    }
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public function list_third_party(Request $request)
     {
@@ -360,7 +510,7 @@ class ThirdPartyController extends Controller
                 $i++;
                 if ($option == 'order') {
 
-                    if ($row->deleted == 1 || $row->status != 'Active') {
+                    if ($row->deleted == 1 || $row->status_id != 1) {
                         //check what does ACTIVE THIRD PARTIES MEANS WITH ASHMAAWIIIIIIII
                         $i--;
                         continue;
@@ -660,9 +810,12 @@ class ThirdPartyController extends Controller
             }
 
             if ($query == 1) {
-                return "Third party has been deleted!";
+                //return "Third party has been deleted!";
+                return redirect(route('index', ['success' => true, 'data' => [], 'message' => "Third party has been deleted!"] ));
+
             } else {
                 return "Error in deleting the third party!";
+                //return view('Third_party.dashboard', ['success' => false, 'data' => $query, 'message' => "Error in deleting the third party!"] );
             }
         }
     }
@@ -670,7 +823,7 @@ class ThirdPartyController extends Controller
     public function accept_third_party($id)
     {
       $third_party_types = Third_party_type::select()->where('deleted', '=', '0')->get();
-      $status = Status::select()->where('deleted', '=', '0')->get();
+      $status = Status::select()->where([['table_name', '=', 'third_parties'],['deleted', '=', '0']])->get();
       $requested_third_party = Request_partnership::select()->where('id', '=', $id)->get();
       return view('Third_party.accept')->with(['tp' => $requested_third_party, 'status' => $status, 'third_party_types' => $third_party_types]);
 
@@ -727,18 +880,23 @@ class ThirdPartyController extends Controller
 */
             //  return dd($test);
             if (count($query) > 0) {
-
-                return $this->beatify($query);
+                 return view('Third_party.searchResults', ['success' => true, 'data' => $query, 'message' => "Search Completed!"] );
             } else {
-                echo "no data found";
+                return redirect(route('index', ['success' => false, 'data' => [], 'message' => 'No data found'] ));
             }
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == '42S22') {
-                return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
+                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]] ));
+                //return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
             } else if ($e->getCode() == '22007') {
-                return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
+                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"] ));
+                //return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
+            } else if ($e->getCode() == '23000') {
+                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]] ));
+               //return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
             } else {
-                return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
+                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"] ));
+                //return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
             }
         }
     }
@@ -799,7 +957,7 @@ class ThirdPartyController extends Controller
                     $i--;
                     continue;
                 }
-                if ($row->Third_party->deleted == 1 || $row->Third_party->status != 'Active') {
+                if ($row->Third_party->deleted == 1 || $row->Third_party->status != 1) {
                     //check the status of the third party and if it is deleted or not
                     $i--;
                     continue;

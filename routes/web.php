@@ -30,9 +30,9 @@ Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 
 Route::get('ThirdParty/request', 'ThirdPartyController@getRequests')->name('requests')->middleware('auth');
-Route::get('ThirdParty/dashboard', 'ThirdPartyController@dashboard')->name('dashboard')->middleware('auth');
-Route::get('ThirdParty/index', 'ThirdPartyController@dashboard')->middleware('auth');
-Route::get('ThirdParty', 'ThirdPartyController@dashboard')->middleware('auth');
+Route::get('ThirdParty/Manage', 'ThirdPartyController@dashboard')->name('dashboard')->middleware('auth');
+Route::get('ThirdParty/index', 'ThirdPartyController@index')->name('index')->middleware('auth');
+Route::get('ThirdParty', 'ThirdPartyController@index')->middleware('auth');
 
 
 //Route::resource('Client', 'ClientController');
@@ -48,12 +48,13 @@ Route::resource('UserThirdParty', 'UserThirdPartyController');
 Route::get('ThirdParty/disconnectThirdParty/{userID}/{third_party_ID}/{platform_id}', 'ThirdPartyController@disconnectThirdParty');
 Route::get('ThirdParty/connect', 'ThirdPartyController@connect')->middleware('auth');//TESTing Purposes
 Route::get('ThirdParty/disconnectThirdParty/{userID}/{platform_id}/{third_party_ID}', 'ThirdPartyController@disconnectThirdParty');
-Route::get('ThirdParty/listThirdPartyBy/{type}/{type_id}/{platform_id}', ['as' => 'ThirdParty.list_third_party', 'uses' =>'ThirdPartyController@listThirdPartyBy']);
-Route::get('ThirdParty/listThirdPartyBy/{type}/{platform_id_OR_orderType}', ['as' => 'ThirdParty.list_third_party', 'uses' =>'ThirdPartyController@listThirdPartyBy']);
-Route::get('ThirdParty/listThirdPartyBy/{type}', ['as' => 'ThirdParty.list_third_party', 'uses' =>'ThirdPartyController@listThirdPartyBy']);
+
+Route::get('ThirdParty/listThirdPartyBy/{type}/{type_id}/{platform_id}', ['as' => 'listThirdPartyBy', 'uses' =>'ThirdPartyController@listThirdPartyBy']);
+Route::get('ThirdParty/listThirdPartyBy/{type}/{platform_id_OR_orderType}', ['as' => 'listThirdPartyBy', 'uses' =>'ThirdPartyController@listThirdPartyBy']);
+Route::get('ThirdParty/listThirdPartyBy/{type}', ['as' => 'listThirdPartyBy', 'uses' =>'ThirdPartyController@listThirdPartyBy']);
 
 Route::get('ThirdParty/create', 'ThirdPartyController@create_interface')->name('create_interface')->middleware('auth');//TESTing Purposes
-
+ 
 
 // Route::get('ThirdParty/create', function () {
 //     return view('Third_party.create_interface');
@@ -65,6 +66,10 @@ Route::get('ThirdParty/create', 'ThirdPartyController@create_interface')->name('
 Route::get('ThirdParty/createAdmin', function () {
     return view('Third_party.createAdmin');
 });
+
+// Route::get('ThirdParty/listThirdParty', function () {
+//     return view('Third_party.listThirdParty', []);
+// })->name('listThirdParty')->middleware('auth');
 
 Route::post('ThirdParty/list_third_party', ['as' => 'ThirdParty.list_third_party', 'uses' =>'ThirdPartyController@list_third_party']);
 
@@ -80,6 +85,8 @@ Route::post('ThirdParty/register','ThirdPartyController@register');
 Route::get('ThirdParty/delete/{x}','ThirdPartyController@delete')->name('delete')->middleware('auth');//tested
 Route::get('ThirdParty/reject/{x}','ThirdPartyController@reject_third_party')->name('reject')->middleware('auth');//tested
 Route::get('ThirdParty/accept/{x}','ThirdPartyController@accept_third_party')->name('accept')->middleware('auth');//tested
+Route::get('ThirdParty/records','ThirdPartyController@getRecords')->name('records')->middleware('auth');//tested
+Route::get('ThirdParty/restore_third_part/{x}','ThirdPartyController@restore_third_party')->name('restore')->middleware('auth');//tested
 //Route::get('ThirdParty/delete/{id}','ThirdPartyController@delete');
 Route::get('ThirdParty/search','ThirdPartyController@search')->name('search')->middleware('auth');//tested
 Route::get('ThirdPartyRating/rate/{user_id}/{plat_id}/{third_party_id}/{rating}/{comment}','ThirdPartyRatingController@rate');//tested

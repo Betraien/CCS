@@ -18,7 +18,7 @@
 
 <div class="card text-center" >
     <div class="card-header" >
-    <h2>List Third Parties By {{request()['type']}}</h2>
+        <h2>Third Parties</h2>
     </div>
     <div class="card-body">
         <table class="table table-hover">
@@ -26,22 +26,22 @@
               <tr>
                 <th scope="col">Logo</th>
                 <th scope="col">Title</th>
-                <th scope="col">description</th>
                 <th scope="col">Identification Token</th>
+                <th scope="col">Status</th>
                 <th scope="col">Website</th>
               </tr>
             </thead>
             <tbody>
             <?php
-             for($i = 1 ; $i <= sizeof($data) ; $i++){
+             for($i = 0 ; $i < sizeof($data) ; $i++){
 
                 if ($i % 2 == 0 ){?>
 
                         <tr>
                                 <td><img src="{{ asset($data[$i]['logo']) }}" width="50px" height="50px"></td>
                                 <th scope="row"><a href={{ route('viewThirdParty', $data[$i]['id']) }}>{{ $data[$i]['title'] }}</a></th>
-                                <td>{{ $data[$i]['description'] }}</td>
                                 <td>{{ $data[$i]['id_token'] }}</td>
+                                <td>{{ $data[$i]->status['status'] }}</td>
                                 <td>{{ $data[$i]['website'] }}</td>
 
                             </tr>
@@ -51,8 +51,8 @@
                         <tr class="table-active">
                                 <td><img src="{{ asset($data[$i]['logo']) }}" width="50px" height="50px"></td>
                                 <th scope="row"><a href={{ route('viewThirdParty', $data[$i]['id']) }}>{{ $data[$i]['title'] }}</a></th>
-                                <td>{{ $data[$i]['description']  }}</td>
                                 <td>{{ $data[$i]['id_token'] }}</td>
+                                <td>{{ $data[$i]->status['status'] }}</td>
                                 <td>{{ $data[$i]['website'] }}</td>
                             </tr>
 
