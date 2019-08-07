@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 01, 2019 at 04:32 PM
+-- Generation Time: Aug 07, 2019 at 09:13 AM
 -- Server version: 10.3.16-MariaDB
 -- PHP Version: 7.3.6
 
@@ -93,9 +93,9 @@ CREATE TABLE `platform_third_parties` (
 --
 
 INSERT INTO `platform_third_parties` (`id`, `platform_id`, `third_party_id`, `created_at`, `updated_at`, `deleted`) VALUES
-(1, 1, 5, '2019-07-05 00:00:00', '2019-07-16 00:00:00', 0),
+(1, 1, 6, '2019-07-05 00:00:00', '2019-07-16 00:00:00', 0),
 (2, 1, 2, '2019-07-04 00:00:00', '2019-07-11 00:00:00', 0),
-(3, 2, 5, '2019-07-05 00:00:00', '2019-07-16 00:00:00', 0);
+(3, 1, 3, '2019-07-05 00:00:00', '2019-07-16 00:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -146,7 +146,7 @@ CREATE TABLE `statuses` (
 INSERT INTO `statuses` (`id`, `status`, `table_name`, `created_at`, `updated_at`, `deleted`) VALUES
 (1, 'Active', 'third_parties', '2019-07-04 00:00:00', '2019-07-27 00:00:00', 0),
 (2, 'pending', 'user_third_parties', '2019-07-10 00:00:00', '2019-07-05 00:00:00', 0),
-(3, 'agreement', 'request_partnerships', '2019-08-16 00:00:00', '2019-08-07 12:00:00', 0);
+(3, 'agreement', 'third_parties', '2019-08-16 00:00:00', '2019-08-07 12:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -159,11 +159,11 @@ CREATE TABLE `third_parties` (
   `title` varchar(100) NOT NULL,
   `id_token` varchar(100) NOT NULL,
   `description` varchar(250) DEFAULT NULL,
-  `logo` text DEFAULT NULL,
+  `logo` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `third_party_type_id` int(11) NOT NULL,
   `view_order` int(11) NOT NULL,
   `status_id` int(11) NOT NULL,
-  `position` varchar(50) NOT NULL,
+  `position` varchar(100) DEFAULT NULL,
   `website` varchar(255) DEFAULT NULL,
   `contact_person` varchar(50) NOT NULL,
   `contact_phone` varchar(20) NOT NULL,
@@ -181,22 +181,17 @@ CREATE TABLE `third_parties` (
 --
 
 INSERT INTO `third_parties` (`id`, `title`, `id_token`, `description`, `logo`, `third_party_type_id`, `view_order`, `status_id`, `position`, `website`, `contact_person`, `contact_phone`, `contact_email`, `average_rating`, `config`, `public`, `created_at`, `updated_at`, `deleted`) VALUES
-(1, 'updateTest', 'tnt', 'erge23rrg', 'images/background.png', 1, 34, 1, 'xwef', 'Turnitin.com', 'jafri jafri', '+96595', 'ohrwiuhg@woehiug.com', 4.58, '{\"config\":{\r\n        \"Connection-standard\": \"Rest\",\r\n        \"type\": \"Post\",\r\n\"url\":\"https://classera.tii-sandbox.com/api/v1/submissions\",\r\n\r\n\"header\": {\r\n\"X-Turnitin-Integration-Name\": \"ccs\",\r\n\"X-Turnitin-Integration-Version\": \"v1beta\",\r\n\"Authorization\": \"Bearer 18853c5ef5804f88bc58d90a12a98577\",\r\n\"Content-Type\":\" application/json\"},\r\n\r\n\"body\":{\r\n\"owner\": \"classera\",\r\n\"title\": \"classera_submission\"}\r\n}\r\n}', 1, '2019-07-10 00:00:00', '2019-07-31 07:37:47', 0),
-(2, 'Dropboxx', 'DB', 'hello mr.shabibb', 'wegwg/tyjtj', 1, 2, 1, 'Jeffri', 'www.dropbox.com', 'rtht erg', '+96658965223', 'ohrwiuhg@woehiug.com', 2.85, '{\r\n    \"config\": {\r\n        \"Auth\": \"OAuth\",\r\n        \"type\": \"Get\",\r\n        \"url\": \"https://www.dropbox.com/oauth2/authorize?client_id=jssbqykrnanwmd8&response_type=code&redirect_uri=http://localhost/GitHub/CCS/public/ThirdParty/token\",\r\n        \"header\": {},\r\n        \"body\": {}\r\n    }\r\n}', 1, '2019-07-19 10:00:17', '2019-07-25 13:58:01', 0),
-(3, 'C8Science', 'g6ek95k5', 'C8Science combines computer & physical exercises to develop the cognitive skills necessary to learn in the classroom and improve math and reading achievement. Assigned by the Director of Student Personnel and Special Services for students who qualify', '', 1, 3, 1, 'Content Gateway', 'https://www.c8sciences.com/', 'Thamer Ahmed', '+96658965223', 'Thamer_Ahmed@gmail.com', 0, '[serialized (platforms, roles, redirect_url, token, etc.)]', 1, '2019-07-19 10:00:17', '2019-07-31 06:26:25', 0),
-(4, 'DD@DD', 'wegweg', 'wegweg', 'images/Thanks.jpg', 1, 1, 1, '1', '1', '1', '1', '2', 0, '{\r\n\"url\":\"https://classera.tii-sandbox.com/api/v1/submissions\",\r\n\r\n\"header\":[\r\n\"X-Turnitin-Integration-Name: ccs\",\r\n\"X-Turnitin-Integration-Version: v1beta\",\r\n\"Authorization: Bearer 18853c5ef5804f88bc58d90a12a98577\",\r\n\"Content-Type: application/json\"],\r\n\r\n\"body\":{\r\n\"owner\": \"classera\",\r\n\"title\": \"classera_submission\"}\r\n\r\n}', 1, '2019-07-07 18:14:59', '2019-07-07 18:14:59', 0),
-(5, 'Dropboxx', '2e', 'hello mr.shabibb', 'wegwg/tyjtj', 1, 6, 1, 'Jeffri', 'www.dropbox.com', 'rtht erg', '+96658965223', 'ohrwiuhg@woehiug.com', 2.85, '{\r\n    \"config\": {\r\n        \"Connection-standard\": \"OAuth\",\r\n        \"type\": \"Get\",\r\n        \"url\": \"https://www.dropbox.com/oauth2/authorize?client_id=jssbqykrnanwmd8&response_type=code&redirect_uri=http://localhost/GitHub/CCS/public/ThirdParty/token\",\r\n        \"header\": {},\r\n        \"body\": {}\r\n    }\r\n}', 1, '0000-00-00 00:00:00', '2019-07-29 09:16:51', 0),
-(47, 'sad 1', 'noob', 'it is decri', 'logoPath', 1, 3, 1, 'xxxx', 'rth', 'Jeff John', '+1 659 875 469', 'Jeff@jemmy.jeff', 0, '{\"config\":\"{\\\"config\\\":{\\\"url\\\":\\\"www.shabib.com\\\",\\\"header\\\":{\\\"Authorization\\\":\\\"0599193936\\\",\\\"content-type\\\":\\\"application\\\\\\/json\\\"}}}\"}', 0, '2019-07-21 08:38:53', '2019-07-21 08:38:53', 0),
-(48, 'wefwegeg', 'sd', 'it is decri', 'logoPath', 1, 5, 1, 'wgweg', 'https://jeff.com', 'Jeff John', '+1 659 875 469', 'Jeff@jemmy.jeff', 0, '{\"config\":\"{\\\"config\\\":{\\\"url\\\":\\\"www.shabib.com\\\",\\\"header\\\":{\\\"Authorization\\\":\\\"0565826926\\\",\\\"content-type\\\":\\\"application\\\\\\/json\\\"}}}\"}', 1, '2019-07-21 10:05:59', '2019-07-21 10:05:59', 0),
-(49, 'Gtyhtyjtyjtyjtyjty 1', 'noo23b', 'it is decri', 'logoPath', 1, 5, 1, 'xxxx', 'https://jeff.com', 'Jeff John', '+1 659 875 469', 'Jeff@jemmy.jeff', 0, '{\"config\":{\"url\":\"www.shabib.com\",\"header\":{\"Authorization\":\"0599193936\",\"content-type\":\"application\\/json\"}}}', 1, '2019-07-21 13:28:56', '2019-07-21 13:28:56', 0),
-(50, 'wef 1', 'nooeb', 'it is decri', 'logoPath', 1, 5, 1, 'xxxx', 'https://jeff.com', 'Jeff John', '+1 659 875 469', 'Jeff@jemmy.jeff', 0, '{\"config\":{\"url\":\"www.shabib.com\",\"header\":{\"Authorization\":\"0599193936\",\"content-type\":\"application\\/json\"}}}', 1, '2019-07-21 13:29:07', '2019-07-21 13:29:07', 0),
-(51, 'wefe 1', '12', 'it is decri', 'logoPath', 1, 5, 1, 'xxxx', 'https://jeff.com', 'Jeff John', '+1 659 875 469', 'Jeff@jemmy.jeff', 0, '{\"config\":{\"url\":\"www.shabib.com\",\"header\":{\"Authorization\":\"0599193936\",\"content-type\":\"application\\/json\"}}}', 1, '2019-07-21 13:29:42', '2019-07-21 13:29:42', 0),
-(52, 'wqefe 1', 'noobe', 'it is decri', 'logoPath', 1, 5, 1, 'xxxx', 'https://jeff.com', 'Jeff John', '+1 659 875 469', 'Jeff@jemmy.jeff', 0, '{\"config\":{\"url\":\"www.shabib.com\",\"header\":{\"Authorization\":\"0599193936\",\"content-type\":\"application\\/json\"}}}', 1, '2019-07-21 13:32:21', '2019-07-21 13:32:21', 0),
-(57, '2134fweg', '324r', 'erge23rrg', 'images/1.jpg', 1, 5, 1, 'xxxx', 'https://jeg.com', 'Jeff John', '+1 659 875 469', 'Jeff@jehhmmy.jeff', 0, '{\"config\":\"{\\\"url\\\":\\\"www.shabib.com\\\", \\\"header\\\":{\\\"Authorization\\\": \\\"0599193936\\\", \\\"content-type\\\": \\\"application\\/json\\\"}}\"}', 1, '2019-07-31 06:43:00', '2019-07-31 06:43:00', 0),
-(58, '2134fweg', '324rf', 'erge23rrg', 'images/1.jpg', 1, 5, 1, 'xxxx', 'https://jeg.com', 'Jeff John', '+1 659 875 469', 'Jeff@jehhmmy.jeff', 0, '{\"config\":\"{\\\"url\\\":\\\"www.shabib.com\\\", \\\"header\\\":{\\\"Authorization\\\": \\\"0599193936\\\", \\\"content-type\\\": \\\"application\\/json\\\"}}\"}', 1, '2019-07-31 06:43:22', '2019-07-31 06:43:22', 0),
-(60, 'aefwegwerg', 'ewfwef', 'erge23rrg', 'images/moh_2.phd', 1, 5, 1, 'xxxx', 'https://jeg.com', 'Jeff John', '+1 659 875 469', 'Jeff@jehhmmy.jeff', 0, '{\"config\":\"{\\\"url\\\":\\\"www.shabib.com\\\", \\\"header\\\":{\\\"Authorization\\\": \\\"0599193936\\\", \\\"content-type\\\": \\\"application\\/json\\\"}}\"}', 1, '2019-07-31 07:39:58', '2019-07-31 07:39:58', 0),
-(62, 'TestT', 'wef', 'erge23rrg', NULL, 1, 5, 1, 'xxxx', 'https://jeg.com', 'Jeff John', '+1 659 875 469', 'Jeff@jehhmmy.jeff', 0, '{\"config\":\"{\\\"url\\\":\\\"www.shabib.com\\\", \\\"header\\\":{\\\"Authorization\\\": \\\"0599193936\\\", \\\"content-type\\\": \\\"application\\/json\\\"}}\"}', 1, '2019-07-31 07:40:32', '2019-07-31 07:40:32', 0),
-(64, 'TestT', 'wef3', 'erge23rrg', NULL, 1, 5, 1, 'xxxx', 'https://jeg.com', 'Jeff John', '+1 659 875 469', 'Jeff@jehhmmy.jeff', 0, '{\"config\":\"{\\\"url\\\":\\\"www.shabib.com\\\", \\\"header\\\":{\\\"Authorization\\\": \\\"0599193936\\\", \\\"content-type\\\": \\\"application\\/json\\\"}}\"}', 1, '2019-08-01 08:14:51', '2019-08-01 08:14:51', 0);
+(1, 'updateTest', 'tnt', 'wreg', 'images/بلا.jpg', 2, 34, 2, 'xwef', 'jafri', 'jafri', '+96595', 'ohrwiuhg@woehiug.com', 4.58, 'gjmg,wefweg', 1, '2019-07-10 00:00:00', '2019-08-06 14:47:00', 0),
+(2, 'Dropboxx', 'DB', 'hello', 'images/1.jpg', 2, 2, 1, 'Jeffri', 'rtht', 'rtht', '+96658965223', 'ohrwiuhg@woehiug.com', 2.85, 'trwgrwg', 1, '2019-07-19 10:00:17', '2019-08-06 19:01:02', 0),
+(3, 'C8Science', 'g6ek95k5', 'C8Science combines computer & physical exercises to develop the cognitive skills necessary to learn in the classroom and improve math and reading achievement. Assigned by the Director of Student Personnel and Special Services for students who qualify', '', 1, 3, 1, 'Content Gateway', 'https://www.c8sciences.com/', 'Thamer Ahmed', '+96658965223', 'Thamer_Ahmed@gmail.com', 0, '{\r\n    \"config\": {\r\n        \"Requests\": {\r\n            \"1\": {\r\n                \"Authentication-type\": \"Rest\",\r\n                \"type\": \"Post\",\r\n                \"url\": \"https://classera.tii-sandbox.com/api/v1/submissions\",\r\n                \"header\": {\r\n                    \"X-Turnitin-Integration-Name\": \"ccs\",\r\n                    \"X-Turnitin-Integration-Version\": \"v1beta\",\r\n                    \"Authorization\": \"Bearer 18853c5ef5804f88bc58d90a12a98577\",\r\n                    \"Content-Type\": \" application/json\"\r\n                },\r\n                \"body\": {\r\n                    \"owner\": \"classera\",\r\n                    \"title\": \"classera_submission\"\r\n                }\r\n            }\r\n        }\r\n    }\r\n}', 1, '2019-07-19 10:00:17', '2019-08-06 19:01:07', 0),
+(4, 'DD@DD', 'wegweg', 'wegweg', 'images/Thanks.jpg', 1, 1, 1, '1', '1', '1', '1', '2', 0, '{\r\n    \"config\": {\r\n        \"Requests\": {\r\n            \"1\": {\r\n                \"Authentication-type\": \"Rest\",\r\n                \"type\": \"post\",\r\n                \"url\": \"https://turnitin.training.classera.com/users/add\",\r\n                \"header\": {},\r\n                \"body\": {\r\n\"api_key\": \"kghNdf0VnwL90ylT3zpy4vryVZoWDA9foLm16gUG76KCGyjwUgrAiqZZRF2iRiWoE9JZAsoVztEix5pnFsHaKiWOdUteiz8GLRAI\"\r\n}\r\n            }\r\n        }\r\n    }\r\n}', 1, '2019-07-07 18:14:59', '2019-08-06 19:01:12', 0),
+(5, 'DropTheX', '2e', 'hello', 'images/background.png', 1, 6, 1, 'Jeffri', 'rtht', 'rtht', '+96658965223', 'ohrwiuhg@woehiug.com', 2.85, '{\r\n    \"config\": {\r\n        \"Requests\": {\r\n            \"1\": {\r\n                \"Authentication-type\": \"Oauth\",\r\n                \"type\": \"Get\",\r\n                \"url\": \"https://www.dropbox.com/oauth2/authorize?client_id=jssbqykrnanwmd8&response_type=code&redirect_uri=http://localhost/GitHub/CCS/public/ThirdParty/token\",\r\n                \"header\": {},\r\n                \"body\": {}\r\n            }\r\n        }\r\n    }\r\n}', 1, '0000-00-00 00:00:00', '2019-08-06 14:45:20', 0),
+(6, '123', 'wef', '123', 'images/بلا.jpg', 2, 123, 1, '123', '123', '123', '123', '23', 0, '{\"config\":\"123weg\"}', 1, '2019-08-05 17:29:38', '2019-08-06 19:10:30', 0),
+(84, '123', '123fwegwef', '123', NULL, 1, 123, 1, '123', '123', '123', '123', '23', 0, 'thrthrthrt', 1, '2019-08-05 17:34:50', '2019-08-06 18:59:09', 0),
+(85, 'shabib', 'skpogij', 'sahbiasb', 'images/background.png', 1, 6, 1, 'reg', 'uhgrhg', 'fegfih', '54', 'roguh', 0, '{\"config\":\"etheth\"}', 1, '2019-08-06 05:54:19', '2019-08-06 18:59:41', 0),
+(86, 'rth', 'rerherh', 'rtjrt', NULL, 3, 1, 2, 'jrtj', 'rheherhe', 'erherb', 'erherh', 'erhdfh', 0, '{\"config\":\"erherh\"}', 1, '2019-08-06 08:17:11', '2019-08-06 19:10:35', 0),
+(88, 'rth', 'rerherherherh', 'rtjrter', NULL, 3, 1, 2, 'jrtj', 'rheherhe', 'erherb', 'erherh', 'erhdfh', 0, '{\"config\":\"erherh\"}', 1, '2019-08-06 08:18:06', '2019-08-06 19:00:52', 0),
+(89, 'rwgerh', 'erherherh', 'erh', 'images/بلا.jpg', 2, 2, 2, 'erhe', 'erherh', 'rherherh', 'erh', 'erherh', 0, '{\"config\":\"erherhrweth\"}', 1, '2019-08-06 08:35:17', '2019-08-06 08:35:17', 0);
 
 -- --------------------------------------------------------
 
@@ -243,7 +238,9 @@ CREATE TABLE `third_party_types` (
 --
 
 INSERT INTO `third_party_types` (`id`, `type`, `created_at`, `updated_at`, `deleted`) VALUES
-(1, 'xType', '2019-07-11 00:00:00', '2019-07-14 00:00:00', 0);
+(1, 'xType', '2019-07-11 00:00:00', '2019-07-14 00:00:00', 0),
+(2, 'JeffType', '2019-08-08 00:00:00', '2019-08-10 00:00:00', 0),
+(3, 'dsdfdg', '2019-08-08 00:00:00', '2019-08-10 00:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -321,10 +318,15 @@ CREATE TABLE `user_third_parties` (
 --
 
 INSERT INTO `user_third_parties` (`id`, `user_id`, `platform_id`, `client_id`, `third_party_id`, `token`, `status_id`, `expire_date`, `created_at`, `updated_at`, `deleted`) VALUES
-(68, 5, 46, 6, 5, 'YQR3vaGQARAAAAAAAAAAQ_pov6sM2ZkP0LITXw_0kjE', 2, '2019-08-01 08:46:31', '2019-08-01 08:46:31', '2019-08-01 08:46:31', 0),
-(69, 1, 1, 1, 1, 'a436035c-2990-499e-bcfc-92b1758f23f2', 1, '2019-08-01 08:48:11', '2019-08-01 08:48:11', '2019-08-01 08:48:11', 0),
+(68, 5, 46, 6, 5, 'YQR3vaGQARAAAAAAAAAAQ_pov6sM2ZkP0LITXw_0kjE', 1, '2019-08-01 08:46:31', '2019-08-01 08:46:31', '2019-08-01 08:46:31', 0),
+(69, 1, 1, 1, 5, 'a436035c-2990-499e-bcfc-92b1758f23f2', 1, '2019-08-01 08:48:11', '2019-08-01 08:48:11', '2019-08-01 08:48:11', 0),
 (70, 1, 12, 3, 5, 'YQR3vaGQARAAAAAAAAAARKcV2YnwTNWU-PHjjBtkAis', 1, '2019-08-01 08:48:54', '2019-08-01 08:48:54', '2019-08-01 08:48:54', 0),
-(71, 1, 12, 1, 1, 'a0251bc8-830e-4d52-9319-96b8cb453680', 2, '2019-08-01 08:49:09', '2019-08-01 08:49:09', '2019-08-01 08:49:09', 0);
+(71, 1, 12, 1, 1, 'a0251bc8-830e-4d52-9319-96b8cb453680', 1, '2019-08-01 08:49:09', '2019-08-01 08:49:09', '2019-08-01 08:49:09', 0),
+(72, 1, 1, 1, 3, '3737e5e0-7414-462a-8188-745e263e850b', 1, '2019-08-05 06:35:30', '2019-08-05 06:35:30', '2019-08-05 06:35:30', 0),
+(73, 1, 2, 3, 5, 'YQR3vaGQARAAAAAAAAAARWrT4n7njxpIRuEw24TcpfA', 1, '2019-08-05 12:22:04', '2019-08-05 12:22:04', '2019-08-05 12:22:04', 0),
+(74, 1, 2, 3, 3, '627e725f-4fe0-4daa-ac34-15b5ccabc0d0', 1, '2019-08-05 12:35:50', '2019-08-05 12:35:50', '2019-08-05 12:35:50', 0),
+(75, 1, 2, 234, 4, '5d49b06c-c898-4586-8401-05a70a020804', 1, '2019-08-06 16:53:01', '2019-08-06 16:53:01', '2019-08-06 16:53:01', 0),
+(76, 5, 5, 5, 4, '5d4a7964-8fd4-4b04-b4c8-05a70a020804', 1, '2019-08-07 07:10:30', '2019-08-07 07:10:30', '2019-08-07 07:10:30', 0);
 
 --
 -- Indexes for dumped tables
@@ -446,7 +448,7 @@ ALTER TABLE `statuses`
 -- AUTO_INCREMENT for table `third_parties`
 --
 ALTER TABLE `third_parties`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
 
 --
 -- AUTO_INCREMENT for table `third_party_ratings`
@@ -458,7 +460,7 @@ ALTER TABLE `third_party_ratings`
 -- AUTO_INCREMENT for table `third_party_types`
 --
 ALTER TABLE `third_party_types`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -476,7 +478,7 @@ ALTER TABLE `users_x`
 -- AUTO_INCREMENT for table `user_third_parties`
 --
 ALTER TABLE `user_third_parties`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
