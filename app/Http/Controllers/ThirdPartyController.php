@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Hash;
 use DB;
 use App\Status;
 use App\Third_party;
@@ -38,12 +38,13 @@ class ThirdPartyController extends Controller
         //view('Third_party.index');
 
     }
+    
     public function createAdmin(request $request){
-
+        dd('STOP LYING');
         try {
             $data = $request->validate([
                 'name' => 'required',
-                'username' => 'required',
+                
                 'password' => 'required',
                 'email' => 'required',
                
@@ -53,13 +54,11 @@ class ThirdPartyController extends Controller
         }
 
         try {
-            $admin = new user();
-
-            $admin->name = $data['name'];
-            $admin->username = $data['username'];
-            $admin->password = $request['password'];
-            $admin->email = $data['email'];
-            $admin->save();
+            return User::create([
+                'name' => $request['name'],
+                'email' => $request['email'],
+                'password' => Hash::make($request['password']),
+            ]);
            
 
             return "Admin has been added";
