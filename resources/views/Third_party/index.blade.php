@@ -1,5 +1,4 @@
 @extends('layouts.app')
-@extends('layouts.nav')
 @section('content')
 
 <div class="text-center" >
@@ -38,10 +37,19 @@
                 if ($i % 2 == 0 ){?>
 
                         <tr>
-                                <td><img src="{{ asset($data[$i]['logo']) }}" width="50px" height="50px"></td>
+                                <td><img class="img-circle" src="{{ asset($data[$i]['logo']) }}" width="50px" height="50px"></td>
                                 <th scope="row"><a href={{ route('viewThirdParty', $data[$i]['id']) }}>{{ $data[$i]['title'] }}</a></th>
                                 <td>{{ $data[$i]['id_token'] }}</td>
-                                <td>{{ $data[$i]->status['status'] }}</td>
+
+                                <?php 
+                                if (strcmp( $data[$i]->status['status'],"Active") == 0){?>
+                                  <td><span class="badge badge-success">{{$data[$i]->status['status']}}</span></td>
+
+                                  <?php  } else if (strcmp( $data[$i]->status['status'],"pending") == 0){ ?>
+
+                                  <td><span class="badge badge-warning">{{$data[$i]->status['status']}}</span></td>
+                                  
+                                  <?php } ?>
                                 <td>{{ $data[$i]['website'] }}</td>
 
                             </tr>
@@ -49,10 +57,20 @@
                     <?php  } else{ ?>
 
                         <tr class="table-active">
-                                <td><img src="{{ asset($data[$i]['logo']) }}" width="50px" height="50px"></td>
+                                <td><img  class="img-circle" src="{{ asset($data[$i]['logo']) }}" width="50px" height="50px"></td>
                                 <th scope="row"><a href={{ route('viewThirdParty', $data[$i]['id']) }}>{{ $data[$i]['title'] }}</a></th>
                                 <td>{{ $data[$i]['id_token'] }}</td>
-                                <td>{{ $data[$i]->status['status'] }}</td>
+                                
+                                <?php 
+                                if (strcmp( $data[$i]->status['status'],"Active") == 0){?>
+                                  <td><span class="badge badge-success">{{$data[$i]->status['status']}}</span></td>
+
+                                  <?php  } else if (strcmp( $data[$i]->status['status'],"pending") == 0){ ?>
+
+                                  <td><span class="badge badge-warning">{{$data[$i]->status['status']}}</span></td>
+                                  
+                                  <?php } ?>
+
                                 <td>{{ $data[$i]['website'] }}</td>
                             </tr>
 
@@ -67,5 +85,4 @@
 
     </div>
   </div>
-
 @endsection

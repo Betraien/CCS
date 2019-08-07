@@ -141,7 +141,7 @@ class ThirdPartyController extends Controller
      */
     public function create(Request $request)
     {
-
+    
         try {
             $data = $request->validate([
                 'title' => 'required',

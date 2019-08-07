@@ -30,7 +30,7 @@ Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 
 Route::get('ThirdParty/request', 'ThirdPartyController@getRequests')->name('requests')->middleware('auth');
-Route::get('ThirdParty/Manage', 'ThirdPartyController@dashboard')->name('dashboard')->middleware('auth');
+Route::get('ThirdParty/dashboard', 'ThirdPartyController@dashboard')->name('dashboard')->middleware('auth');
 Route::get('ThirdParty/index', 'ThirdPartyController@index')->name('index')->middleware('auth');
 Route::get('ThirdParty', 'ThirdPartyController@index')->middleware('auth');
 
@@ -65,7 +65,7 @@ Route::get('ThirdParty/create', 'ThirdPartyController@create_interface')->name('
 
 Route::get('ThirdParty/createAdmin', function () {
     return view('Third_party.createAdmin');
-})->middleware('auth');
+})->name('newAdmin')->middleware('auth');
 
 // Route::get('ThirdParty/listThirdParty', function () {
 //     return view('Third_party.listThirdParty', []);
