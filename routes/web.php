@@ -114,6 +114,8 @@ Route::post('ThirdParty/requestPartnership', 'ThirdPartyController@requestPartne
 Route::get('ThirdParty/token', 'ThirdPartyController@token');
 
 
+
+
 Route::post('ThirdParty/ClientThirdParty/create', ['as' => 'ClientThirdParty.create', 'uses' => 'ClientThirdPartyController@create']);
 Route::post('ThirdParty/ClientThirdParty/delete', ['as' => 'ClientThirdParty.delete', 'uses' => 'ClientThirdPartyController@delete']);
 //Route::get('ThirdParty/dropboxToeken/{x}', ['as' => 'ThirdParty.dropboxToeken', 'uses' =>'ThirdPartyController@dropboxToeken']);
