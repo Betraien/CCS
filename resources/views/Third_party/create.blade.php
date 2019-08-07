@@ -19,8 +19,15 @@
             <input type="text" name="position" class="form-control" placeholder="Enter position">
           </div>
           <div class="form-group">
-            <label >public</label>
-            <input type="text" name="public" class="form-control" placeholder="is the third party public?">
+            <label>public</label>
+            <select class="form-control" id="public" name="public">
+
+               
+                <option name="public" value="0">No</option>
+                <option name="public" value="1">Yes</option>
+                
+
+            </select>
           </div>
           <div class="form-group">
                 <label >Identification Token</label>
