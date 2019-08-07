@@ -1,9 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="card">
+<div class="card-header text-center" >
+        <h2>Update Third Party</h2>
+    </div>
+    <div class="card-body">
 <form method="post" action={{ route('update', $tp[0]['id']) }} enctype="multipart/form-data">
         <fieldset>
-          <legend>Edit Third Party</legend>
           <div class="form-group">
                 <label>Title</label>
                 <input type="text" name="title" class="form-control" value="{{ $tp[0]['title'] }}" >
@@ -82,7 +86,9 @@
             <small id="fileHelp" class="form-text text-muted"></small>
           </div>
           <fieldset class="form-group">
-          <button type="submit" class="btn btn-primary">Submit</button>
-        </fieldset>
+                <button type="submit" class="btn btn-primary" style="float: right ; margin-right:4%; width:120px">Submit</button>
+          </fieldset>
       </form>
+    </div>
+</div>
 @endsection
