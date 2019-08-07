@@ -1,11 +1,15 @@
 @extends('layouts.app')
-@extends('layouts.nav')
 
 @section('content')
 
+<div class="card" >
+    <div class="card-header text-center" >
+        <h2> Create Third Parties</h2>
+    </div>
+    <div class="card-body">
+
 <form method="post" action={{ route('create') }} enctype="multipart/form-data">
         <fieldset>
-          <legend>Create Third Party</legend>
           <div class="form-group">
             <label >Title</label>
             <input type="text" name="title" class="form-control" placeholder="Enter title">
@@ -78,7 +82,9 @@
             <input type="file" id="Logo" name="logo">
            </div>
           <fieldset class="form-group">
-          <button type="submit" class="btn btn-primary">Submit</button>
-        </fieldset>
+              <button type="submit" class="btn btn-primary" style="float: right ; margin-right:4%; width:120px">Submit</button>
+            </fieldset>
       </form>
+    </div>
+  </div>
 @endsection

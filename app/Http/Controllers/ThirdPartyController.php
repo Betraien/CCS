@@ -141,7 +141,7 @@ class ThirdPartyController extends Controller
      */
     public function create(Request $request)
     {
-
+    
         try {
             $data = $request->validate([
                 'title' => 'required',
@@ -696,9 +696,10 @@ class ThirdPartyController extends Controller
             }
 
             if ($query == 1) {
-                return "Third party has been deleted!";
+                return redirect(route('dashboard', ['success' => true, 'data' => [], 'message' => "Third party has been deleted!"] ));
             } else {
-                return "Error in deleting the third party!";
+            return redirect(route('dashboard', ['success' => true, 'data' => [], 'message' => "Error in deleting the third party!"] ));
+
             }
         }
     }

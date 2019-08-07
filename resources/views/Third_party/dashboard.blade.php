@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@extends('layouts.nav')
+
 @section('content')
 
 <div class="text-center" >
@@ -28,6 +28,8 @@
                 <th scope="col">Identification Token</th>
                 <th scope="col">Status</th>
                 <th scope="col">Website</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Delete</th>
               </tr>
             </thead>
             <tbody>

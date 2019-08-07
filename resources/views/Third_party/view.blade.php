@@ -1,5 +1,4 @@
 @extends('layouts.app')
-@extends('layouts.nav')
 
 @section('content')
 <fieldset>
@@ -58,9 +57,12 @@
          </select>
     </div>
 
-    <div class="form-group">
+  <!--  <div class="form-group">
         <label>Configration info</label>
         <textarea class="form-control" id="config" rows="10" name="config" disabled>{{ $tp[0]['config'] }}</textarea>
     </div>
+-->
+        
+     
 
     @endsection

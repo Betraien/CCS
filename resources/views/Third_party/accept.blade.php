@@ -1,9 +1,5 @@
 @extends('layouts.app')
-
 @section('content')
-
-
-
 <form method="post" action={{ route('create') }} enctype="multipart/form-data">
         <fieldset>
           <legend>Create Third Party</legend>
@@ -82,4 +78,5 @@
           <button type="submit" class="btn btn-primary">Submit</button>
         </fieldset>
       </form>
+
 @endsection
