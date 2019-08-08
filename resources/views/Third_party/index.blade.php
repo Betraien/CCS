@@ -49,7 +49,13 @@
 
                                   <td><span class="badge badge-warning">{{$data[$i]->status['status']}}</span></td>
                                   
-                                  <?php } ?>
+                                  <?php } else if (strcmp( $data[$i]->status['status'],"agreement") == 0){ ?>
+
+                                    <td><span class="badge badge-primary">agreement</span></td>
+                                    
+                                    <?php } ?>
+
+                            
                                 <td>{{ $data[$i]['website'] }}</td>
 
                             </tr>

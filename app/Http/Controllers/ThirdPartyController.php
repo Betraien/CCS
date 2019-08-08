@@ -311,20 +311,22 @@ class ThirdPartyController extends Controller
                 $query = Third_party::select()->where('id', '=', $id)->update($assoc_array);
 
             if ($query == 1) {
-                return redirect(route('dashboard', ['success' => true, 'data' => [], 'message' => "Third party has been updated!"] ));
+                return redirect(route('index', ['success' => true, 'data' => [], 'message' => "Third party has been updated!"] ));
                // return "Third party has been updated!";
             } else {
-                return "The selected third party was not found!";
+               // return "The selected third party was not found!";
+               return redirect(route('index', ['success' => false, 'data' => [], 'message' => "The selected third party was not found!"] ));
+
             }
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == '42S22') {
-                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]] ));
+                return redirect(route('index', ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]] ));
                // return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
             } else if ($e->getCode() == '22007') {
-                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => "WRONG FORMAT FOR ONE OR MORE OF YOUR INPUTS!"] ));
+                return redirect(route('index', ['success' => false, 'data' => [], 'message' => "WRONG FORMAT FOR ONE OR MORE OF YOUR INPUTS!"] ));
                // return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT FOR ONE OR MORE OF YOUR INPUTS!"];
             } else {
-                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => "PLEASE CHECK YOUR INPUTS!"] ));
+                return redirect(route('index', ['success' => false, 'data' => [], 'message' => "PLEASE CHECK YOUR INPUTS!"] ));
               //  return ['success' => false, 'data' => [], 'message' => "PLEASE CHECK YOUR INPUTS!"];
             }
         }
@@ -428,7 +430,7 @@ class ThirdPartyController extends Controller
                         continue;
                     }
                     $object = [
-                        'id' => $row->id,
+                        'id' => $row->Third_party->id,
                         'logo' => $row->Third_party->logo,
                         'title' => $row->Third_party->title,
                         'description' => $row->Third_party->description,
@@ -441,7 +443,7 @@ class ThirdPartyController extends Controller
                 }
             }
             if ($result != null) {
-               // return ['success' => true, 'data' => $result];
+                //return ['success' => true, 'data' => $result];
                 return view('Third_party.listThirdParty', ['success' => true, 'data' => $result, 'message' => "Search Completed!"] );
             } else {
                // return ['success' => false, 'data' => [], 'message' => "NO RESULTS"];
@@ -673,11 +675,15 @@ class ThirdPartyController extends Controller
             return "Error request type";
         }
 
+        if($response == null){
+             return ['success' => false, 'data' => [], 'message' => "No response!, please check your http request"];
+           }else{
 
         $token = $request['token'];  // This is a way how to access a query string in laravel, you should put no parameters in the route
         $data = ['data' => json_decode($data, true), 'token' => $token];
         //$response = json_decode($data, true);
         return  $this->saveConnection($data);
+           }
     }
 
 
@@ -709,7 +715,6 @@ class ThirdPartyController extends Controller
             //$response = Curl::to($url)->withHeaders($arrayOfHeaders)->withData($body)->asJson(true)->get();
             //return $response;
             //          if type == OAuth2 redirect otherwise send curl get request;
-
 
             return redirect($url . '&state=' . encrypt($data)); //encrypting the data so it won't be shown to the user as a text plain
 
@@ -748,7 +753,7 @@ class ThirdPartyController extends Controller
         }
     }
 
-
+    
 
 
     public function saveConnection($response)
@@ -771,7 +776,9 @@ class ThirdPartyController extends Controller
                 'deleted' => '0'
             ]);
 
-            return "The user has been successfully connected to the third party!";
+            //return "The user has been successfully connected to the third party!";
+            return ['success' => true, 'data' => [], 'message' => "The user has been successfully connected to the third party!"];
+
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == '42S22') {
                 return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
@@ -801,12 +808,16 @@ class ThirdPartyController extends Controller
                 //       $TPS = DB::Update("UPDATE third_parties SET deleted =1 WHERE id =". $id);
                 $query = Third_party::select()->where('id', '=', $id)->update(['deleted' => 1]);
             } catch (\Illuminate\Database\QueryException $e) {
+
                 if ($e->getCode() == '42S22') {
-                    return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
+                    return redirect(route('index', ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]] ));
+                   // return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
                 } else if ($e->getCode() == '22007') {
-                    return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
+                    return redirect(route('index', ['success' => false, 'data' => [], 'message' => "WRONG FORMAT FOR ONE OR MORE OF YOUR INPUTS!"] ));
+                   // return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT FOR ONE OR MORE OF YOUR INPUTS!"];
                 } else {
-                    return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
+                    return redirect(route('index', ['success' => false, 'data' => [], 'message' => "PLEASE CHECK YOUR INPUTS!"] ));
+                  //  return ['success' => false, 'data' => [], 'message' => "PLEASE CHECK YOUR INPUTS!"];
                 }
             }
 

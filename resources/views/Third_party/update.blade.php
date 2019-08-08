@@ -21,9 +21,18 @@
                 <input type="text" name="position" class="form-control" value="{{ $tp[0]['position'] }}" >
             </div>
             <div class="form-group">
-                <label>public</label>
-                <input type="text" name="public" class="form-control" value="{{ $tp[0]['public'] }}" >
-            </div>
+                    <label>public</label>
+                    <select class="form-control" id="public" name="public">
+                        
+                       @if($tp[0]['public'] == 0)
+                        <option name="public" value="0" selected>No</option>
+                        <option name="public" value="1">Yes</option>
+                        @elseif($tp[0]['public'] == 1)
+                        <option name="public" value="0">No</option>
+                        <option name="public" value="1" selected>Yes</option>
+                        @endif
+                    </select>
+                  </div>
             <div class="form-group">
                 <label>Identification Token</label>
                 <input type="text" name="id_token" class="form-control" value="{{ $tp[0]['id_token'] }}" >

@@ -8,7 +8,7 @@
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <title>{{ config('app.name', 'Laravel') }}</title>
+  <title>{{ config('app.name', 'CCS') }}</title>
 
   <!-- Scripts -->
   <script src="{{ asset('js/app.js') }}" defer></script>
@@ -85,7 +85,7 @@
   
   <div id="mySidenav" class="sidenav">
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  <img src="{{ asset('images/x.png')}}" alt="Smiley face" height="70" width="210" style = "margin-left: 20px">
+  <img src="{{ asset('images/ClasseraLogo.png')}}" alt="Smiley face" height="70" width="210" style = "margin-left: 20px">
   <a href= {{ route('index')}}>Home</a>
   <a href={{ route('requests')}}>Partnerships Request</a>
   <a href={{ route('create_interface')}}>Create Third Party</a>
@@ -114,7 +114,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-3">
-                <img src="{{ asset('images/x.png')}}" alt="Smiley face" height="70" width="210">
+                <img src="{{ asset('images/ClasseraLogo.png')}}" alt="Smiley face" height="70" width="210">
               </div>
             <div class="col-sm-2">
                 <h5>Get started</h5>
