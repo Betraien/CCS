@@ -35,23 +35,27 @@
              for($i = 0 ; $i < sizeof($data) ; $i++){
 
                 if ($i % 2 == 0 ){?>
-
+ 
                         <tr>
                                 <td><img class="img-circle" src="{{ asset($data[$i]['logo']) }}" width="50px" height="50px"></td>
                                 <th scope="row"><a href={{ route('viewThirdParty', $data[$i]['id']) }}>{{ $data[$i]['title'] }}</a></th>
                                 <td>{{ $data[$i]['id_token'] }}</td>
 
                                 <?php 
-                                if (strcmp( $data[$i]->status['status'],"Active") == 0){?>
-                                  <td><span class="badge badge-success">{{$data[$i]->status['status']}}</span></td>
+                                if ($data[$i]->status_id == 1){?>
+                                  <td><span class="badge badge-success">{{ $data[$i]->status['status'] }}</span></td>
 
-                                  <?php  } else if (strcmp( $data[$i]->status['status'],"pending") == 0){ ?>
+                                  <?php  } else if ($data[$i]->status_id == 2){ ?>
 
-                                  <td><span class="badge badge-warning">{{$data[$i]->status['status']}}</span></td>
+                                  <td><span class="badge badge-warning">{{ $data[$i]->status['status'] }}</span></td>
                                   
-                                  <?php } else if (strcmp( $data[$i]->status['status'],"agreement") == 0){ ?>
+                                  <?php } else if ($data[$i]->status_id == 3){ ?>
 
-                                    <td><span class="badge badge-primary">agreement</span></td>
+                                    <td><span class="badge badge-primary"> {{ $data[$i]->status['status'] }}</span></td>
+
+                                    <?php } else if ($data[$i]->status_id == 4){ ?>
+
+                                      <td><span class="badge badge-danger"> {{ $data[$i]->status['status'] }}</span></td>
                                     
                                     <?php } ?>
 
@@ -59,23 +63,30 @@
                                 <td>{{ $data[$i]['website'] }}</td>
 
                             </tr>
-
                     <?php  } else{ ?>
-
                         <tr class="table-active">
                                 <td><img  class="img-circle" src="{{ asset($data[$i]['logo']) }}" width="50px" height="50px"></td>
                                 <th scope="row"><a href={{ route('viewThirdParty', $data[$i]['id']) }}>{{ $data[$i]['title'] }}</a></th>
                                 <td>{{ $data[$i]['id_token'] }}</td>
                                 
+
                                 <?php 
-                                if (strcmp( $data[$i]->status['status'],"Active") == 0){?>
-                                  <td><span class="badge badge-success">{{$data[$i]->status['status']}}</span></td>
+                                if ($data[$i]->status_id == 1){?>
+                                  <td><span class="badge badge-success">{{ $data[$i]->status['status'] }}</span></td>
 
-                                  <?php  } else if (strcmp( $data[$i]->status['status'],"pending") == 0){ ?>
+                                  <?php  } else if ($data[$i]->status_id == 2){ ?>
 
-                                  <td><span class="badge badge-warning">{{$data[$i]->status['status']}}</span></td>
+                                  <td><span class="badge badge-warning">{{ $data[$i]->status['status'] }}</span></td>
                                   
-                                  <?php } ?>
+                                  <?php } else if ($data[$i]->status_id == 3){ ?>
+
+                                    <td><span class="badge badge-primary"> {{ $data[$i]->status['status'] }}</span></td>
+                                    
+                                    <?php } else if ($data[$i]->status_id == 4){ ?>
+
+                                      <td><span class="badge badge-danger"> {{ $data[$i]->status['status'] }}</span></td>
+
+                                    <?php } ?>
 
                                 <td>{{ $data[$i]['website'] }}</td>
                             </tr>

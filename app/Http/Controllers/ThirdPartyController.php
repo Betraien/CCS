@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use DB;
@@ -52,12 +53,13 @@ class ThirdPartyController extends Controller
     }
 
 
-    public function createAdmin(request $request){
-      
+    public function createAdmin(request $request)
+    {
+
         try {
             $data = $request->validate([
                 'name' => 'required',
-                
+
                 'password' => 'required',
                 'email' => 'required',
 
@@ -67,12 +69,12 @@ class ThirdPartyController extends Controller
         }
 
         try {
-             User::create([
+            User::create([
                 'name' => $request['name'],
                 'email' => $request['email'],
                 'password' => Hash::make($request['password']),
             ]);
-           
+
 
             return redirect()->route('dashboard');
         } catch (\Illuminate\Database\QueryException $e) {
@@ -86,8 +88,6 @@ class ThirdPartyController extends Controller
                 return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
             }
         }
-
-
     }
 
 
@@ -114,11 +114,11 @@ class ThirdPartyController extends Controller
     public function restore_third_party($id)
     {
 
-        $data = Third_party::select()->where('id', '=', $id)->update(['deleted'=>'0']);
+        $data = Third_party::select()->where('id', '=', $id)->update(['deleted' => '0']);
         //   return $this->jsonToArray($data[0]);
         //echo "<script>alert('Third Party Restored Successfully');</script>";
 
-        return redirect(route('dashboard', ['success' => true, 'data' => [], 'message' => "Third Party Has Been Restored!"] ));
+        return redirect(route('dashboard', ['success' => true, 'data' => [], 'message' => "Third Party Has Been Restored!"]));
 
         //view('Third_party.index');
 
@@ -141,7 +141,7 @@ class ThirdPartyController extends Controller
      */
     public function create(Request $request)
     {
-    
+
         try {
             $data = $request->validate([
                 'title' => 'required',
@@ -187,20 +187,20 @@ class ThirdPartyController extends Controller
             $thirdparty->config = json_encode(["config" => $data['config']]);
             $thirdparty->save();
 
-            return redirect(route('dashboard', ['success' => true, 'data' => [], 'message' => "third party has been added"] ));
-           // return "third party has been added";
+            return redirect(route('dashboard', ['success' => true, 'data' => [], 'message' => "third party has been added"]));
+            // return "third party has been added";
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == '42S22') {
-                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]] ));
+                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]]));
                 //return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
             } else if ($e->getCode() == '22007') {
-                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"] ));
+                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"]));
                 //return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
             } else if ($e->getCode() == '23000') {
-                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]] ));
-               //return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
+                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]]));
+                //return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
             } else {
-                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"] ));
+                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"]));
                 //return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
             }
         }
@@ -208,7 +208,7 @@ class ThirdPartyController extends Controller
     public function create_interface()
     {
 
-        $status = Status::select()->where([['table_name', '=', 'third_parties'],['deleted', '=', '0']])->get();
+        $status = Status::select()->where([['table_name', '=', 'third_parties'], ['deleted', '=', '0']])->get();
         $third_party_types = Third_party_type::select()->where('deleted', '=', '0')->get();
         return view('Third_party.create')->with(['status' => $status, 'third_party_types' => $third_party_types]);
     }
@@ -281,9 +281,9 @@ class ThirdPartyController extends Controller
         }
 
         if ($callerFunction == 'update_interface') {
-            $status = Status::select()->where([['table_name', '=', 'third_parties'],['deleted', '=', '0']])->get();
+            $status = Status::select()->where([['table_name', '=', 'third_parties'], ['deleted', '=', '0']])->get();
             $third_party_types = Third_party_type::select()->where('deleted', '=', '0')->get();
-            return view('Third_party.update')->with(['tp' => $thirdparty, 'status' => $status, 'third_party_types' => $third_party_types ]);
+            return view('Third_party.update')->with(['tp' => $thirdparty, 'status' => $status, 'third_party_types' => $third_party_types]);
         } else {
             return view('Third_party.view')->with('tp', $thirdparty);
         }
@@ -297,37 +297,36 @@ class ThirdPartyController extends Controller
     public function update($id)
     {
 
-            try {
+        try {
 
-                $assoc_array = request()->all();
-                unset($assoc_array['id']); //This line is ignoring the id in case the user has put it within the request body
+            $assoc_array = request()->all();
+            unset($assoc_array['id']); //This line is ignoring the id in case the user has put it within the request body
 
-                if (isset($assoc_array['logo'])) {
-                    $logo = $assoc_array['logo'];
-                    $fileName = $logo->getClientOriginalName();
-                    $logo->move('images', $fileName);
-                    $assoc_array['logo'] = 'images/' . $fileName;
-                }
-                $query = Third_party::select()->where('id', '=', $id)->update($assoc_array);
+            if (isset($assoc_array['logo'])) {
+                $logo = $assoc_array['logo'];
+                $fileName = $logo->getClientOriginalName();
+                $logo->move('images', $fileName);
+                $assoc_array['logo'] = 'images/' . $fileName;
+            }
+            $query = Third_party::select()->where('id', '=', $id)->update($assoc_array);
 
             if ($query == 1) {
-                return redirect(route('index', ['success' => true, 'data' => [], 'message' => "Third party has been updated!"] ));
-               // return "Third party has been updated!";
+                return redirect(route('index', ['success' => true, 'data' => [], 'message' => "Third party has been updated!"]));
+                // return "Third party has been updated!";
             } else {
-               // return "The selected third party was not found!";
-               return redirect(route('index', ['success' => false, 'data' => [], 'message' => "The selected third party was not found!"] ));
-
+                // return "The selected third party was not found!";
+                return redirect(route('index', ['success' => false, 'data' => [], 'message' => "The selected third party was not found!"]));
             }
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == '42S22') {
-                return redirect(route('index', ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]] ));
-               // return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
+                return redirect(route('index', ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]]));
+                // return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
             } else if ($e->getCode() == '22007') {
-                return redirect(route('index', ['success' => false, 'data' => [], 'message' => "WRONG FORMAT FOR ONE OR MORE OF YOUR INPUTS!"] ));
-               // return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT FOR ONE OR MORE OF YOUR INPUTS!"];
+                return redirect(route('index', ['success' => false, 'data' => [], 'message' => "WRONG FORMAT FOR ONE OR MORE OF YOUR INPUTS!"]));
+                // return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT FOR ONE OR MORE OF YOUR INPUTS!"];
             } else {
-                return redirect(route('index', ['success' => false, 'data' => [], 'message' => "PLEASE CHECK YOUR INPUTS!"] ));
-              //  return ['success' => false, 'data' => [], 'message' => "PLEASE CHECK YOUR INPUTS!"];
+                return redirect(route('index', ['success' => false, 'data' => [], 'message' => "PLEASE CHECK YOUR INPUTS!"]));
+                //  return ['success' => false, 'data' => [], 'message' => "PLEASE CHECK YOUR INPUTS!"];
             }
         }
     }
@@ -358,9 +357,11 @@ class ThirdPartyController extends Controller
 
                     $query = User_third_party::select()->where([['user_id', '=', $type_id], ['platform_id', '=', $platform_id], ['deleted', '=', '0']])->get();
                 } else if ($option == 'platform') {
-                    return "listing third party by platform needs only one parameter to be passed";
+                    //return "listing third party by platform needs only one parameter to be passed";
+                    return ['success' => false, 'data' => [], 'message' => "Listing third parties by platform needs only one parameter to be passed"];
                 } else {
-                    return "Please check your inputs";
+                    //return "Please check your inputs";
+                    return ['success' => false, 'data' => [], 'message' => "Please check your inputs"];
                 }
             } else {
                 $platform_id = $type_id;
@@ -378,16 +379,20 @@ class ThirdPartyController extends Controller
                         if ($orderType == 'asc' || $orderType == 'desc') {
                             $query = Third_party::select()->where('deleted', '=', '0')->orderBy('view_order', $orderType)->get();
                         } else {
-                            return "please select a valid order type";
+                            // return "please select a valid order type";
+                            return ['success' => false, 'data' => [], 'message' => "Please select a valid order type"];
                         }
                     }
                 } else {
                     if (($option == 'client' || $option == 'user') && $type_id != null) {
-                        return " please type the platform id";
+                        //return "please type the platform id";
+                        return ['success' => false, 'data' => [], 'message' => "Please type the platform id"];
                     } else if ($option == 'client' || $option == 'user') {
-                        return "Please type the " . $option . " id";
+                        //return "Please type the " . $option . " id";
+                        return ['success' => false, 'data' => [], 'message' => "Please type the " . $option . " id"];
                     } else {
-                        return "listing type is missing";
+                        //return "listing type is missing";
+                        return ['success' => false, 'data' => [], 'message' => "Please select a valid listing type"];
                     }
                 }
             }
@@ -406,7 +411,7 @@ class ThirdPartyController extends Controller
                         $i--;
                         continue;
                     }
-  
+
                     $object = [
                         'id' => $row->id,
                         'logo' => $row->logo,
@@ -417,9 +422,8 @@ class ThirdPartyController extends Controller
                         'created_at' => $row->created_at,
                         'updated_at' => $row->updated_at
                     ];
-                    
+
                     $result[$i] =  $object;
-                    
                 } else {
                     if (empty($row->Third_party) == true) {
                         $i--;
@@ -444,14 +448,14 @@ class ThirdPartyController extends Controller
             }
             if ($result != null) {
                 //return ['success' => true, 'data' => $result];
-                return view('Third_party.listThirdParty', ['success' => true, 'data' => $result, 'message' => "Search Completed!"] );
+                return view('Third_party.listThirdParty', ['success' => true, 'data' => $result, 'message' => "Search Completed!"]);
             } else {
-               // return ['success' => false, 'data' => [], 'message' => "NO RESULTS"];
-                return view('Third_party.listThirdParty', ['success' => true, 'data' => [], 'message' => "NO RESULTS"] );
+                // return ['success' => false, 'data' => [], 'message' => "NO RESULTS"];
+                return view('Third_party.listThirdParty', ['success' => true, 'data' => [], 'message' => "NO RESULTS"]);
             }
         } else {
-           // return ['success' => false, 'data' => [], 'message' => "NO RESULTS"];
-            return view('Third_party.listThirdParty', ['success' => true, 'data' => [], 'message' => "NO RESULTS"] );
+            // return ['success' => false, 'data' => [], 'message' => "NO RESULTS"];
+            return view('Third_party.listThirdParty', ['success' => true, 'data' => [], 'message' => "NO RESULTS"]);
         }
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -675,15 +679,15 @@ class ThirdPartyController extends Controller
             return "Error request type";
         }
 
-        if($response == null){
-             return ['success' => false, 'data' => [], 'message' => "No response!, please check your http request"];
-           }else{
+        if ($response == null) {
+            return ['success' => false, 'data' => [], 'message' => "No response!, please check your http request"];
+        } else {
 
-        $token = $request['token'];  // This is a way how to access a query string in laravel, you should put no parameters in the route
-        $data = ['data' => json_decode($data, true), 'token' => $token];
-        //$response = json_decode($data, true);
-        return  $this->saveConnection($data);
-           }
+            $token = $request['token'];  // This is a way how to access a query string in laravel, you should put no parameters in the route
+            $data = ['data' => json_decode($data, true), 'token' => $token];
+            //$response = json_decode($data, true);
+            return  $this->saveConnection($data);
+        }
     }
 
 
@@ -753,7 +757,7 @@ class ThirdPartyController extends Controller
         }
     }
 
-    
+
 
 
     public function saveConnection($response)
@@ -778,7 +782,6 @@ class ThirdPartyController extends Controller
 
             //return "The user has been successfully connected to the third party!";
             return ['success' => true, 'data' => [], 'message' => "The user has been successfully connected to the third party!"];
-
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == '42S22') {
                 return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
@@ -801,45 +804,45 @@ class ThirdPartyController extends Controller
         //delets a third party softly from the database
 
         if ($id == null) {
-            return 'please type in a third party id';
+            //return 'please type in a third party id';
+            return ['success' => false, 'data' => [], 'message' => "Please type in a third party id"];
+            
         } else {
 
             try {
                 //       $TPS = DB::Update("UPDATE third_parties SET deleted =1 WHERE id =". $id);
                 $query = Third_party::select()->where('id', '=', $id)->update(['deleted' => 1]);
+                
             } catch (\Illuminate\Database\QueryException $e) {
 
                 if ($e->getCode() == '42S22') {
-                    return redirect(route('index', ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]] ));
-                   // return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
+                    return redirect(route('index', ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]]));
+                    // return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
                 } else if ($e->getCode() == '22007') {
-                    return redirect(route('index', ['success' => false, 'data' => [], 'message' => "WRONG FORMAT FOR ONE OR MORE OF YOUR INPUTS!"] ));
-                   // return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT FOR ONE OR MORE OF YOUR INPUTS!"];
+                    return redirect(route('index', ['success' => false, 'data' => [], 'message' => "WRONG FORMAT FOR ONE OR MORE OF YOUR INPUTS!"]));
+                    // return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT FOR ONE OR MORE OF YOUR INPUTS!"];
                 } else {
-                    return redirect(route('index', ['success' => false, 'data' => [], 'message' => "PLEASE CHECK YOUR INPUTS!"] ));
-                  //  return ['success' => false, 'data' => [], 'message' => "PLEASE CHECK YOUR INPUTS!"];
+                    return redirect(route('index', ['success' => false, 'data' => [], 'message' => "PLEASE CHECK YOUR INPUTS!"]));
+                    //  return ['success' => false, 'data' => [], 'message' => "PLEASE CHECK YOUR INPUTS!"];
                 }
             }
 
             if ($query == 1) {
                 //return "Third party has been deleted!";
-                return redirect(route('index', ['success' => true, 'data' => [], 'message' => "Third party has been deleted!"] ));
-
+                return redirect(route('index', ['success' => true, 'data' => [], 'message' => "Third party has been deleted!"]));
             } else {
-                return "Error in deleting the third party!";
-                //return view('Third_party.dashboard', ['success' => false, 'data' => $query, 'message' => "Error in deleting the third party!"] );
+               // return ['success' => false, 'data' => [], 'message' => "Error in deleting third party!"];
+                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => "Error in deleting the third party!"] ));
             }
         }
     }
 
     public function accept_third_party($id)
     {
-      $third_party_types = Third_party_type::select()->where('deleted', '=', '0')->get();
-      $status = Status::select()->where([['table_name', '=', 'third_parties'],['deleted', '=', '0']])->get();
-      $requested_third_party = Request_partnership::select()->where('id', '=', $id)->get();
-      return view('Third_party.accept')->with(['tp' => $requested_third_party, 'status' => $status, 'third_party_types' => $third_party_types]);
-
-
+        $third_party_types = Third_party_type::select()->where('deleted', '=', '0')->get();
+        $status = Status::select()->where([['table_name', '=', 'third_parties'], ['deleted', '=', '0']])->get();
+        $requested_third_party = Request_partnership::select()->where('id', '=', $id)->get();
+        return view('Third_party.accept')->with(['tp' => $requested_third_party, 'status' => $status, 'third_party_types' => $third_party_types]);
     }
     public function reject_third_party($id)
     {
@@ -881,8 +884,7 @@ class ThirdPartyController extends Controller
             $key =  $request['key'];
             //$query = DB::select("SELECT * FROM third_parties WHERE title LIKE '%$key%' or description LIKE '%$key%'");
 
-            $query = Third_party::where('title', 'like', '%' . $key . '%')
-                ->orWhere('description', 'like', '%' . $key . '%')->get();
+            $query = Third_party::where('title', 'like', '%' . $key . '%')->orWhere('description', 'like', '%' . $key . '%')->get();
 
             /* $test = Third_party::select()->where([
                     ['id', '=', $key]
@@ -892,22 +894,22 @@ class ThirdPartyController extends Controller
 */
             //  return dd($test);
             if (count($query) > 0) {
-                 return view('Third_party.searchResults', ['success' => true, 'data' => $query, 'message' => "Search Completed!"] );
+                return view('Third_party.searchResults', ['success' => true, 'data' => $query, 'message' => "Search Completed!"]);
             } else {
-                return redirect(route('index', ['success' => false, 'data' => [], 'message' => 'No data found'] ));
+                return redirect(route('index', ['success' => false, 'data' => [], 'message' => 'No data found']));
             }
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == '42S22') {
-                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]] ));
+                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]]));
                 //return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
             } else if ($e->getCode() == '22007') {
-                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"] ));
+                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"]));
                 //return ['success' => false, 'data' => [], 'message' => "WRONG FORMAT!"];
             } else if ($e->getCode() == '23000') {
-                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]] ));
-               //return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
+                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]]));
+                //return ['success' => false, 'data' => [], 'message' => $e->errorInfo[2]];
             } else {
-                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"] ));
+                return redirect(route('dashboard', ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"]));
                 //return ['success' => false, 'data' => [], 'message' => "CHECK YOUR INPUTS!"];
             }
         }

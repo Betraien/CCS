@@ -36,15 +36,18 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
 
     <span style="font-size:30px;cursor:pointer; color:#f1f1f1" onclick="openNav()">&#9776;</span>
+ 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
   
-    <div class="collapse navbar-collapse" id="navbarColor02" style="margin-left: 72% ;">
+    <div class="collapse navbar-collapse" id="navbarColor02" style="margin-left: 40%;">
       <form class="form-inline my-2 my-lg-0" method="get" action={{ route('search') }}>
         <input class="form-control mr-sm-2" type="text" name="key" placeholder="Search">
         <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+ 
       </form>
+      
       <ul class="navbar-nav ml-auto">
           <!-- Authentication Links -->
           @guest
@@ -78,6 +81,7 @@
   
           @endguest
         </ul>
+
     </div>
   
   </nav>
@@ -92,6 +96,21 @@
   <a href={{ route('dashboard')}}>Manage Third Parties</a>
   <a href={{ route('records')}}>Third Party Records</a>
   <a href={{ route('newAdmin')}}>Create new admin</a>
+  
+  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">List Third Party By</a>
+    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 39px, 0px);">
+  
+   <div class = "dropdown-item">
+      <a class="dropdown-item" href={{ route('listThirdPartyBy', 'client')}}>Client</a>
+      <a class="dropdown-item" href={{ route('listThirdPartyBy', 'User')}}>User</a>
+      <a class="dropdown-item" href={{ route('listThirdPartyBy', 'Platform')}}>Platform</a>
+      <a class="dropdown-item" href={{ route('listThirdPartyBy', 'Order')}}>Order</a>
+ 
+    </div>
+ 
+ 
+    </div>
+  
   </div>
   
   <script>
